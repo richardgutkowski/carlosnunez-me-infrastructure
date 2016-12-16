@@ -4,4 +4,5 @@ module "coreos-infra-east" {
   number_of_instances = "${var.number_of_instances}"
   subnet_id = "${var.infra_subnet_id}"
   instance_type = "${var.coreos_instance_type}"
+  tags = "${merge(var.infra_tags, var.ec2_tags, var.coreos_tags)}"
 }
