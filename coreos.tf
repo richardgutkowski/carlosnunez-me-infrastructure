@@ -1,4 +1,4 @@
-module "coreos-infra-east" {
+module "ec2-infrastructure-coreos" {
   source = "github.com/terraform-community-modules/tf_aws_ec2_instance"
   ami_id = "${var.coreos_ami_id}"
   number_of_instances = "${var.number_of_instances}"
