@@ -11,3 +11,16 @@ variable "coreos_instance_type" {
   description = "Instance type to use for CoreOS infrastructure."
   default = "t2.micro"
 }
+
+variable "coreos_subnet_id" {
+  description = "Subnet to place CoreOS containers into."
+}
+
+variable "coreos_tags" {
+  description = "Tags to apply onto CoreOS instances."
+  default {}
+}
+
+variable "coreos_user_data" {
+  description = "User data to apply onto CoreOS instances."
+}

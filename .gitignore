@@ -1,0 +1,6 @@
+# Ignore cached terraform stuff and s3-backed include folder
+.terraform/*
+include/*
+
+# Ignore terraform.tfvars
+terraform.tfvars
