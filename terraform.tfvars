@@ -1,1 +1,0 @@
-/home/ubuntu/cnunez-infrastructure-data/terraform/global/terraform.tfvars
