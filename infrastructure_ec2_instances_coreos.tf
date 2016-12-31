@@ -6,7 +6,15 @@ data "template_file" "user_data" {
   }
 }
 
-module "infrastructure-ec2-instances-coreos" {
+module "coreos_security_group" {
+  source = "github.com/carlosonunez/tf_aws_sg/sg_coreos"
+  security_group_name = "${var.coreos_security_group_name}"
+  vpc_id = "${var.infrastructure_vpc_id}"
+  source_cidr_blocks = "${var.infrastructure_vpc_cidr_block}"
+  security_group_tags = "${var.ec2_tags}"
+}
+
+module "coreos_instances" {
   source = "github.com/carlosonunez/tf_aws_ec2_instance"
   ami_id = "${var.coreos_ami_id}"
   number_of_instances = "${var.coreos_number_of_instances}"
