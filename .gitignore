@@ -5,5 +5,5 @@ include/*
 # Ignore terraform.tfvars
 terraform.tfvars
 
-# Ignore any state generated
+# Ignore any local state generated
 terraform.tfstate*
