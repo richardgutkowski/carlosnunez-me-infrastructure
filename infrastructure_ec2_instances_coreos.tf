@@ -9,8 +9,8 @@ data "template_file" "user_data" {
 module "coreos_security_group" {
   source = "github.com/carlosonunez/tf_aws_sg/sg_coreos"
   security_group_name = "${var.coreos_security_group_name}"
-  vpc_id = "${var.infrastructure_vpc_id}"
-  source_cidr_blocks = "${var.infrastructure_vpc_cidr_block}"
+  vpc_id = "${var.ec2_vpc_id}"
+  source_cidr_blocks = "${var.ec2_vpc_cidr_block}"
   security_group_tags = "${var.ec2_tags}"
 }
 
@@ -26,4 +26,5 @@ module "coreos_instances" {
   instance_name = "${var.environment}-coreos"
   user_data = "${data.template_file.user_data.rendered}"
   tags = "${merge(var.global_infrastructure_tags, var.ec2_tags, var.coreos_tags)}"
+  security_group_ids = ["${module.coreos_security_group.security_group_id}"]
 }

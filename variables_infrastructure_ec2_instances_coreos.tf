@@ -24,3 +24,7 @@ variable "coreos_tags" {
 variable "coreos_user_data" {
   description = "User data to apply onto CoreOS instances."
 }
+
+variable "coreos_security_group_name" {
+  description = "Name of the security group to use for CoreOS instances."
+}
