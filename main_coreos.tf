@@ -1,11 +1,3 @@
-data "template_file" "user_data" {
-  template = "$${global_user_data}\n$${specific_user_data}"
-  vars {
-    global_user_data = "${var.ec2_user_data}"
-    specific_user_data = "${var.coreos_user_data}"
-  }
-}
-
 module "coreos_security_group" {
   source = "github.com/carlosonunez/tf_aws_sg/sg_coreos"
   security_group_name = "${var.coreos_security_group_name}"
@@ -25,7 +17,7 @@ module "coreos_instances" {
   instance_type = "${var.coreos_instance_type}"
   instance_name = "${var.environment}-coreos"
   key_name = "${var.ec2_key_name}"
-  user_data = "${data.template_file.user_data.rendered}"
+  user_data = "${var.coreos_user_data}"
   tags = "${merge(var.global_infrastructure_tags, var.ec2_tags, var.coreos_tags)}"
   security_group_ids = [
     "${module.coreos_security_group.security_group_id}",
