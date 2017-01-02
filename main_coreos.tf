@@ -24,7 +24,14 @@ module "coreos_instances" {
   subnet_id = "${length(var.coreos_subnet_id) > 0 ? var.coreos_subnet_id : var.ec2_subnet_id}"
   instance_type = "${var.coreos_instance_type}"
   instance_name = "${var.environment}-coreos"
+  key_name = "${var.ec2_key_name}"
   user_data = "${data.template_file.user_data.rendered}"
   tags = "${merge(var.global_infrastructure_tags, var.ec2_tags, var.coreos_tags)}"
-  security_group_ids = ["${module.coreos_security_group.security_group_id}"]
+  security_group_ids = [
+    "${module.coreos_security_group.security_group_id}",
+    "${var.ec2_default_ssh_access_sg_id}"
+  ]
+  create_route53_cname_resource_records = true
+  route53_hosted_zone_id = "${var.route53_hosted_zone_id}"
+  route53_rr_suffix = "coreos.${var.ec2_route53_rr_suffix}"
 }

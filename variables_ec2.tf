@@ -20,6 +20,14 @@ variable "ec2_vpc_cidr_block" {
   type = "list"
 }
 
-variable "ec2_inbound_ssh_sg_id" {
+variable "ec2_default_ssh_access_sg_id" {
   description = "ID corresponding to unmanaged default-ssh-access-policy"
+}
+
+variable "ec2_route53_rr_suffix" {
+  description = "The Route53 resource record suffix to apply onto EC2 resources."
+}
+
+variable "ec2_key_name" {
+  description = "The name of the access keypair to use for EC2 instances."
 }
