@@ -1,5 +1,5 @@
 module "coreos_security_group" {
-  source = "github.com/carlosonunez/tf_aws_sg/sg_coreos"
+  source = "github.com/carlosonunez/terraform_modules/aws/ec2/security_groups/coreos"
   security_group_name = "${var.coreos_security_group_name}"
   vpc_id = "${var.ec2_vpc_id}"
   source_cidr_blocks = "${var.ec2_vpc_cidr_block}"
@@ -7,7 +7,7 @@ module "coreos_security_group" {
 }
 
 module "coreos_instances" {
-  source = "github.com/carlosonunez/tf_aws_ec2_instance"
+  source = "github.com/carlosonunez/terraform_modules/aws/ec2/instances/coreos"
   ami_id = "${var.coreos_ami_id}"
   number_of_instances = "${var.coreos_number_of_instances}"
 
@@ -26,4 +26,5 @@ module "coreos_instances" {
   create_route53_cname_resource_records = true
   route53_hosted_zone_id = "${var.route53_hosted_zone_id}"
   route53_rr_suffix = "coreos.${var.ec2_route53_rr_suffix}"
+  coreos_docker_service_conf_location = "include/${var.environment}/files/etc/systemd/system/docker.service.d/custom.conf"
 }
