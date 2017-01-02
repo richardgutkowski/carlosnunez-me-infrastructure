@@ -17,6 +17,7 @@ module "coreos_instances" {
   instance_type = "${var.coreos_instance_type}"
   instance_name = "${var.environment}-coreos"
   key_name = "${var.ec2_key_name}"
+  private_key_path = "${var.ec2_private_key_path}"
   user_data = "${var.coreos_user_data}"
   tags = "${merge(var.global_infrastructure_tags, var.ec2_tags, var.coreos_tags)}"
   security_group_ids = [

@@ -31,3 +31,7 @@ variable "ec2_route53_rr_suffix" {
 variable "ec2_key_name" {
   description = "The name of the access keypair to use for EC2 instances."
 }
+
+variable "ec2_private_key_path" {
+  description = "The location of the key to use for SSH connections with EC2 instances."
+}
