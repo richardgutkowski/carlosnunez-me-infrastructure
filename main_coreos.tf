@@ -28,4 +28,5 @@ module "coreos_instances" {
   route53_hosted_zone_id = "${var.route53_hosted_zone_id}"
   route53_rr_suffix = "coreos.${var.ec2_route53_rr_suffix}"
   coreos_docker_service_conf_location = "include/${var.environment}/files/etc/systemd/system/docker.service.d/custom.conf"
+  coreos_provisioning_commands = "${var.coreos_provisioning_commands}"
 }

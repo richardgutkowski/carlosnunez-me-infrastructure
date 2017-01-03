@@ -28,3 +28,8 @@ variable "coreos_user_data" {
 variable "coreos_security_group_name" {
   description = "Name of the security group to use for CoreOS instances."
 }
+
+variable "coreos_provisioning_commands" {
+  description = "Provisioning commands for CoreOS instances."
+  default = []
+}
