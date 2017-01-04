@@ -9,4 +9,4 @@ terraform.tfvars
 terraform.tfstate*
 
 # Ignore packer build.log
-*/build.log
+build.log

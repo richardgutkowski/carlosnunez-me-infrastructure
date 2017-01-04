@@ -27,8 +27,14 @@ How to run it
 
 6. Run `packer validate -var-file=include/develop/packervars/coreos.json include/images/packer_configs/coreos.json`. This will validate that the Packer configuration for your new CoreOS image is ready to go.
 
-7. Run `packer build -machine-readable -var-file=include/develop/packervars/coreos.json include/images/packer_configs/coreos.json` to build your CoreOS AMI. Its ID will be stored in `build.log` at the root of your repository.
+7. Run `packer build -machine-readable -var-file=include/develop/packervars/coreos.json include/images/packer_configs/coreos.json | tee build.log` to build your CoreOS AMI. Its ID will be stored in `build.log` at the root of your repository.
 
 > NOTE: This will create an EBS snapshot. This costs money.
 
-8.  
+8. Run `egrep "artifact,.*,string,AMIs.*" build.log | sed 's/.*created:\(.*\)/\1/g' | tr -d '\\n ' | grep $AWS_REGION | cut -f2 -d: | while read id; do echo "coreos_ami_id=\"${id}\"" >> include/develop/packervars/coreos.tf; done`. This will extract the AMI created for the region specified and move it to include/develop/image_ids/coreos.tf for use by Terraform.
+
+> NOTE: Unfortunately, Packer does not have the ability to output the IDs created to a file natively.
+
+9. Have a look at `include/develop/tfvars/coreos.tfvars` and edit the number of nodes you would like to provision and any other parameter you'd like to modify
+
+10. Run `terraform plan -var-file=include/develop/env.tfvars -var-file=include/develop/tfvars/coreos.tfvars -var-file=include/develop/image_ids/coreos.tfvars` to plan your Terraform deployment. Ensure that it creates *n* instances as defined by `include/develop/tfvars/coreos.tfvars` as well as its requisite security groups and Route 53 CNAME RRs.
