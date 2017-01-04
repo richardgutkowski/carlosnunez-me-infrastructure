@@ -27,6 +27,8 @@ How to run it
 
 6. Run `packer validate -var-file=include/develop/packervars/coreos.json include/images/packer_configs/coreos.json`. This will validate that the Packer configuration for your new CoreOS image is ready to go.
 
-7. Run `packer validate -machine-readable -var-file=include/develop/packervars/coreos.json include/images/packer_configs/coreos.json` to build your CoreOS AMI. Its ID will be stored in `build.log` at the root of your repository.
+7. Run `packer build -machine-readable -var-file=include/develop/packervars/coreos.json include/images/packer_configs/coreos.json` to build your CoreOS AMI. Its ID will be stored in `build.log` at the root of your repository.
+
+> NOTE: This will create an EBS snapshot. This costs money.
 
 8.  
