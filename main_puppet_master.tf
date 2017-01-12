@@ -8,7 +8,7 @@ module "puppet_master_security_group" {
 
 module "puppet_master_instances" {
   source = "github.com/carlosonunez/terraform_modules/aws/ec2/instances/general"
-  ami_id = "${data.aws_ami.ubuntu_latest}"
+  ami_id = "${data.aws_ami.ubuntu_latest.id}"
   number_of_instances = "${var.puppet_master_number_of_instances}"
 
   // It would be nice to do a regex match on this instead of a simple length comparison, but
@@ -17,7 +17,6 @@ module "puppet_master_instances" {
   instance_type = "${var.puppet_master_instance_type}"
   instance_name = "${var.environment}-puppet_master"
   key_name = "${var.ec2_key_name}"
-  private_key_path = "${var.ec2_private_key_path}"
   user_data = "${var.puppet_master_user_data}"
   tags = "${merge(var.global_infrastructure_tags, var.ec2_tags, var.puppet_master_tags)}"
   security_group_ids = [

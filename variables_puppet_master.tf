@@ -1,7 +1,3 @@
-variable "puppet_master_ami_id" {
-  description = "ID of the AWS AMI for Puppet master."
-}
-
 variable "puppet_master_number_of_instances" { 
   description = "Number of Puppet master instances to deploy."
   default = 1
