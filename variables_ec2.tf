@@ -28,6 +28,7 @@ variable "ec2_route53_rr_suffix" {
   description = "The Route53 resource record suffix to apply onto EC2 resources."
 }
 
+
 variable "ec2_key_name" {
   description = "The name of the access keypair to use for EC2 instances."
 }
