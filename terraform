@@ -15,8 +15,8 @@ case $maybe_op in
 esac
 
 environment=`echo ${@:0} | \
-  grep '-environment=' | \
-  sed 's/.*\-environment=\(.*\) .*/\1/' | \
+  grep '-env=' | \
+  sed 's/.*\-env=\(.*\) .*/\1/' | \
   cut -f2 -d'='`
 
 [ -z "$environment" ] && {
@@ -33,5 +33,4 @@ var_files_arr=`find include/$environment/tfvars -type f | \
 var_files=`echo "${var_files_arr}" | tr '\n' ' '`
 
 command="terraform ${operation} ${var_files} ${@:3}"
-echo "COMMAND: $command"
 eval "${command}"
