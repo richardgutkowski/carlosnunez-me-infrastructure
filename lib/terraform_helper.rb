@@ -39,6 +39,7 @@ def install_latest_version_of_terraform
   if cpu_platform == "unsupported"
     raise "Terraform is not supported by your CPU platform."
   end
+
   terraform_releases_uri = URI('https://releases.hashicorp.com')
   terraform_releases_html = Net::HTTP.get(terraform_releases_uri).split("\n")
   terraform_versions = terraform_releases_html.map do |html_node|
