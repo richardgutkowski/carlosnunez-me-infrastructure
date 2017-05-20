@@ -1,0 +1,2 @@
+def install_latest_version_of_terraform
+end
