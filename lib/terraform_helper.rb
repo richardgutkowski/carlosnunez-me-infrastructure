@@ -12,7 +12,8 @@ def install_latest_version_of_terraform!
     raise "Terraform is not supported by your CPU platform."
   end
 
- 
+  latest_terraform_release_uri = get_latest_terraform_release os:os,cpu_platform:cpu_platform
+  terraform_binary = open("https://releases.hashicorp.com/terraform/#{latest_version}/#{terraform_file_to_get}")
 end
 
 private
@@ -44,15 +45,13 @@ def get_supported_cpu_platform
   end
 end
 
-def get_latest_release_of_terraform
-  terraform_releases_uri = URI('https://releases.hashicorp.com')
-  terraform_releases_html = Net::HTTP.get(terraform_releases_uri).split("\n")
+def get_latest_terraform_release(os,cpu_platform)
+  terraform_releases_uri = 'https://releases.hashicorp.com'
+  terraform_releases_html = Net::HTTP.get(URI(terraform_releases_uri)).split("\n")
   terraform_versions = terraform_releases_html.map do |html_node|
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
   end.compact
   _, latest_version = terraform_versions.first.split('_')
 
-  terraform_file_to_get
-  terraform_binary = open("https://releases.hashicorp.com/terraform/#{latest_version}/#{terraform_file_to_get}")
 end
