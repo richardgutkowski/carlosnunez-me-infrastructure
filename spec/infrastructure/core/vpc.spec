@@ -1,10 +1,5 @@
 require 'spec_helper'
 
-config_file = load_config
-ng already exists for <80><fd>SSpecChangelog
-config_file = load_config
-@config = config_file[ENV['TARGET_ENVIRONMENT']]
-@config = config_file[ENV['TARGET_ENVIRONMENT']]
 describe Infrastructure::Core::AWS::MainVPC do
   aws_regions_containing_this_vpc = @infrastructure_config['vpc']['regions']
   vpc_cidr_block = @infrastructure_config['vpc']['cidr_block']
