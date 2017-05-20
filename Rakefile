@@ -1,5 +1,6 @@
 require 'rspec/core/rake_task'
 require_relative 'lib/environments'
+require_relative 'lib/terraform_helper'
 
 namespace :check_env_vars do
   required_env_vars_with_valid_values = {
