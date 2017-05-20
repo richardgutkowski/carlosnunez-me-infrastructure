@@ -7,10 +7,11 @@ namespace :check_env_vars do
   }
   required_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
     raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
-    raise "#{ENV[env_var]} is not a valid value for #{ENV[env_var]}" \
-      if !supported_env_var_values.contains? ENV[env_var]
+    raise "#{ENV[env_var]} is not a valid value for #{ENV[env_var]}" if !supported_env_var_values.contains? ENV[env_var]
   end
 end
+
+  nam
 
 namespace :unit do
   RSpec::Core::RakeTask.new(:rspec) do
