@@ -3,7 +3,7 @@ require 'rspec/core/rake_task'
 namespace :prerequisites do
   required_env_vars = [ 'TARGET_ENVIRONMENT' ]
   required_env_vars.each do |env_var|
-    raise "#{env_var} is not defined in your environment; please define it." if !ENV[$env_var]
+    raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
   end
 end
 
