@@ -53,5 +53,10 @@ def get_latest_terraform_release(os,cpu_platform)
     version
   end.compact
   _, latest_version = terraform_versions.first.split('_')
+  latest_terraform_release_uri = \
+    "#{terraform_releases_uri}/terraform/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
+  latest_terraform_release_uri
+end
 
+def download_file_to_working_directory(uri, file_name)
 end
