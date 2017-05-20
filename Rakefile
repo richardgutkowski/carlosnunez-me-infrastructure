@@ -2,7 +2,7 @@ require 'rspec/core/rake_task'
 
 namespace :check_env_vars do
   required_env_vars_with_valid_values = {
-    'TARGET_ENVIRONMENT' => [ 'development', 'production' ]
+    'TARGET_ENVIRONMENT' => [ 'dev', 'prod' ]
   }
   required_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
     raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
