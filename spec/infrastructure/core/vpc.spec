@@ -7,13 +7,25 @@ describe Infrastructure::Core::AWS::MainVPC do
   aws_regions_containing_this_vpc.each do |aws_region|
     describe 'vpc_presence' do
       it "Should exist in this region: #{aws_region}" do
+        pass
+      end
+    end
+
+    describe 'vpc_properties' do
+      it "Should have DNS hostnames enabled" do
+        pass
+      end
+      it "Should have DNS resolution enabled" do
+        pass
       end
     end
 
     describe 'subnets' do
       it "Should be using CIDR #{vpc_cidr_block} for its default subnet" do
+        pass
       end
     end
+
     describe 'core_security_groups' do
     end
     describe 'network_acls' do

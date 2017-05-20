@@ -9,6 +9,6 @@ end
 RSpec.configure do |config|
   config_for_all_environments = load_config
   config.before(:example) {
-    @config = config_for_all_environments[ENV['TARGET_ENVIRONMENT']]
+    @infrastructure_config = config_for_all_environments[ENV['TARGET_ENVIRONMENT']]
   }
 end
