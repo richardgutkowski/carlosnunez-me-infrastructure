@@ -1,5 +1,22 @@
 require 'net/http'
 
+def get_supported_terraform_os_build
+  case RUBY_PLATFORM
+  when /win32/
+    "windows"
+  when /darwin/
+    "darwin"
+  when /linux/
+    "linux"
+  when /openbsd/
+    "openbsd"
+  when /solaris/
+    "solaris"
+  else
+    "unsupported"
+  end
+end
+
 def install_latest_version_of_terraform
   terraform_releases_uri = URI('https://releases.hashicorp.com')
   terraform_releases_html = Net::HTTP.get(terraform_releases_uri).split("\n")
@@ -7,4 +24,6 @@ def install_latest_version_of_terraform
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
   end.compact
+  latest_version = terraform_versions.first
+
 end
