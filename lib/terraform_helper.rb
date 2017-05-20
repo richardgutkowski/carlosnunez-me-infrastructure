@@ -12,7 +12,11 @@ def install_latest_version_of_terraform!
     raise "Terraform is not supported by your CPU platform."
   end
 
-  latest_terraform_release_uri = get_latest_terraform_release os:os,cpu_platform:cpu_platform
+  latest_terraform_release_uri = get_latest_terraform_release os:os,
+    cpu_platform:cpu_platform
+  download_file_to_working_directory! uri_as_string:latest_terraform_release_uri,
+    file_name:"terraform.zip"
+
 end
 
 private
