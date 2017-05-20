@@ -60,7 +60,8 @@ def get_latest_terraform_release(os,cpu_platform)
   latest_terraform_release_uri
 end
 
-def download_terraform_to_working_directory!(uri_as_string, file_name)
+def download_terraform_to_working_directory!(uri_as_string)
+  file_name = "terraform.zip"
   uri = URI(uri_as_string)
   uri_host_with_scheme = "#{uri.scheme}://#{uri.host}"
   Net::HTTP.start(uri_host_with_scheme) do |session|
@@ -69,7 +70,9 @@ def download_terraform_to_working_directory!(uri_as_string, file_name)
       file.write(response.body)
     end
   end
-  Zip::ZipFile.open("terraform.zip") do zip_file
+  Zip::ZipFile.open(file_name) do |zip_file|
+    zip_file.each do |file|
+      zip_file.extract file, Dir.pwd
+    end
   end
 end
-  
