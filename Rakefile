@@ -3,7 +3,7 @@ require_relative 'lib/environments'
 
 namespace :check_env_vars do
   required_env_vars_with_valid_values = {
-    'TARGET_ENVIRONMENT' => [ 'dev', 'prod' ]
+    'TARGET_ENVIRONMENT' => get_valid_environments
   }
   required_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
     raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
