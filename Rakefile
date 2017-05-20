@@ -15,7 +15,7 @@ end
 namespace :install_terraform_if_needed do
   terraform_version = `terraform version`
   if terraform_version == "" or terraform_version.contains? 'Your version of Terraform is out of date'
-    install_latest_version_of_terraform
+    install_latest_version_of_terraform!
   end
 end
 
