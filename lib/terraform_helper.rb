@@ -1,4 +1,5 @@
 require 'net/http'
+require 'open-uri'
 
 def get_supported_terraform_os_build
   case RUBY_PLATFORM
@@ -28,6 +29,6 @@ def install_latest_version_of_terraform
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
   end.compact
-  latest_version = terraform_versions.first
+  _, latest_version = terraform_versions.first.split('_')
 
 end
