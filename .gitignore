@@ -10,3 +10,6 @@ terraform.tfstate*
 
 # Ignore packer build.log
 build.log
+
+# Ignore Gemfile.lock
+Gemfile.lock
