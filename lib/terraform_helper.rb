@@ -13,7 +13,6 @@ def install_latest_version_of_terraform!
   end
 
   latest_terraform_release_uri = get_latest_terraform_release os:os,cpu_platform:cpu_platform
-  terraform_binary = open("https://releases.hashicorp.com/terraform/#{latest_version}/#{terraform_file_to_get}")
 end
 
 private
@@ -58,5 +57,15 @@ def get_latest_terraform_release(os,cpu_platform)
   latest_terraform_release_uri
 end
 
-def download_file_to_working_directory(uri, file_name)
+def download_file_to_working_directory!(uri_as_string, file_name)
+  uri = URI(uri_as_string)
+  uri_host_with_scheme = "#{uri.scheme}://#{uri.host}"
+  Net::HTTP.start(uri_host_with_scheme) do |session|
+    response = session.get(uri.request_uri)
+    open(file_name, 'wb') do |file|
+      file.write(response.body)
+    end
+  end
+end
+  
 end
