@@ -12,6 +12,9 @@ namespace :check_env_vars do
 end
 
 namespace :install_terraform_if_needed do
+  if `which terraform` == ""
+    install_latest_version_of_terraform
+  end
 end
 
 namespace :unit do
@@ -21,4 +24,4 @@ namespace :unit do
   end
 end
 
-task :default => [ 'check_env_vars', 'unit:rspec' ]
+task :default => [ 'check_env_vars', 'install_terraform_if_needed', 'unit:rspec' ]
