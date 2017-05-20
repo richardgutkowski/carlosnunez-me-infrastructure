@@ -1,5 +1,6 @@
 require 'net/http'
 require 'open-uri'
+require 'zip'
 
 def install_latest_version_of_terraform!
   os = get_supported_terraform_os_build
@@ -68,6 +69,7 @@ def download_terraform_to_working_directory!(uri_as_string, file_name)
       file.write(response.body)
     end
   end
+  Zip::ZipFile.open("terraform.zip") do zip_file
+  end
 end
   
-end
