@@ -13,3 +13,6 @@ build.log
 
 # Ignore Gemfile.lock
 Gemfile.lock
+
+# Ignore local env vars
+config/application.yml
