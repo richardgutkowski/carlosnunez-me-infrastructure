@@ -1,8 +1,0 @@
-config:
-  dev:
-    aws:
-      regions:
-        - us-east-1
-        - us-west-1
-      vpc:
-        cidr_block: 10.0.0.0/16
