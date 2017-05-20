@@ -11,7 +11,8 @@ namespace :check_env_vars do
   end
 end
 
-  nam
+namespace :install_terraform_if_needed do
+end
 
 namespace :unit do
   RSpec::Core::RakeTask.new(:rspec) do
