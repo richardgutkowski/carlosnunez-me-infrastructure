@@ -1,7 +1,7 @@
 require 'net/http'
 require 'open-uri'
 
-def install_latest_version_of_terraform
+def install_latest_version_of_terraform!
   os = get_supported_terraform_os_build
   if os == "unsupported"
     raise "Terraform is not supported by your operating system."
@@ -13,7 +13,6 @@ def install_latest_version_of_terraform
   end
 
  
-  terraform_binary = open("https://releases.hashicorp.com/terraform/#{latest_version}/#{terraform_file_to_get}")
 end
 
 private
@@ -55,4 +54,5 @@ def get_latest_release_of_terraform
   _, latest_version = terraform_versions.first.split('_')
 
   terraform_file_to_get
+  terraform_binary = open("https://releases.hashicorp.com/terraform/#{latest_version}/#{terraform_file_to_get}")
 end
