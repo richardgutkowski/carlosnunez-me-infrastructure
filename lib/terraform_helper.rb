@@ -62,6 +62,7 @@ end
 
 def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   raise "Too many redirects to uri #{uri}" if redirects_remaining == 0
+  puts "URI: #{uri}"
   uri_object = URI(uri)
   response = Net::HTTP.get_response(uri_object)
   if response.code == "301" or response.code == "302"
