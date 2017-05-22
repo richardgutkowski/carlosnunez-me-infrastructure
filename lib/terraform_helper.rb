@@ -47,7 +47,6 @@ def get_supported_cpu_platform
 end
 
 def get_latest_terraform_release(os: ,cpu_platform:)
-  require 'pry'
   terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
   terraform_releases_html = Net::HTTP.get(URI(terraform_releases_uri)).split("\n")
   binding.pry
