@@ -3,7 +3,7 @@ require 'rspec/core/rake_task'
 require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
-namespace :check_env_vars :dotenv do
+task check_env_vars: :dotenv do
   required_env_vars_with_valid_values = {
     'TARGET_ENVIRONMENT' => get_supported_environments
   }
@@ -13,14 +13,14 @@ namespace :check_env_vars :dotenv do
   end
 end
 
-namespace :install_terraform_if_needed do
+task install_terraform_if_needed: do
   terraform_version = `terraform version`
   if terraform_version == "" or terraform_version.contains? 'Your version of Terraform is out of date'
     install_latest_version_of_terraform!
   end
 end
 
-namespace :unit :dotenv do
+task unit: :dotenv do
   RSpec::Core::RakeTask.new(:rspec) do
     task.pattern = Dir.glob('spec/**/*_spec.rb')
     task.rspec_opts = '--format documentation'
