@@ -18,4 +18,5 @@ Gemfile.lock
 config/application.yml
 
 # Ignore env vars (from dotenv)
+*.env
 *.env.*
