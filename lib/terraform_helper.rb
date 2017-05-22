@@ -47,8 +47,10 @@ def get_supported_cpu_platform
 end
 
 def get_latest_terraform_release(os: ,cpu_platform:)
+  require 'pry'
   terraform_releases_uri = 'https://releases.hashicorp.com'
   terraform_releases_html = Net::HTTP.get(URI(terraform_releases_uri)).split("\n")
+  binding.pry
   terraform_versions = terraform_releases_html.map do |html_node|
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
