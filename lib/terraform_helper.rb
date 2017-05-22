@@ -67,10 +67,8 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   response = Net::HTTP.get_response(uri_object)
   puts "Header: #{response.header}"
   if response.code == "301" or response.code == "302"
-    require 'pry'
-    binding.pry
     uri_object_to_visit_next = URI.parse(response.header['location'])
-    if uri_object_to_visit_next.hostname == ""
+    if uri_object_to_visit_next.hostname.to_s == ""
       uri_to_visit_next = "#{uri}/#{uri_object_to_visit_next.to_s}"
     else
       uri_to_visit_next = uri_object_to_visit_next.to_s
