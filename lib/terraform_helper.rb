@@ -60,25 +60,14 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   latest_terraform_release_uri
 end
 
-def do_http_get_with_forwards!(uri:, redirect_limit: 10)
-  loop do
-    break if redirect_limit == 0
-    uri_object = URI(uri)
-    http_client = Net::HTTP.new(uri_object)
-    if uri_object.scheme == 'https'
-      http_client.use_ssl = true
-    end
-    response = Net::HTTP.start(uri_object.host, uri_object.port) do |session|
-      session.request(http_client)
-    end
-    case response
-    when Net::HTTPSuccess then response
-    when Net::HTTPRedirection then
-      do_http_get_with_forwards! uri: response['location'], redirect_limit: redirect_limit-1
-    else
-      response.error!
-    end
+def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
+  raise "Too many redirects to uri #{uri}" if redirects_remaining == 0
+  response = Net::HTTP.get_response(uri)
+  if response.code == "301" or response.code == "302"
+    do_http_get_with_forwards uri: response.header['location'], \
+      redirects_remaining: redirects_remaining-1
   end
+  response.body
 end
 
 def download_terraform_to_working_directory!(uri_as_string:)
