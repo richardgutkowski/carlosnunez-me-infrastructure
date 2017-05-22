@@ -59,7 +59,7 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   latest_terraform_release_uri
 end
 
-def download_terraform_to_working_directory!(uri_as_string)
+def download_terraform_to_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
   uri_host_with_scheme = "#{uri.scheme}://#{uri.host}"
