@@ -60,7 +60,7 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   latest_terraform_release_uri
 end
 
-def do_http_get_with_forwards!(uri:, redirect_limit = 10)
+def do_http_get_with_forwards!(uri:, redirect_limit: 10)
   loop do
     break if redirect_limit == 0
     uri_with_data = URI(uri)
