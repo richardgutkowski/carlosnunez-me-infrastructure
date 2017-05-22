@@ -77,6 +77,8 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
     else
       uri_to_visit_next = uri_object_to_visit_next.to_s
     end
+    require 'pry'
+    binding.pry
     do_http_get_with_forwards! uri: uri_to_visit_next, \
       redirects_remaining: redirects_remaining-1
   end
