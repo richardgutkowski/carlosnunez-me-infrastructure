@@ -71,7 +71,7 @@ def do_http_get_with_forwards!(uri:, redirect_limit: 10)
     case response
     when Net::HTTPSuccess then response
     when Net::HTTPRedirection then
-      do_http_get_with_forwards! uri: uri, redirect_limit: redirect_limit-1
+      do_http_get_with_forwards! uri: response['location'], redirect_limit: redirect_limit-1
     else
       response.error!
     end
