@@ -65,7 +65,7 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   uri_object = URI(uri)
   response = Net::HTTP.get_response(uri_object)
   if response.code == "301" or response.code == "302"
-    do_http_get_with_forwards uri: response.header['location'], \
+    do_http_get_with_forwards! uri: response.header['location'], \
       redirects_remaining: redirects_remaining-1
   end
   response.body
