@@ -14,6 +14,9 @@ def install_latest_version_of_terraform!
   end
 
   latest_terraform_release_uri = get_latest_terraform_release os:os, cpu_platform:cpu_platform
+  if latest_terraform_release_uri == "NOT_FOUND"
+    raise "Couldn't retrieve latest Terraform URI. You'll need to install it manually."
+  end
   download_terraform_to_working_directory! uri_as_string:latest_terraform_release_uri
 end
 
@@ -54,6 +57,9 @@ def get_latest_terraform_release(os: ,cpu_platform:)
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
   end.compact
+  if terraform_versions.empty?
+    return "NOT_FOUND"
+  end
   _, latest_version = terraform_versions.first.split('_')
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
