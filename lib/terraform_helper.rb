@@ -15,7 +15,7 @@ def install_latest_version_of_terraform!
 
   latest_terraform_release_uri = get_latest_terraform_release os:os, cpu_platform:cpu_platform
   if latest_terraform_release_uri == "NOT_FOUND"
-    raise "Couldn't retrieve latest Terraform URI. You'll need to install it manually."
+    raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
   end
   download_terraform_to_working_directory! uri_as_string:latest_terraform_release_uri
 end
