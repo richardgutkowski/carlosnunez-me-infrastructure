@@ -63,9 +63,10 @@ end
 def do_http_get_with_forwards!(uri:, redirect_limit: 10)
   loop do
     break if redirect_limit == 0
+    puts "ATTEMPT: #{redirect_limit-9}"
     uri_with_data = URI(uri)
     request = Net::HTTP::Get.new(uri_with_data)
-    response = Net::HTTP.start(uri_with_data.host) do |session|
+    response = Net::HTTP.start(uri_with_data.host, uri_with_data.port) do |session|
       session.request(request)
     end
     case response
