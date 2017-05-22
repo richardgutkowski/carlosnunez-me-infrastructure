@@ -48,7 +48,7 @@ end
 
 def get_latest_terraform_release(os: ,cpu_platform:)
   require 'pry'
-  terraform_releases_uri = 'https://releases.hashicorp.com'
+  terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
   terraform_releases_html = Net::HTTP.get(URI(terraform_releases_uri)).split("\n")
   binding.pry
   terraform_versions = terraform_releases_html.map do |html_node|
@@ -57,7 +57,7 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   end.compact
   _, latest_version = terraform_versions.first.split('_')
   latest_terraform_release_uri = \
-    "#{terraform_releases_uri}/terraform/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
+    "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
   latest_terraform_release_uri
 end
 
