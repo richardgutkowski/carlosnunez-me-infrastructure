@@ -73,7 +73,7 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   if response.code == "301" or response.code == "302"
     uri_object_to_visit_next = URI.parse(response.header['location'])
     if uri_object_to_visit_next.hostname.to_s == ""
-      uri_to_visit_next = "#{uri}/#{uri_object_to_visit_next.to_s}"
+      uri_to_visit_next = "#{uri_object.hostname}/#{uri_object_to_visit_next.to_s}"
     else
       uri_to_visit_next = uri_object_to_visit_next.to_s
     end
