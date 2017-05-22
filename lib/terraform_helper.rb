@@ -53,6 +53,8 @@ def get_latest_terraform_release(os: ,cpu_platform:)
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
   end.compact
+  require 'pry'
+  binding.pry
   _, latest_version = terraform_versions.first.split('_')
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
