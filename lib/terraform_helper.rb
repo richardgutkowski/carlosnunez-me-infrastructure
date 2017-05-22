@@ -69,7 +69,7 @@ def do_http_get_with_forwards!(uri:, redirect_limit: 10)
       http_client.use_ssl = true
     end
     response = Net::HTTP.start(uri_object.host, uri_object.port) do |session|
-      session.http_client(http_client)
+      session.request(http_client)
     end
     case response
     when Net::HTTPSuccess then response
