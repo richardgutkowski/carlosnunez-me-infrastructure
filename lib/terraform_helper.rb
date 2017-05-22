@@ -63,13 +63,13 @@ end
 def do_http_get_with_forwards!(uri:, redirect_limit: 10)
   loop do
     break if redirect_limit == 0
-    uri_with_data = URI(uri)
-    request = Net::HTTP::Get.new(uri_with_data)
-    if uri_with_data.scheme == 'https'
-      request.use_ssl = true
+    uri_object = URI(uri)
+    http_client = Net::HTTP.new(uri_object)
+    if uri_object.scheme == 'https'
+      http_client.use_ssl = true
     end
-    response = Net::HTTP.start(uri_with_data.host, uri_with_data.port) do |session|
-      session.request(request)
+    response = Net::HTTP.start(uri_object.host, uri_object.port) do |session|
+      session.http_client(http_client)
     end
     case response
     when Net::HTTPSuccess then response
