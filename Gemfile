@@ -2,5 +2,5 @@ source 'https://rubygems.org'
 
 gem 'rspec'
 gem 'rake'
-gem 'figaro'
 gem 'zip'
+gem 'dotenv'
