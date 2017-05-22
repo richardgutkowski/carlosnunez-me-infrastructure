@@ -27,4 +27,4 @@ task unit: :dotenv do
   end
 end
 
-task :default => [ 'check_env_vars', 'install_terraform_if_needed', 'unit:rspec' ]
+task :default => [ 'check_env_vars', 'install_terraform_if_needed', 'unit' ]
