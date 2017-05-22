@@ -68,10 +68,8 @@ end
 
 def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   raise "Too many redirects to uri #{uri}" if redirects_remaining == 0
-  puts "URI: #{uri}"
   uri_object = URI(uri)
   response = Net::HTTP.get_response(uri_object)
-  puts "Header: #{response.header}"
   if response.code == "301" or response.code == "302"
     uri_object_to_visit_next = URI.parse(response.header['location'])
     if uri_object_to_visit_next.hostname.to_s == ""
