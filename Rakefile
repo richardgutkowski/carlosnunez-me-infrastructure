@@ -1,8 +1,9 @@
+require 'dotenv/tasks'
 require 'rspec/core/rake_task'
 require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
-namespace :check_env_vars do
+namespace :check_env_vars :dotenv do
   required_env_vars_with_valid_values = {
     'TARGET_ENVIRONMENT' => get_supported_environments
   }
@@ -19,7 +20,7 @@ namespace :install_terraform_if_needed do
   end
 end
 
-namespace :unit do
+namespace :unit :dotenv do
   RSpec::Core::RakeTask.new(:rspec) do
     task.pattern = Dir.glob('spec/**/*_spec.rb')
     task.rspec_opts = '--format documentation'
