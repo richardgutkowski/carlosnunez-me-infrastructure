@@ -123,12 +123,10 @@ def download_terraform_into_working_directory!(uri_as_string:)
       open file_name, 'w' do |file_handle|
         amount_downloaded_so_far = 0
         response.read_body do |chunk|
-          this_chunk_size = chunk.length.to_i
+          this_chunk_size = chunk.length
           amount_downloaded_so_far += this_chunk_size
-          require 'pry'
-          binding.pry
           percent_downloaded = \
-            ((amount_downloaded_so_far/total_download_size)*100).round(2)
+            ((amount_downloaded_so_far.to_i/total_download_size.to_i)*100).round(2)
           print "Downloading Terraform (#{percent_downloaded} complete). " \
             "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
             $stdout.flush
