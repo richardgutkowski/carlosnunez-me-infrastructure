@@ -71,16 +71,19 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   uri_object = URI(uri)
   response = Net::HTTP.get_response(uri_object)
   if response.code == "301" or response.code == "302"
-    uri_object_to_visit_next = URI.parse(response.header['location'])
-    if uri_object_to_visit_next.hostname.to_s == ""
-      uri_to_visit_next = \
-        "#{uri_object.scheme}://#{uri_object.hostname}/#{uri_object_to_visit_next.to_s}"
+    referred_uri = URI.parse(response.header['location'])
+    if not referred_uri.hostname
+      next_uri = create_uri scheme: uri_object.scheme, \
+        hostname: uri_object.hostname, \
+        path: referred_uri.path
     else
-      uri_to_visit_next = uri_object_to_visit_next.to_s
+      next_uri = create_uri scheme: referred_uri.scheme, \
+        hostname: referred_uri.hostname, \
+        path: referred_uri.path
     end
     require 'pry'
     binding.pry
-    do_http_get_with_forwards! uri: uri_to_visit_next, \
+    do_http_get_with_forwards! uri: referred_uri.to_s, \
       redirects_remaining: redirects_remaining-1
   end
   response.body
