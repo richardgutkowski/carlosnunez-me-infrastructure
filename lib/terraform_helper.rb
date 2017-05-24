@@ -108,6 +108,7 @@ end
 def download_terraform_into_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
+  terraform_zip_being_downloaded = uri.path.split('/')[-1]
   session = Net::HTTP.new(uri.host, uri.port)
   if uri.scheme == 'https'
     session.use_ssl = true
@@ -130,7 +131,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
           # override this.
           percent_downloaded = \
             ((amount_downloaded_so_far.to_f/total_download_size)*100).round(2)
-          print "Downloading Terraform (#{percent_downloaded} complete). " \
+          print "Downloading #{terraform_zip_being_downloaded} (#{percent_downloaded}% complete). " \
             "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
             $stdout.flush
           file_handle.write chunk
