@@ -22,4 +22,4 @@ config/application.yml
 *.env.*
 
 # Ignore terraform.zip
-terraform.zip
+terraform_*.zip
