@@ -111,7 +111,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
   require 'pry'
   binding.pry
   if uri.scheme == 'https'
-    session.use_ssl == true
+    session.use_ssl = true
   end
   session.start do |session|
     request = Net::HTTP::Get.new uri
