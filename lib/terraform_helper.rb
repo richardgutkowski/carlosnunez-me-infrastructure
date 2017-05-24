@@ -83,7 +83,7 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
     end
     require 'pry'
     binding.pry
-    do_http_get_with_forwards! uri: referred_uri.to_s, \
+    do_http_get_with_forwards! uri: next_uri.to_s, \
       redirects_remaining: redirects_remaining-1
   end
   response.body
