@@ -92,10 +92,10 @@ end
 def create_uri(scheme:, hostname:, path:)
   case scheme.downcase
   when 'http'
-    URI::HTTP.build {
+    URI::HTTP.build({
       :host => hostname,
       :path => path
-    }
+    })
   when 'https'
     URI::HTTPS.build {
       :host => hostname,
