@@ -3,7 +3,7 @@ require 'open-uri'
 require 'zip'
 require 'fileutils'
 
-def install_latest_version_of_terraform!
+def install_latest_version_of_terraform_into_working_directory!
   os = get_supported_terraform_os_build
   if os == "unsupported"
     raise "Terraform is not supported by your operating system."
