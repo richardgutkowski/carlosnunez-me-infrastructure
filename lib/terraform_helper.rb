@@ -109,6 +109,8 @@ def download_terraform_into_working_directory!(uri_as_string:)
   uri = URI(uri_as_string)
   Net::HTTP.start(uri.host, uri.port) do |session|
     request = Net::HTTP::Get.new uri
+    require 'pry'
+    binding.pry
     session.request request do |response|
       open file_name, 'w' do |file_handle|
         response.read_body do |chunk|
