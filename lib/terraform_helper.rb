@@ -145,7 +145,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
     zip_file.each do |file|
       puts "Extracting #{file.name} from #{file_name}..."
       file.extract(file.name)
-      File.chmod(0644, file.name, "out")
+      File.chmod(0644, file.name)
     end
   end
 end
