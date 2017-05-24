@@ -161,5 +161,7 @@ end
 
 def terraform_installed_successfully?(version_expected)
   terraform_version_reported = `\$PWD/terraform version`
+  require 'pry'
+  binding.pry
   terraform_version_reported.include? "Terraform v#{version_expected}"
 end
