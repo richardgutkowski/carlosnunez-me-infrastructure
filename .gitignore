@@ -21,5 +21,6 @@ config/application.yml
 *.env
 *.env.*
 
-# Ignore terraform.zip
+# Ignore terraform zips and the Terraform binary
+terraform
 terraform_*.zip
