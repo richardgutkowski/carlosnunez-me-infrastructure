@@ -127,6 +127,8 @@ def download_terraform_into_working_directory!(uri_as_string:)
           amount_downloaded_so_far += this_chunk_size
           percent_downloaded = \
             ((amount_downloaded_so_far.to_i/total_download_size.to_i)*100).round(2)
+          require 'pry'
+          binding.pry
           print "Downloading Terraform (#{percent_downloaded} complete). " \
             "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
             $stdout.flush
