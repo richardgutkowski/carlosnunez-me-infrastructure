@@ -109,12 +109,12 @@ def download_terraform_to_working_directory!(uri_as_string:)
   uri = URI(uri_as_string)
   Net::HTTP.start(uri.host, uri.port) do |session|
     response = session.get(uri.request_uri)
+    require 'pry'
+    binding.pry
     open(file_name, 'wb') do |file|
       file.write(response.body)
     end
   end
-  require 'pry'
-  binding.pry
   Zip::ZipFile.open(file_name) do |zip_file|
     zip_file.each do |file|
       zip_file.extract file, Dir.pwd
