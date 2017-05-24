@@ -125,8 +125,11 @@ def download_terraform_into_working_directory!(uri_as_string:)
         response.read_body do |chunk|
           this_chunk_size = chunk.length
           amount_downloaded_so_far += this_chunk_size
+          # Ruby defaults to using integer division instead of floating point
+          # division. One needs to use .to_f on one of the divisors to
+          # override this.
           percent_downloaded = \
-            ((amount_downloaded_so_far/total_download_size)*100).round(2)
+            ((amount_downloaded_so_far.to_f/total_download_size)*100).round(2)
           require 'pry'
           binding.pry
           print "Downloading Terraform (#{percent_downloaded} complete). " \
