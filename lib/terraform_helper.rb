@@ -108,6 +108,8 @@ def download_terraform_into_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
   session = Net::HTTP.new(uri.host, uri.port)
+  require 'pry'
+  binding.pry
   if uri.scheme == 'https'
     session.use_ssl == true
   end
