@@ -19,6 +19,7 @@ def install_latest_version_of_terraform!
     raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
   end
   download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
+  confirm_terraform_installation!
 end
 
 private
@@ -148,4 +149,9 @@ def download_terraform_into_working_directory!(uri_as_string:)
       File.chmod(0744, file.name)
     end
   end
+end
+
+def terraform_installed_successfully?(version_expected)
+  terraform_version_reported = `\$PWD/terraform version`
+  terraform_version_reported.contain? "Terraform v#{version_expected}"
 end
