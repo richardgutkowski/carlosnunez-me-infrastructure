@@ -17,7 +17,7 @@ def install_latest_version_of_terraform!
   if latest_terraform_release_uri == "NOT_FOUND"
     raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
   end
-  download_terraform_to_working_directory! uri_as_string:latest_terraform_release_uri
+  download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
 end
 
 private
@@ -104,11 +104,9 @@ def create_uri(scheme:, hostname:, path:)
   end
 end   
 
-def download_terraform_to_working_directory!(uri_as_string:)
+def download_terraform_into_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
-  require 'pry'
-  binding.pry
   Net::HTTP.start(uri.host, uri.port) do |session|
     request = Net::HTTP::Get.new uri
     session.request request do |response|
