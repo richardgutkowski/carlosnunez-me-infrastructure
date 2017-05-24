@@ -107,8 +107,7 @@ end
 def download_terraform_to_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
-  uri_host_with_scheme = "#{uri.scheme}://#{uri.host}"
-  Net::HTTP.start(uri_host_with_scheme, uri.port) do |session|
+  Net::HTTP.start(uri.host, uri.port) do |session|
     response = session.get(uri.request_uri)
     open(file_name, 'wb') do |file|
       file.write(response.body)
