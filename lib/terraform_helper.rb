@@ -14,12 +14,16 @@ def install_latest_version_of_terraform!
     raise "Terraform is not supported by your CPU platform."
   end
 
-  latest_terraform_release_uri = get_latest_terraform_release os:os, cpu_platform:cpu_platform
+  latest_terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
+  latest_terraform_version = latest_terraform_release_details[:latest_version]
+  latest_terraform_release_uri = latest_terraform_release_details[:latest_version_uri]
   if latest_terraform_release_uri == "NOT_FOUND"
     raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
   end
   download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
-  confirm_terraform_installation!
+  if not terraform_installed_successfully? version:latest_terraform_version
+    raise "Terraform not updated successfully. You'll need to install it manually."
+  end
 end
 
 private
@@ -64,7 +68,10 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   _, latest_version = terraform_versions.first.split('_')
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
-  latest_terraform_release_uri
+  {
+    :latest_version => latest_version,
+    :latest_version_uri => latest_terraform_release_uri
+  }
 end
 
 def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
