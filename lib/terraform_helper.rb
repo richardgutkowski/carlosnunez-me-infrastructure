@@ -52,7 +52,6 @@ end
 def get_latest_terraform_release(os: ,cpu_platform:)
   terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
   terraform_releases_html = do_http_get_with_forwards! uri:terraform_releases_uri
-  terraform_releases_html = Net::HTTP.get(URI(terraform_releases_uri)).split("\n")
   terraform_versions = terraform_releases_html.map do |html_node|
     version = html_node.gsub!  /.*>(terraform_.*)<.*/,'\1'
     version
@@ -85,8 +84,6 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
       redirects_remaining: redirects_remaining-1
   else
     response.body
-    require 'pry'
-    binding.pry
   end
 end
 
