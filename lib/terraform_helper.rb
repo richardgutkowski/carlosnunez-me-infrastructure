@@ -83,7 +83,7 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
     do_http_get_with_forwards! uri: next_uri.to_s, \
       redirects_remaining: redirects_remaining-1
   else
-    response.body
+    response.body.split("\n")
   end
 end
 
