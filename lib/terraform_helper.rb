@@ -136,6 +136,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
             $stdout.flush
           file_handle.write chunk
         end
+        puts "\n"
       end
     end
   end
