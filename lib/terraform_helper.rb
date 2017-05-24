@@ -15,11 +15,14 @@ def install_latest_version_of_terraform!
   end
 
   latest_terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
+  require 'pry'
+  binding.pry
   latest_terraform_version = latest_terraform_release_details[:latest_version]
   latest_terraform_release_uri = latest_terraform_release_details[:latest_version_uri]
   if latest_terraform_release_uri == "NOT_FOUND"
     raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
   end
+
   download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
   if not terraform_installed_successfully? version:latest_terraform_version
     raise "Terraform not updated successfully. You'll need to install it manually."
