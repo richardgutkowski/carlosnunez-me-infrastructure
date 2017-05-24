@@ -86,6 +86,23 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
   response.body
 end
 
+def create_uri(scheme:, hostname:, path:)
+  case scheme.downcase
+  when 'http'
+    URI::HTTP.build {
+      :host => hostname,
+      :path => path
+    }
+  when 'https'
+    URI::HTTPS.build {
+      :host => hostname,
+      :path => path
+    }
+  else
+    nil
+  end
+end   
+
 def download_terraform_to_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
