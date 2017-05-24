@@ -16,6 +16,7 @@ end
 task :install_terraform_if_needed do
   terraform_version = `terraform version`
   if terraform_version == "" or terraform_version.include? 'Your version of Terraform is out of date'
+    puts "Terraform not found or out of date. Updating."
     install_latest_version_of_terraform!
   end
 end
