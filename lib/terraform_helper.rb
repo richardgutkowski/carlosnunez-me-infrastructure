@@ -106,9 +106,8 @@ def create_uri(scheme:, hostname:, path:)
 end   
 
 def download_terraform_into_working_directory!(uri_as_string:)
-  file_name = "terraform.zip"
   uri = URI(uri_as_string)
-  terraform_zip_being_downloaded = uri.path.split('/')[-1]
+  file_name = uri.path.split('/')[-1]
 
   if !File.exist? file_name
     session = Net::HTTP.new(uri.host, uri.port)
@@ -129,7 +128,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
             # override this.
             percent_downloaded = \
               ((amount_downloaded_so_far.to_f/total_download_size)*100).round(2)
-            print "Downloading #{terraform_zip_being_downloaded} (#{percent_downloaded}% complete). " \
+            print "Downloading #{file_name} (#{percent_downloaded}% complete). " \
               "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
               $stdout.flush
             file_handle.write chunk
@@ -138,6 +137,8 @@ def download_terraform_into_working_directory!(uri_as_string:)
         end
       end
     end
+  else
+    puts "#{file_name} already downloaded."
   end
 
   Zip::File.open(file_name) do |zip_file|
