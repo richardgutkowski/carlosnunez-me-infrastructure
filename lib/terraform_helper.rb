@@ -119,16 +119,14 @@ def download_terraform_into_working_directory!(uri_as_string:)
   session.start do |session|
     request = Net::HTTP::Get.new uri
     session.request request do |response|
-      total_download_size = response.header['content-length']
+      total_download_size = response.header['content-length'].to_i
       open file_name, 'w' do |file_handle|
         amount_downloaded_so_far = 0
         response.read_body do |chunk|
           this_chunk_size = chunk.length
           amount_downloaded_so_far += this_chunk_size
           percent_downloaded = \
-            ((amount_downloaded_so_far.to_i/total_download_size.to_i)*100).round(2)
-          require 'pry'
-          binding.pry
+            ((amount_downloaded_so_far/total_download_size)*100).round(2)
           print "Downloading Terraform (#{percent_downloaded} complete). " \
             "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
             $stdout.flush
