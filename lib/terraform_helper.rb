@@ -109,34 +109,33 @@ def download_terraform_into_working_directory!(uri_as_string:)
   file_name = "terraform.zip"
   uri = URI(uri_as_string)
   terraform_zip_being_downloaded = uri.path.split('/')[-1]
-  session = Net::HTTP.new(uri.host, uri.port)
-  if uri.scheme == 'https'
-    session.use_ssl = true
-  end
 
-  if File.exist? file_name
-    FileUtils.rm file_name
-  end
-  session.start do |session|
-    request = Net::HTTP::Get.new uri
-    session.request request do |response|
-      total_download_size = response.header['content-length'].to_i
-      open file_name, 'w' do |file_handle|
-        amount_downloaded_so_far = 0
-        response.read_body do |chunk|
-          this_chunk_size = chunk.length
-          amount_downloaded_so_far += this_chunk_size
-          # Ruby defaults to using integer division instead of floating point
-          # division. One needs to use .to_f on one of the divisors to
-          # override this.
-          percent_downloaded = \
-            ((amount_downloaded_so_far.to_f/total_download_size)*100).round(2)
-          print "Downloading #{terraform_zip_being_downloaded} (#{percent_downloaded}% complete). " \
-            "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
-            $stdout.flush
-          file_handle.write chunk
+  if !File.exist? file_name
+    session = Net::HTTP.new(uri.host, uri.port)
+    if uri.scheme == 'https'
+      session.use_ssl = true
+    end
+    session.start do |session|
+      request = Net::HTTP::Get.new uri
+      session.request request do |response|
+        total_download_size = response.header['content-length'].to_i
+        open file_name, 'w' do |file_handle|
+          amount_downloaded_so_far = 0
+          response.read_body do |chunk|
+            this_chunk_size = chunk.length
+            amount_downloaded_so_far += this_chunk_size
+            # Ruby defaults to using integer division instead of floating point
+            # division. One needs to use .to_f on one of the divisors to
+            # override this.
+            percent_downloaded = \
+              ((amount_downloaded_so_far.to_f/total_download_size)*100).round(2)
+            print "Downloading #{terraform_zip_being_downloaded} (#{percent_downloaded}% complete). " \
+              "[#{amount_downloaded_so_far}/#{total_download_size}] bytes downloaded.\r"
+              $stdout.flush
+            file_handle.write chunk
+          end
+          puts "\n"
         end
-        puts "\n"
       end
     end
   end
