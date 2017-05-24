@@ -123,7 +123,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
       open file_name, 'w' do |file_handle|
         amount_downloaded_so_far = 0
         response.read_body do |chunk|
-          this_chunk_size = chunk.length
+          this_chunk_size = chunk.length.to_i
           amount_downloaded_so_far += this_chunk_size
           percent_downloaded = \
             ((amount_downloaded_so_far/total_download_size)*100).round(2)
