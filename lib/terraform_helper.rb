@@ -97,10 +97,10 @@ def create_uri(scheme:, hostname:, path:)
       :path => path
     })
   when 'https'
-    URI::HTTPS.build {
+    URI::HTTPS.build({
       :host => hostname,
       :path => path
-    }
+    })
   else
     nil
   end
