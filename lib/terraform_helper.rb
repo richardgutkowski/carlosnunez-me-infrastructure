@@ -1,6 +1,7 @@
 require 'net/http'
 require 'open-uri'
 require 'zip'
+require 'fileutils'
 
 def install_latest_version_of_terraform!
   os = get_supported_terraform_os_build
@@ -110,6 +111,10 @@ def download_terraform_into_working_directory!(uri_as_string:)
   session = Net::HTTP.new(uri.host, uri.port)
   if uri.scheme == 'https'
     session.use_ssl = true
+  end
+
+  if File.exist? file_name
+    FileUtils.rm file_name
   end
   session.start do |session|
     request = Net::HTTP::Get.new uri
