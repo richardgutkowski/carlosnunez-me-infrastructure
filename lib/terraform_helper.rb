@@ -83,10 +83,11 @@ def do_http_get_with_forwards!(uri:, redirects_remaining: 10)
     end
     do_http_get_with_forwards! uri: next_uri.to_s, \
       redirects_remaining: redirects_remaining-1
+  else
+    response.body
+    require 'pry'
+    binding.pry
   end
-  response.body
-  require 'pry'
-  binding.pry
 end
 
 def create_uri(scheme:, hostname:, path:)
