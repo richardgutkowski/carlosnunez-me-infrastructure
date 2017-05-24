@@ -143,7 +143,7 @@ def download_terraform_into_working_directory!(uri_as_string:)
 
   Zip::File.open(file_name) do |zip_file|
     zip_file.each do |file|
-      zip_file.extract file
+      file.extract(file.name)
     end
   end
 end
