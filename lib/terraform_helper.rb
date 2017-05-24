@@ -22,7 +22,7 @@ def install_latest_version_of_terraform!
   end
 
   download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
-  if not terraform_installed_successfully? version:latest_terraform_version
+  if not terraform_installed_successfully? version_expected:latest_terraform_version
     raise "Terraform not updated successfully. You'll need to install it manually."
   end
 end
