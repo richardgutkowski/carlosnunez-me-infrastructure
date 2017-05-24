@@ -120,6 +120,8 @@ def download_terraform_into_working_directory!(uri_as_string:)
     session.request request do |response|
       open file_name, 'w' do |file_handle|
         response.read_body do |chunk|
+          require 'pry'
+          binding.pry
           file_handle.write chunk
         end
       end
