@@ -28,7 +28,7 @@ end
 
 task unit: :dotenv do
   RSpec::Core::RakeTask.new(:rspec) do
-    task.pattern = Dir.glob('spec/**/*_spec.rb')
+    task.pattern = 'spec/**/*_spec.rb'
     task.rspec_opts = '--format documentation'
   end
 end
