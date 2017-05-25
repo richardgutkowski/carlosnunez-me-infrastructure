@@ -12,9 +12,9 @@ namespace :prerequisites do
     }
     required_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
       raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
-      raise "#{ENV[env_var]} is not a valid value for #{ENV[env_var]}" \
-        if !supported_env_var_values.include? ENV[env_var] or \
-          supported_env_var_values != "CHECK_NOT_REQUIRED"
+      if supported_env_var_values != "CHECK_NOT_REQUIRED" and !supported_env_var_values.include? ENV[env_var]
+        raise "#{ENV[env_var]} is not a valid value for #{ENV[env_var]}"
+      end
     end
   end
   task :install_terraform_if_needed do
