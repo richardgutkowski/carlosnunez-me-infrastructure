@@ -27,9 +27,9 @@ namespace :prerequisites do
 end
 
 task unit: :dotenv do
-  RSpec::Core::RakeTask.new(:rspec) do
-    task.pattern = 'spec/**/*_spec.rb'
-    task.rspec_opts = '--format documentation'
+  RSpec::Core::RakeTask.new(:rspec) do |task|
+    task.rspec_opts = ['--color', '-f progress', '-r ./spec/spec_helper.rb']
+    task.pattern = Dir.glob('spec/**/*_spec.rb')
   end
 end
 
