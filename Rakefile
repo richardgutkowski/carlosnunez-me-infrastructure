@@ -17,13 +17,12 @@ namespace :prerequisites do
           supported_env_var_values != "CHECK_NOT_REQUIRED"
     end
   end
-end
-
-task :install_terraform_if_needed do
-  terraform_version = `\$PWD/terraform version 2>/dev/null`
-  if terraform_version == "" or terraform_version.include? 'Your version of Terraform is out of date'
-    puts "Terraform not found or out of date. Updating."
-    install_latest_version_of_terraform_into_working_directory!
+  task :install_terraform_if_needed do
+    terraform_version = `\$PWD/terraform version 2>/dev/null`
+    if terraform_version == "" or terraform_version.include? 'Your version of Terraform is out of date'
+      puts "Terraform not found or out of date. Updating."
+      install_latest_version_of_terraform_into_working_directory!
+    end
   end
 end
 
@@ -34,4 +33,6 @@ task unit: :dotenv do
   end
 end
 
-task :default => [ 'check_env_vars', 'install_terraform_if_needed', 'unit' ]
+task :default => [ 'prerequisites:check_env_vars', \
+                   'prerequisites:install_terraform_if_needed', \
+                   'unit' ]
