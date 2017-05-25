@@ -8,6 +8,9 @@ end
 
 RSpec.configure do |config|
   config_for_all_environments = load_config environment:ENV['TARGET_ENVIRONMENT']
+  config.before(:all) {
+    $terraform_stdout = `terraform plan`
+  }
   config.before(:example) {
     @infrastructure_config = config_for_all_environments['config']
   }
