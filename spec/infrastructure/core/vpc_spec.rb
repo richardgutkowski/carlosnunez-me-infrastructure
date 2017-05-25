@@ -1,5 +1,18 @@
 require 'spec_helper'
 
+vpcs = @infrastructure_config['vpc']
+vpcs.each do |vpc|
+  vpc_name = vpc['name']
+  vpc_cidr_block = vpc['cidr_block']
+  vpc_tags = vpc['tags']
+  describe vpc(vpc_name) do
+    it { should exist }
+    it { should be_available }
+    its('is_default') { should be_false }
+    its('cidr_block') { should eq vpc_cidr_block }
+  end
+end
+
 describe Infrastructure::Core::AWS::MainVPC do
   aws_regions_to_contain_a_vpc = @infrastructure_config['vpc']['regions']
   vpc_cidr_block = @infrastructure_config['vpc']['cidr_block']
