@@ -1,6 +1,7 @@
-def load_config
-  if not File.exist? 'config/infrastructure_config.yml'
-    raise 'config/infrastructure_config.yml not found' 
+def load_config(environment)
+  file_to_load = "config/infrastructure_config.#{environment}.yml"
+  if not File.exist? file_to_load
+    raise "#{file_to_load} not found."
   end
-  YAML.load_file("config/infrastructure_config.yml")
+  YAML.load_file(file_to_load)
 end
