@@ -35,4 +35,4 @@ end
 
 task :default => [ 'prerequisites:check_env_vars', \
                    'prerequisites:install_terraform_if_needed', \
-                   'unit' ]
+                   'unit:spec' ]
