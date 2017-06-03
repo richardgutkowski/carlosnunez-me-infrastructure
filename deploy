@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+set -e
 
 SUPPORTED_ENVIRONMENTS=$(find config -type f -name "infrastructure_config*" \
-  -exec sh -c "echo {} | cut -f2-d '.'" \;)
+  -exec sh -c "echo {} | cut -f2 -d '.'" \;)
 
 usage() {
   print "deploy.sh [target_environment]\n"
