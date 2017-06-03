@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-vpcs = @infrastructure_config['vpc']
+vpcs = @infrastructure_config['aws']['vpc']
 vpcs.each do |vpc|
 end
 
