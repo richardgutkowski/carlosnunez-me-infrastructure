@@ -15,7 +15,12 @@ env_support_check() {
   env_to_check="$1"
   supported_envs="$2"
   matching_envs_found=$(echo "$supported_envs" | grep "${env_to_check}")
-  [ "$matching_envs_found" != "" ]
+  if [ "$matching_envs_found" != "" ]
+  then
+    return 1
+  else
+    return 0
+  fi
 }
 
 NUMBER_OF_ARGS_EXPECTED=1
@@ -27,7 +32,7 @@ fi
 
 target_env=$1
 is_env_supported=$(env_support_check $target_env $SUPPORTED_ENVIRONMENTS)
-if !$is_env_supported
+if $is_env_supported
 then
   printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
   usage
