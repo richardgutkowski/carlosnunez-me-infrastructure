@@ -38,3 +38,4 @@ then
   usage
   exit 1
 fi
+echo "You're good"
