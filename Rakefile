@@ -26,6 +26,15 @@ namespace :prerequisites do
   end
 end
 
+namespace :static_analysis do
+  task :lint do
+    lint_successful, lint_error_message = lint_terraform_configurations_in_this_directory
+    if !lint_successful
+      raise "terraform-lint failed! Error: #{lint_error_message}"
+    end
+  end
+end
+
 namespace :unit do
   RSpec::Core::RakeTask.new(:spec) do |task|
     task.rspec_opts = ['--color', '-f progress', '-r ./spec/spec_helper.rb']
@@ -35,4 +44,5 @@ end
 
 task :default => [ 'prerequisites:check_env_vars', \
                    'prerequisites:install_terraform_if_needed', \
+                   'static_analysis:lint', \
                    'unit:spec' ]
