@@ -34,7 +34,6 @@ target_env=$1
 if ! is_env_supported $target_env $SUPPORTED_ENVIRONMENTS
 then
   printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
-  usage
   exit 1
 fi
 
