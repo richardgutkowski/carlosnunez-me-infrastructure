@@ -7,8 +7,8 @@ SUPPORTED_ENVIRONMENTS=$(find config -type f -name "infrastructure_config*" \
 usage() {
   printf "deploy.sh [target_environment]\n"
   printf "Deploys infrastructure for carlosnunez.me\n\n"
-  printf "\ttarget_environment: The environment to deploy onto. \
-Supported environments: $SUPPORTED_ENVIRONMENTS"
+  printf "  target_environment: The environment to deploy onto. \
+Supported environments: ${SUPPORTED_ENVIRONMENTS}\n\n"
 }
 
 env_support_check() {
