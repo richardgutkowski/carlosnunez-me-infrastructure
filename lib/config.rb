@@ -8,7 +8,7 @@ def load_config(environment:)
     end
   end.compact
   if valid_config_files_found.count > 1
-    raise "Too many files found: #{valid_config_files_found}"
+    raise "Too many configuration files found for environment #{environment}: #{valid_config_files_found}"
   end
   file_to_load = valid_config_files_found.first
   YAML.load_file(file_to_load)
