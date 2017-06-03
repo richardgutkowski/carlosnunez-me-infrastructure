@@ -3,6 +3,15 @@ require 'open-uri'
 require 'zip'
 require 'fileutils'
 
+def lint_terraform_configurations_in_this_directory
+  lint_result = `\$PWD/terraform validate 2>&1`
+  lint_successful = false
+  if lint_result.empty?
+    lint_successful = true
+  end
+  return (lint_successful, lint_result)
+end
+
 def install_latest_version_of_terraform_into_working_directory!
   os = get_supported_terraform_os_build
   if os == "unsupported"
