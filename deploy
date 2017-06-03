@@ -22,7 +22,7 @@ NUMBER_OF_ARGS_EXPECTED=1
 if [ "$#" != "$NUMBER_OF_ARGS_EXPECTED" ]
 then
   usage
-  return 1
+  exit 1
 fi
 
 target_env=$1
@@ -31,5 +31,5 @@ if !$is_env_supported
 then
   printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
   usage
-  return 1
+  exit 1
 fi
