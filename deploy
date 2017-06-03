@@ -37,3 +37,22 @@ then
   usage
   exit 1
 fi
+
+for command in 'ruby --version' 'which gem'
+do
+  ruby_installation_check_result=$($command 2>/dev/null; echo $?)
+  if [ "$ruby_installation_check_result" != "0" ]
+  then
+    printf "ERROR: Installation check [$command] failed. Ensure that Ruby and \
+gem is installed correctly.\n"
+    exit 1
+  fi
+done
+
+which bundle 2>/dev/null || {
+  printf "INFO: Bundler not found. Installing Bundler.\n"
+  gem install bundler
+}
+
+TARGET_ENVIRONMENT=$target_env bundle exec rake
+
