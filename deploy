@@ -5,9 +5,9 @@ SUPPORTED_ENVIRONMENTS=$(find config -type f -name "infrastructure_config*" \
   -exec sh -c "echo {} | cut -f2 -d '.'" \;)
 
 usage() {
-  print "deploy.sh [target_environment]\n"
-  print "Deploys infrastructure for carlosnunez.me\n\n"
-  print "\ttarget_environment: The environment to deploy onto. \
+  printf "deploy.sh [target_environment]\n"
+  printf "Deploys infrastructure for carlosnunez.me\n\n"
+  printf "\ttarget_environment: The environment to deploy onto. \
 Supported environments: $SUPPORTED_ENVIRONMENTS"
 }
 
@@ -29,7 +29,7 @@ target_env=$1
 is_env_supported=env_support_check $target_env $SUPPORTED_ENVIRONMENTS
 if !$is_env_supported
 then
-  print "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
+  printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
   usage
   return 1
 fi
