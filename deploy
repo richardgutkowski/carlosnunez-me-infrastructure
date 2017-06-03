@@ -8,7 +8,7 @@ usage() {
   printf "deploy.sh [target_environment]\n"
   printf "Deploys infrastructure for carlosnunez.me\n\n"
   printf "  target_environment: The environment to deploy onto. \
-Supported environments: ${SUPPORTED_ENVIRONMENTS}\n\n"
+Supported environments: [${SUPPORTED_ENVIRONMENTS}]\n\n"
 }
 
 env_support_check() {
