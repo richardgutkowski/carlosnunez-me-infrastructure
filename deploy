@@ -26,7 +26,7 @@ then
 fi
 
 target_env=$1
-is_env_supported=env_support_check $target_env $SUPPORTED_ENVIRONMENTS
+is_env_supported=$(env_support_check $target_env $SUPPORTED_ENVIRONMENTS)
 if !$is_env_supported
 then
   printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
