@@ -9,7 +9,7 @@ def lint_terraform_configurations_in_this_directory
   if lint_result.empty?
     lint_successful = true
   end
-  return (lint_successful, lint_result)
+  return lint_successful, lint_result
 end
 
 def install_latest_version_of_terraform_into_working_directory!
