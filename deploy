@@ -11,7 +11,7 @@ usage() {
 Supported environments: [${SUPPORTED_ENVIRONMENTS}]\n\n"
 }
 
-env_support_check() {
+is_env_supported() {
   env_to_check="$1"
   supported_envs="$2"
   matching_envs_found=$(echo "$supported_envs" | grep "${env_to_check}")
@@ -31,9 +31,7 @@ then
 fi
 
 target_env=$1
-echo "Hello"
-is_env_supported=$(env_support_check $target_env $SUPPORTED_ENVIRONMENTS)
-if $is_env_supported
+if ! is_env_supported $target_env $SUPPORTED_ENVIRONMENTS
 then
   printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
   usage
