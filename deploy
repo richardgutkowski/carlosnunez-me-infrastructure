@@ -40,7 +40,7 @@ fi
 
 for command in 'ruby --version' 'which gem'
 do
-  ruby_installation_check_result=$($command 2>/dev/null; echo $?)
+  ruby_installation_check_result=$(eval "$command" 2>/dev/null; echo $?)
   if [ "$ruby_installation_check_result" != "0" ]
   then
     printf "ERROR: Installation check [$command] failed. Ensure that Ruby and \
