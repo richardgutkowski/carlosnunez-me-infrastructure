@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 SUPPORTED_ENVIRONMENTS=$(find config -type f -name "infrastructure_config*" \
   -exec sh -c "echo {} | cut -f2-d '.'" \;`)
 
