@@ -49,7 +49,7 @@ gem is installed correctly.\n"
   fi
 done
 
-which bundle 2>/dev/null || {
+which bundle 2>&1 > /dev/null || {
   printf "INFO: Bundler not found. Installing Bundler.\n"
   gem install bundler
 }
