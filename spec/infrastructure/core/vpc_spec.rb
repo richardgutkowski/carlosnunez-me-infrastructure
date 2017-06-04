@@ -1,5 +1,7 @@
 require 'spec_helper'
+require 'pp'
 
+pp @infrastructure_config
 vpcs = @infrastructure_config['aws']['vpc']
 vpcs.each do |vpc|
 end
