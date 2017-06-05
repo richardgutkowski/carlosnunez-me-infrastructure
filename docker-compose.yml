@@ -18,4 +18,10 @@ data_jenkins-master:
 
 jenkins-worker:
   image: jenkinsci/docker-jnlp-slave
+  environment:
+    JENKINS_URL: 'http://jenkins-master:8080'
+    JENKINS_SECRET: 'aaa12345'
+    JENKINS_AGENT_NAME: 'jenkins-worker'
 
+pipeline-runner:
+  build: .
