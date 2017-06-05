@@ -46,7 +46,6 @@ TARGET_ENVIRONMENT=$target_env" > .env.jenkins-master
 
 # Do the deployment! Ignore errors after this point so that we can always ensure
 # we have a clean image.
-docker build -t "jenkins_local_ci" . 2>/dev/null
 docker-compose up
 
 # Cleanup.
