@@ -8,6 +8,10 @@ What's required?
 
 * An AWS account key and secret. You can get that by signing up on aws.com, downloading the awscli (`pip install awscli`) and running `aws configure`.
 
+NOTE: Terraform will use the AWS region, access and secret keys defined by the
+environment variables AWS_REGION, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+respectively. `rake` will let you know if they're missing. :)
+
 How do I run this?
 ==================
 
