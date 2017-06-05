@@ -55,4 +55,3 @@ which bundle 2>&1 > /dev/null || {
 
 bundle install
 TARGET_ENVIRONMENT=$target_env bundle exec rake
-
