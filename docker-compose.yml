@@ -28,7 +28,7 @@ jenkins-worker:
 
 pipeline-runner:
   build:
-    context: .
+    context: '.'
     dockerfile: 'pipeline-runner.Dockerfile'
   external_links:
     - jenkins-master
