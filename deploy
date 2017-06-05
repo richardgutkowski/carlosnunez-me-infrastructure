@@ -54,7 +54,7 @@ docker run --detach \
   --rm \
   --volume .jenkins:/var/jenkins_home \
   jenkins_local_ci
-docker rmi jenkins_local_ci
 
-# Destroy our env vars list
+# Cleanup.
+docker rmi jenkins_local_ci
 rm .docker_env_vars
