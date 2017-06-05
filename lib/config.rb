@@ -13,6 +13,7 @@ def load_config(environment:)
   file_to_load = valid_config_files_found.first
   yaml = YAML.load_file(file_to_load)
   puts "Testing that file got loaded"
+  require 'pp'
   pp yaml
   yaml
 end
