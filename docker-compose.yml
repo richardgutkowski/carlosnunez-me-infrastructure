@@ -31,7 +31,7 @@ services:
   pipeline-runner:
     build:
       context: .
-      dockerfile: pipeline-runner.Dockerfile
+      dockerfile: Dockerfile-pipeline_runner
     image: pipeline-runner
     external_links:
       - jenkins-master
