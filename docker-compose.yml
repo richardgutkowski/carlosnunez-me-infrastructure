@@ -13,6 +13,7 @@ services:
     external_links:
       - jenkins-worker
       - pipeline-runner
+    user: jenkins
 
   jenkins-worker:
     image: jenkinsci/jnlp-slave
