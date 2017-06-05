@@ -44,17 +44,12 @@ AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID\n\
 AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
 TARGET_ENVIRONMENT=$target_env" > .docker_env_vars
 
+# Generate a dynamic master 
+
 # Do the deployment! Ignore errors after this point so that we can always ensure
 # we have a clean image.
 docker build -t "jenkins_local_ci" . 2>/dev/null
-docker run --detach \
-  --env-file .docker_env_vars \
-  --name infrastructure_deployment_$target_env \
-  --publish 8080:8080 \
-  --publish 5000:5000 \
-  --rm \
-  --volume $PWD/config/jenkins/jenkins_home:/var/jenkins_home \
-  jenkins_local_ci || true
+docker-compose up
 
 # Cleanup.
 rm .docker_env_vars
