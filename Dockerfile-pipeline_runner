@@ -1,4 +1,5 @@
 FROM alpine:latest
 MAINTAINER Carlos Nunez <dev@carlonunez.me>
-RUN curl -X POST \
-  http://jenkins-master:8080/job/infrastructure-carlosnunez.me/start/build
+RUN apk add --update curl && \
+    rm -rf /var/cache/apk/*
+ENTRYPOINT ["/usr/bin/curl"]
