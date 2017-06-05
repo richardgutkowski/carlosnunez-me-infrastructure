@@ -24,4 +24,6 @@ jenkins-worker:
     JENKINS_AGENT_NAME: 'jenkins-worker'
 
 pipeline-runner:
-  build: .
+  build:
+    context: .
+    dockerfile: pipeline-runner.Dockerfile
