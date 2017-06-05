@@ -22,8 +22,12 @@ jenkins-worker:
     JENKINS_URL: 'http://jenkins-master:8080'
     JENKINS_SECRET: 'aaa12345'
     JENKINS_AGENT_NAME: 'jenkins-worker'
+  external_links:
+    - jenkins-master
 
 pipeline-runner:
   build:
     context: .
     dockerfile: pipeline-runner.Dockerfile
+  external_links:
+    - jenkins-master
