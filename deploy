@@ -44,8 +44,9 @@ AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID\n\
 AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
 TARGET_ENVIRONMENT=$target_env" > .docker_env_vars
 
-# Do the deployment!
-docker build -t "jenkins_local_ci" .
+# Do the deployment! Ignore errors after this point so that we can always ensure
+# we have a clean image.
+docker build -t "jenkins_local_ci" . || true
 docker run --detach \
   --env-file .docker_env_vars \
   --name infrastructure_deployment_$target_env \
@@ -53,7 +54,7 @@ docker run --detach \
   --publish 5000:5000 \
   --rm \
   --volume $PWD/config/jenkins/jenkins_home:/var/jenkins_home \
-  jenkins_local_ci
+  jenkins_local_ci || true
 
 # Cleanup.
 docker rmi jenkins_local_ci
