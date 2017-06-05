@@ -11,6 +11,8 @@ def load_config(environment:)
     raise "Too many configuration files found for environment #{environment}: #{valid_config_files_found}"
   end
   file_to_load = valid_config_files_found.first
-  puts "File to load: #{file_to_load}"
-  YAML.load_file(file_to_load)
+  yaml = YAML.load_file(file_to_load)
+  puts "Testing that file got loaded"
+  pp yaml
+  yaml
 end
