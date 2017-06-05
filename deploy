@@ -56,8 +56,5 @@ docker run --detach \
   jenkins_local_ci
 docker rmi jenkins_local_ci
 
-bundle install
-TARGET_ENVIRONMENT=$target_env bundle exec rake
-
 # Destroy our env vars list
 rm .docker_env_vars
