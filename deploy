@@ -37,21 +37,18 @@ then
   exit 1
 fi
 
-for command in 'ruby --version' 'which gem'
-do
-  ruby_installation_check_result=$(eval "$command" 2>&1 > /dev/null; echo $?)
-  if [ "$ruby_installation_check_result" != "0" ]
-  then
-    printf "ERROR: Installation check [$command] failed. Ensure that Ruby and \
-gem is installed correctly.\n"
-    exit 1
-  fi
-done
+# Create a list of the env vars to provide to our deployment job.
+# NOTE: Our Rakefile will check whether these are empty or not.
+cat "AWS_REGION=$AWS_REGION\n\
+AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID\n\
+AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
+TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT" > .docker_env_vars
 
-which bundle 2>&1 > /dev/null || {
-  printf "INFO: Bundler not found. Installing Bundler.\n"
-  gem install bundler
-}
-
+# Do the deployment!
+docker run --detach \
+  --env-file .docker_env_vars
 bundle install
 TARGET_ENVIRONMENT=$target_env bundle exec rake
+
+# Destroy our env vars list
+rm .docker_env_vars
