@@ -27,3 +27,7 @@ terraform_*.zip
 
 # Ignore test kitchen stuff.
 .kitchen/*
+
+# Ignore pipeline temp data.
+.docker_env_vars
+config/*
