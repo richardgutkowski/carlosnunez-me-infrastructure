@@ -1,0 +1,21 @@
+jenkins-master:
+  image: jenkinsci/jenkins:lts
+  ports:
+    - "80:8080"
+    - "50000:50000"
+  volumes_from:
+    - data_jenkins-master
+  env_file:
+    - .docker_env
+  external_links:
+    - jenkins-worker
+    - pipeline-runner
+data_jenkins-master:
+  image: busybox
+  volumes:
+    - $HOME/jenkins/.ssh
+    - $PWD/config/jenkins/jenkins_home:/var/jenkins_home
+
+jenkins-worker:
+  image: jenkinsci/docker-jnlp-slave
+
