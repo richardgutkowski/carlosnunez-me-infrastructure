@@ -8,7 +8,7 @@ services:
     volumes_from:
       - data_jenkins-master
     env_file:
-      - .docker_env
+      - .env.jenkins-master
     external_links:
       - jenkins-worker
       - pipeline-runner
