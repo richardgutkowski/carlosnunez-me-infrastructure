@@ -7,7 +7,7 @@ namespace :prerequisites do
   task check_env_vars: :dotenv do
     required_env_vars_with_valid_values = {
       'TARGET_ENVIRONMENT' => get_supported_environments,
-      'AWS_REGION' => "MUST_BE_NONEMPTY"
+      'AWS_REGION' => "MUST_BE_NONEMPTY",
       'AWS_ACCESS_KEY_ID' => "MUST_BE_NONEMPTY",
       'AWS_SECRET_ACCESS_KEY' => "MUST_BE_NONEMPTY"
     }
