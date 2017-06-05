@@ -4,6 +4,12 @@ require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
 namespace :prerequisites do
+  task :check_for_terraform_tfvars do
+    if not File.exist? 'terraform.tfvars'
+      raise "Terraform variables not found. Did you pull them in from S3?"
+    end
+  end
+
   task check_env_vars: :dotenv do
     required_env_vars_with_valid_values = {
       'TARGET_ENVIRONMENT' => get_supported_environments,
@@ -42,7 +48,8 @@ namespace :unit do
   end
 end
 
-task :default => [ 'prerequisites:check_env_vars', \
+task :default => [ 'prerequisites:check_for_terraform_tfvars', \
+                   'prerequisites:check_env_vars', \
                    'prerequisites:install_terraform_if_needed', \
                    'static_analysis:lint', \
                    'unit:spec' ]
