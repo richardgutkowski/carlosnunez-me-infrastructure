@@ -10,6 +10,7 @@ jenkins-master:
   external_links:
     - jenkins-worker
     - pipeline-runner
+
 data_jenkins-master:
   image: busybox
   volumes:
