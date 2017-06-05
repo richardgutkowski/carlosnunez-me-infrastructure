@@ -46,7 +46,7 @@ TARGET_ENVIRONMENT=$target_env" > .docker_env_vars
 
 # Do the deployment! Ignore errors after this point so that we can always ensure
 # we have a clean image.
-docker build -t "jenkins_local_ci" . || true
+docker build -t "jenkins_local_ci" -q
 docker run --detach \
   --env-file .docker_env_vars \
   --name infrastructure_deployment_$target_env \
@@ -57,5 +57,4 @@ docker run --detach \
   jenkins_local_ci || true
 
 # Cleanup.
-docker rmi jenkins_local_ci
 rm .docker_env_vars
