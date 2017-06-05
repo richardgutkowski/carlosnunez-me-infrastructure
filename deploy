@@ -52,7 +52,7 @@ docker run --detach \
   --publish 8080:8080 \
   --publish 5000:5000 \
   --rm \
-  --volume config/jenkins/jenkins_home:/var/jenkins_home \
+  --volume $PWD/config/jenkins/jenkins_home:/var/jenkins_home \
   jenkins_local_ci
 
 # Cleanup.
