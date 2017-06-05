@@ -39,16 +39,16 @@ fi
 
 # Create a list of the env vars to provide to our deployment job.
 # NOTE: Our Rakefile will check whether these are empty or not.
-cat "AWS_REGION=$AWS_REGION\n\
+echo "AWS_REGION=$AWS_REGION\n\
 AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID\n\
 AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
-TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT" > .docker_env_vars
+TARGET_ENVIRONMENT=$target_env" > .docker_env_vars
 
 # Do the deployment!
 docker build -t "jenkins_local_ci" .
 docker run --detach \
   --env-file .docker_env_vars \
-  --name infrastructure_deployment_$TARGET_ENVIRONMENT \
+  --name infrastructure_deployment_$target_env \
   --publish 8080:8080 \
   --publish 5000:5000 \
   --rm \
