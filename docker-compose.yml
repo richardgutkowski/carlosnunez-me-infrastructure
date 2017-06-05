@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   jenkins-master:
     image: jenkinsci/jenkins:lts
@@ -18,6 +18,8 @@ services:
     volumes:
       - $HOME/jenkins/.ssh
       - $PWD/config/jenkins/jenkins_home:/var/jenkins_home
+    depends_on: 
+      - jenkins-master
 
   jenkins-worker:
     image: jenkinsci/jnlp-slave
@@ -27,6 +29,8 @@ services:
       JENKINS_AGENT_NAME: 'jenkins-worker'
     external_links:
       - jenkins-master
+    depends_on:
+      - jenkins-master
 
   pipeline-runner:
     build:
@@ -34,4 +38,6 @@ services:
       dockerfile: Dockerfile-pipeline_runner
     image: pipeline-runner
     external_links:
+      - jenkins-master
+    depends_on:
       - jenkins-master
