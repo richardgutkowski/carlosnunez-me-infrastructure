@@ -7,16 +7,13 @@ namespace :prerequisites do
   task check_env_vars: :dotenv do
     required_env_vars_with_valid_values = {
       'TARGET_ENVIRONMENT' => get_supported_environments,
-      'AWS_REGION' => "MUST_BE_NONEMPTY",
-      'AWS_ACCESS_KEY_ID' => "MUST_BE_NONEMPTY",
-      'AWS_SECRET_ACCESS_KEY' => "MUST_BE_NONEMPTY"
+      'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
+      'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED"
     }
     required_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
       raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
       if supported_env_var_values != "CHECK_NOT_REQUIRED" and !supported_env_var_values.include? ENV[env_var]
         raise "#{ENV[env_var]} is not a valid value for #{ENV[env_var]}"
-      elsif supported_env_var_values == "MUST_BE_NONEMPTY" and ENV[env_var] == ""
-        raise "#{env_var} is not defined. Please define it."
       end
     end
   end
