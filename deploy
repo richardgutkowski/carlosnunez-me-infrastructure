@@ -42,9 +42,7 @@ fi
 echo "AWS_REGION=$AWS_REGION\n\
 AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID\n\
 AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
-TARGET_ENVIRONMENT=$target_env" > .docker_env_vars
-
-# Generate a dynamic master 
+TARGET_ENVIRONMENT=$target_env" > .env.docker
 
 # Do the deployment! Ignore errors after this point so that we can always ensure
 # we have a clean image.
