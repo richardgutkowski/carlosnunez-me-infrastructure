@@ -45,8 +45,17 @@ AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
 TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT" > .docker_env_vars
 
 # Do the deployment!
+docker build -t "jenkins_local_ci" .
 docker run --detach \
-  --env-file .docker_env_vars
+  --env-file .docker_env_vars \
+  --name infrastructure_deployment_$TARGET_ENVIRONMENT \
+  --publish 8080:8080 \
+  --publish 5000:5000 \
+  --rm \
+  --volume .jenkins:/var/jenkins_home \
+  jenkins_local_ci
+docker rmi jenkins_local_ci
+
 bundle install
 TARGET_ENVIRONMENT=$target_env bundle exec rake
 
