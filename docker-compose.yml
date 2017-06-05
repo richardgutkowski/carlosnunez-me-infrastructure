@@ -20,7 +20,7 @@ services:
       - $PWD/config/jenkins/jenkins_home:/var/jenkins_home
 
   jenkins-worker:
-    image: jenkinsci/docker-jnlp-slave
+    image: jenkinsci/jnlp-slave
     environment:
       JENKINS_URL: 'http://jenkins-master:8080'
       JENKINS_SECRET: 'aaa12345'
