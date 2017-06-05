@@ -1,3 +1,4 @@
+require 'colorize'
 require 'dotenv/tasks'
 require 'rspec/core/rake_task'
 require_relative 'lib/environments'
@@ -6,7 +7,7 @@ require_relative 'lib/terraform_helper'
 namespace :prerequisites do
   task :check_for_terraform_tfvars do
     if not File.exist? 'terraform.tfvars'
-      raise "Terraform variables not found. Did you pull them in from S3?"
+      raise "ERROR: Terraform variables not found. Did you pull them in from S3?".red
     end
   end
 
@@ -17,9 +18,9 @@ namespace :prerequisites do
       'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED"
     }
     required_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
-      raise "#{env_var} is not defined in your environment; please define it." if !ENV[env_var]
+      raise "ERROR: #{env_var} is not defined in your environment; please define it." if !ENV[env_var].red
       if supported_env_var_values != "CHECK_NOT_REQUIRED" and !supported_env_var_values.include? ENV[env_var]
-        raise "#{ENV[env_var]} is not a valid value for #{ENV[env_var]}"
+        raise "ERROR: #{ENV[env_var]} is not a valid value for #{ENV[env_var]}".red
       end
     end
   end
@@ -36,7 +37,7 @@ namespace :static_analysis do
   task :lint do
     lint_successful, lint_error_message = lint_terraform_configurations_in_this_directory
     if !lint_successful
-      raise "terraform-lint failed! Error: #{lint_error_message}"
+      raise "ERROR: terraform-lint failed! Error: #{lint_error_message}".red
     end
   end
 end
