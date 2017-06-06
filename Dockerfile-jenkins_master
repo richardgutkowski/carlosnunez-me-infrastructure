@@ -2,3 +2,4 @@ FROM jenkinsci/jenkins:lts
 MAINTAINER Carlos Nunez <dev@carlosnunez.me>
 
 COPY files/jenkins/config.xml /var/jenkins_home/config.xml
+COPY files/jenkins/create_admin_user.groovy /usr/share/jenkins/ref/init.groovy.d/create_admin_user.groovy
