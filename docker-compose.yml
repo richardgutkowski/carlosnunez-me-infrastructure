@@ -6,14 +6,18 @@ services:
       - "80:8080"
       - "50000:50000"
     volumes:
-      - $HOME/jenkins/.ssh
-      - $PWD/config/jenkins/jenkins_home:/var/jenkins_home
+      - jenkins-master-data-service:/var/jenkins_home
     env_file:
       - .env.jenkins-master
     external_links:
       - jenkins-worker
       - pipeline-runner
     user: jenkins
+  jenkins-master-data-service:
+    image: busybox
+    volumes:
+      - $PWD/config/jenkins/jenkins_home:/var/jenkins_home
+    command: "chown jenkins:jenkins /var/jenkins_home"
   jenkins-worker:
     image: jenkinsci/jnlp-slave
     environment:
