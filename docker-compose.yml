@@ -14,7 +14,6 @@ services:
       - jenkins-worker
       - pipeline-runner
     user: jenkins
-
   jenkins-worker:
     image: jenkinsci/jnlp-slave
     environment:
