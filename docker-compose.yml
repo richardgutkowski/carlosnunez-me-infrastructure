@@ -1,23 +1,16 @@
 version: '3'
 services:
   jenkins-master:
-    image: jenkinsci/jenkins:lts
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins_master
+    image: local_jenkins_master
     ports:
       - "80:8080"
       - "50000:50000"
-    volumes:
-      - jenkins-master-data-service:/var/jenkins_home
     env_file:
       - .env.jenkins-master
-    external_links:
-      - jenkins-worker
-      - pipeline-runner
     user: jenkins
-  jenkins-master-data-service:
-    image: busybox
-    volumes:
-      - $PWD/config/jenkins/jenkins_home:/var/jenkins_home
-    command: "chown jenkins:jenkins /var/jenkins_home"
   jenkins-worker:
     image: jenkinsci/jnlp-slave
     environment:
@@ -45,5 +38,3 @@ services:
       interval: 30s
       timeout: 2s
       retries: 15
-volumes:
-  jenkins-master-data-service:
