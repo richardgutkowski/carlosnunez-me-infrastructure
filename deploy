@@ -77,6 +77,8 @@ job/$JENKINS_JOB_NAME/lastBuild/consoleText"
       else
         last_build_status=$(curl -so /dev/null $last_build_stats_url)
         last_build_console_text=$(curl -so /dev/null $last_build_console_text_url)
+        echo "Current build status: $last_build_status"
+        echo "Current console text: $last_build_console_text"
         if [ "$(echo $last_build_status | grep 'building: true')" != "" ]
         then
           retries=$((retries+1))
