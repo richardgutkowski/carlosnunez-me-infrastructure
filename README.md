@@ -30,3 +30,9 @@ I don't want full CI. How can I run this manually?
 
 If you want to do quick local tests, take a look at the "unit" step within
 the `Jenkinsfile`.
+
+Damn, son; why do you have so many commits?!
+=============================================
+
+1. I don't know how to code.
+2. I commit on every save. Want to do the same? Check out my [.vimrc](https://github.com/carlosonunez/setup.git)
