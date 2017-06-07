@@ -24,3 +24,7 @@ services:
       - WITHIN_DEPLOYMENT_CONTAINER=true
       - TARGET_ENVIRONMENT
     command: /tmp/deploy $TARGET_ENVIRONMENT
+    healthcheck:
+      test: nc -z $JENKINS_MASTER_HOSTNAME 8080
+      interval: 5s
+      timeout: 1m 
