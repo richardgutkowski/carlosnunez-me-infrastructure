@@ -54,14 +54,15 @@ else
     echo "Doing the deployment!"
     WAIT_PERIOD=15s
     retries=0
-    url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/$JENKINS_JOB_NAME/Test/build"
+    url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+$JENKINS_JOB_NAME/Test/build"
     while [ $retries -lt 10 ]
     do
-      curl -X POST $url
-      if [ "$?" != "0" ]
+      response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $url)
+      if [ "$?" != "0" -o "$response_code" != "200" ]
       then
         retries=$((retries+1))
-        echo "Retrying in $WAIT_PERIOD"
+        echo "Expected HTTP 200, got HTTP $response_code. Retrying in $WAIT_PERIOD"
         sleep $WAIT_PERIOD
       else
         echo "Deployment was successful!"
