@@ -37,13 +37,6 @@ then
   exit 1
 fi
 
-# Create a list of the env vars to provide to our deployment job.
-# NOTE: Our Rakefile will check whether these are empty or not.
-echo "AWS_REGION=$AWS_REGION\n\
-AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID\n\
-AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY\n\
-TARGET_ENVIRONMENT=$target_env" > .env.jenkins-master
-
 # Do the deployment! Ignore errors after this point so that we can always ensure
 # we have a clean image.
 echo "Booting local Jenkins CI."
