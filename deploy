@@ -90,13 +90,11 @@ job/$JENKINS_JOB_NAME/lastBuild/consoleText"
           exit 1
         else
           echo "Deployment succeeded!"
-
-
-        echo "Deployment was successful!"
-        exit 0
+          exit 0
+        fi
       fi
     done
-    echo "Deployment failed."
+    echo "Deployment failed. Timed out waiting on the deployment job to start."
     exit 1
   else
     echo "ERROR: A required environment variable is missing. Ensure that it \
