@@ -54,12 +54,16 @@ else
     echo "Doing the deployment!"
     WAIT_PERIOD=15s
     retries=0
-    url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+    start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/build"
+    last_build_stats_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+job/$JENKINS_JOB_NAME/lastBuild/api/json"
+    last_build_console_text_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+job/$JENKINS_JOB_NAME/lastBuild/consoleText"
     while [ $retries -lt 10 ]
     do
-      response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $url)
-      if [ "$?" != "0" -o "$response_code" != "200" ]
+      response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $start_build_url)
+      if [ "$?" != "0" -o "$response_code" != "201" ]
       then
         retries=$((retries+1))
         if [ "$response_code" == "000" ]
@@ -68,9 +72,11 @@ job/$JENKINS_JOB_NAME/build"
         else
           echo "Expected HTTP 200, got HTTP $response_code. Retrying in $WAIT_PERIOD"
         fi
-        echo "URL we tried to hit: $url"
+        echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
+        last_build_status=$(curl -so /dev/null $last_build_stats_url | grep \
+'result: ' | cut -f2 -d ':')
         echo "Deployment was successful!"
         exit 0
       fi
