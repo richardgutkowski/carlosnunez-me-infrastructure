@@ -58,7 +58,7 @@ else
     url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/$JENKINS_JOB_NAME/Test/build"
     while [ $retries -lt 10 ]
     do
-      curl --fail -vvv $url
+      curl -X POST $url
       if [ "$?" != "0" ]
       then
         retries=$((retries+1))
