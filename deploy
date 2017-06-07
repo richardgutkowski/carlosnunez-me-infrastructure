@@ -43,7 +43,7 @@ then
   echo "Booting local Jenkins CI. Target environment: $TARGET_ENVIRONMENT"
   [ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
   docker-compose up --abort-on-container-exit 2>&1 | \
-    grep --line-buffered pipeline-runner
+    egrep --line-buffered "(pipeline\-runner|Jenkins is fully up and running)"
 else
   if [ -f .dockerenv \
     -a "$JENKINS_JOB_NAME" != "" \
@@ -97,7 +97,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
         # occurred). While this isn't a problem for our local CI given that our
         # containers don't keep state at the moment, this will need to be modified
         # for those that decide to use this script as-is in their existing Jenkins
-        # server.
+        # server or for those that would like to bind-mount a JENKINS_HOME.
         last_build_response_code=$(curl -LIso /dev/null -w '%{http_code}' $last_build_url)
         if [ "$last_build_response_code" != "200" ]
         then
@@ -122,7 +122,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
           elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
           then
             echo "Deployment failed. See below for error text."
-            echo $last_build_console_text
+            echo "$last_build_console_text"
             exit 1
           else
             echo "Deployment succeeded!"
