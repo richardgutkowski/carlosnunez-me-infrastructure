@@ -102,7 +102,7 @@ job/$JENKINS_JOB_NAME/build"
         then
             retries=$((retries+1))
             JOB_IS_BUILDING=true
-            echo "This job is waiting to be queued. See results at: $last_build_console_text_url"
+            echo "[$last_build_response_code] This job is waiting to be queued. See results at: $last_build_console_text_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
         else
