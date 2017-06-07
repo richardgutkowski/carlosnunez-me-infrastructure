@@ -16,8 +16,13 @@ services:
     image: pipeline-runner
     depends_on:
       - jenkins-master
-    entrypoint: >
-      curl -X POST http://admin:password@jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me/test/build
+    environment:
+      - JENKINS_MASTER_URL=http://admin:password@jenkins-master:8080
+      - JENKINS_JOB_NAME=deploy-infrastructure-carlosnunez.me
+      - JENKINS_USERNAME=admin
+      - JENKINS_PASSWORD=password
+      - WITHIN_DEPLOYMENT_CONTAINER=true
+    command: ./deploy.sh
     healthcheck:
       test: curl -f http://jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me || exit 1
       interval: 30s
