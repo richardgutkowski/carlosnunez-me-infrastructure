@@ -1,7 +1,7 @@
 FROM jenkinsci/jenkins
 MAINTAINER Carlos Nunez <dev@carlosnunez.me>
 
-COPY files/jenkins/config.xml /var/jenkins_home/config.xml
+COPY files/jenkins/config.xml /usr/share/jenkins/ref/config.xml.override
 COPY files/jenkins/create_admin_user.groovy /usr/share/jenkins/ref/init.groovy.d/create_admin_user.groovy
 COPY files/jenkins/jobs/deploy-infrastructure-seed-job.xml /usr/share/jenkins/ref/jobs/deploy-infrastructure-carlosnunez.me/config.xml
 
