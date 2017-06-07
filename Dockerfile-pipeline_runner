@@ -5,4 +5,4 @@ RUN apk add --update curl && \
 ENTRYPOINT ["/usr/bin/curl", \
 						"-X", \
 						"POST", \
-						"http://jenkins-master:8080/job/infrastructure-carlosnunez.me/start/build"]
+						"http://jenkins-master/job/deploy-infrastructure-carlosnunez.me/start/build"]
