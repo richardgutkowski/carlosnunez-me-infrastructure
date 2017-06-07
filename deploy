@@ -110,8 +110,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
           last_build_status=$(curl -s $last_build_stats_url)
           last_build_console_text=$(curl -s $last_build_console_text_url)
 
-          echo "Current build status: $last_build_status"
-          echo "Current console text: $last_build_console_text"
+          echo "On build attempt #${retries}/9"
           if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
           then
             retries=$((retries+1))
@@ -119,7 +118,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
             echo "This job is still building. See results at: $last_build_console_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
-          elif [ "$(echo $last_build_status | grep 'result: "FAILURE"')" != "" ]
+          elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
           then
             echo "Deployment failed. See below for error text."
             echo $last_build_console_text
