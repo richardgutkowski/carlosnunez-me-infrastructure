@@ -2,7 +2,7 @@ FROM alpine:latest
 MAINTAINER Carlos Nunez <dev@carlonunez.me>
 RUN apk add --update curl && rm -rf /var/cache/apk/*
 RUN apk add --update bash && rm -rf /var/cache/apk/*
-RUN apk add --update nc && rm -rf /var/cache/apk/*
+RUN apk add --update netcat && rm -rf /var/cache/apk/*
 COPY ./deploy /tmp/deploy
 CMD "echo 'This container does nothing by default. The deployment command you \
 are looking for should be within docker-compose.yml.'"
