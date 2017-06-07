@@ -56,10 +56,6 @@ else
     retries=0
     start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/build"
-    last_build_stats_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-job/$JENKINS_JOB_NAME/lastBuild/api/json?tree=building,result"
-    last_build_console_text_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-job/$JENKINS_JOB_NAME/lastBuild/consoleText"
     while [ $retries -lt 10 ]
     do
       response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $start_build_url)
@@ -75,24 +71,47 @@ job/$JENKINS_JOB_NAME/lastBuild/consoleText"
         echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
-        last_build_status=$(curl -s $last_build_stats_url)
-        last_build_console_text=$(curl -s $last_build_console_text_url)
-        echo "Current build status: $last_build_status"
-        echo "Current console text: $last_build_console_text"
-        if [ "$(echo $last_build_status | grep 'building: true')" != "" ]
+        echo "Waiting a few seconds for the job to initialize and run..."
+        sleep 10
+        last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+          job/$JENKINS_JOB_NAME/lastBuild"
+        last_build_stats_url="${last_build_url}/api/json?tree=building,result"
+        last_build_console_text_url="${last_build_url}/consoleText"
+
+        # This is a bit crude in that it always assumes that this job hasn't been queued
+        # up before (lastBuild will always return information about the last build that
+        # occurred). While this isn't a problem for our local CI given that our
+        # containers don't keep state at the moment, this will need to be modified
+        # for those that decide to use this script as-is in their existing Jenkins
+        # server.
+        last_build_response_code=$(curl -so /dev/null -w '%{http_code}' $last_build_url)
+        if [ "$last_build_response_code" != "200" ]
+            retries=$((retries+1))
+            echo "This job is waiting to be queued. See results at: $last_build_console_text"
+            echo "Retrying in $WAIT_PERIOD"
+            sleep $WAIT_PERIOD
         then
-          retries=$((retries+1))
-          echo "This job is still building. See results at: $last_build_console_text"
-          echo "Retrying in $WAIT_PERIOD"
-          sleep $WAIT_PERIOD
-        elif [ "$(echo $last_build_status | grep 'result: "FAILURE"')" != "" ]
-        then
-          echo "Deployment failed. See below for error text."
-          echo $last_build_console_text
-          exit 1
         else
-          echo "Deployment succeeded!"
-          exit 0
+          last_build_status=$(curl -s $last_build_stats_url)
+          last_build_console_text=$(curl -s $last_build_console_text_url)
+
+          echo "Current build status: $last_build_status"
+          echo "Current console text: $last_build_console_text"
+          if [ "$(echo $last_build_status | grep 'building: true')" != "" ]
+          then
+            retries=$((retries+1))
+            echo "This job is still building. See results at: $last_build_console_text"
+            echo "Retrying in $WAIT_PERIOD"
+            sleep $WAIT_PERIOD
+          elif [ "$(echo $last_build_status | grep 'result: "FAILURE"')" != "" ]
+          then
+            echo "Deployment failed. See below for error text."
+            echo $last_build_console_text
+            exit 1
+          else
+            echo "Deployment succeeded!"
+            exit 0
+          fi
         fi
       fi
     done
