@@ -4,10 +4,11 @@ MAINTAINER Carlos Nunez <dev@carlosnunez.me>
 USER root
 RUN apt-get update
 RUN \
-  for package in python py-pip ruby; \
+  for package in python python-setuptools python-dev build-essential ruby; \
   do \
     apt-get install $package; \
   done;
+RUN easy_install pip
 RUN pip install awscli
 USER jenkins
 
