@@ -35,6 +35,7 @@ fi
 # docker container.
 if [ ! -f .dockerenv ]
 then
+  echo "We're outside our container"
   target_env=$1
   if ! is_env_supported $target_env $SUPPORTED_ENVIRONMENTS
   then
