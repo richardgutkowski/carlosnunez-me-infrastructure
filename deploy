@@ -76,7 +76,7 @@ job/$JENKINS_JOB_NAME/lastBuild/consoleText"
         sleep $WAIT_PERIOD
       else
         echo "Waiting a few seconds for the job to initialize and run..."
-        sleep 3
+        sleep 10
         last_build_status=$(curl -so /dev/null $last_build_stats_url)
         last_build_console_text=$(curl -so /dev/null $last_build_console_text_url)
         echo "Current build status: $last_build_status"
