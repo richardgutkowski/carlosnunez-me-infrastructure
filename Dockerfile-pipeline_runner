@@ -1,8 +1,11 @@
 FROM alpine:latest
 MAINTAINER Carlos Nunez <dev@carlonunez.me>
-RUN apk add --update curl && rm -rf /var/cache/apk/*
-RUN apk add --update bash && rm -rf /var/cache/apk/*
-RUN apk add --update netcat-openbsd && rm -rf /var/cache/apk/*
+RUN \
+  for package in curl bash netcat-openbsd python py-pip ruby
+  do
+    apk add --update $package
+  done
+  rm -rf /var/cache/apk/*
 COPY ./deploy /tmp/deploy
 CMD "echo 'This container does nothing by default. The deployment command you \
 are looking for should be within docker-compose.yml.'"
