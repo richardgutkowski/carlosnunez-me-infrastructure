@@ -17,7 +17,7 @@ services:
     depends_on:
       - jenkins-master
     healthcheck:
-      test: curl -f http://jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me
+      test: curl -f http://jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me || exit 1
       interval: 30s
       timeout: 2s
       retries: 15
