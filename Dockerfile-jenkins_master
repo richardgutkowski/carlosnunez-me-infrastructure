@@ -1,4 +1,4 @@
-FROM jenkinsci/jenkins:lts
+FROM jenkinsci/jenkins
 MAINTAINER Carlos Nunez <dev@carlosnunez.me>
 
 COPY files/jenkins/config.xml /var/jenkins_home/config.xml
