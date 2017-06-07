@@ -44,13 +44,14 @@ if [ ! -f .dockerenv ]
 then
   echo "Booting local Jenkins CI."
   [ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
-  docker-compose up
+  TARGET_ENVIRONMENT=$target_env docker-compose up
 else
   if [ -f .dockerenv \
     -a "$JENKINS_JOB_NAME" != "" \
     -a "$JENKINS_MASTER_URL" != "" \
     -a "$JENKINS_USERNAME" != "" \
-    -a "$JENKINS_PASSWORD" != "" ]
+    -a "$JENKINS_PASSWORD" != "" \
+    -a "$TARGET_ENVIRONMENT" ]
   then
     echo "Doing the deployment!"
     retries=0
@@ -74,7 +75,8 @@ is defined in docker-compose.yml. Here's what I have:\n \
 JENKINS_MASTER_URL=$JENKINS_MASTER_URL\n \
 JENKINS_JOB_NAME=$JENKINS_JOB_NAME\n \
 JENKINS_USERNAME=$JENKINS_USERNAME\n \
-JENKINS_PASSWORD=$JENKINS_PASSWORD\n"
+JENKINS_PASSWORD=$JENKINS_PASSWORD\n \
+TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT"
     return 1
 fi
 fi
