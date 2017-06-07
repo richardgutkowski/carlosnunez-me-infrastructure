@@ -108,7 +108,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
         else
           retries=0
           last_build_status=$(curl -s $last_build_stats_url)
-          last_build_console_text=$(curl -s $last_build_console_text_url)
+          last_build_console_text="$(curl -s $last_build_console_text_url)"
 
           echo "On build attempt #${retries}/9"
           if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
