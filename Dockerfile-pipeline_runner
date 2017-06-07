@@ -2,4 +2,5 @@ FROM alpine:latest
 MAINTAINER Carlos Nunez <dev@carlonunez.me>
 RUN apk add --update curl && \
     rm -rf /var/cache/apk/*
+COPY ./deploy /tmp/deploy
 ENTRYPOINT "echo 'This container runs pipelines. You should override this in docker-compose.yml'"
