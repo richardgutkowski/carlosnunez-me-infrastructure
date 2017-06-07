@@ -44,7 +44,8 @@ if [ ! -f .dockerenv ]
 then
   echo "Booting local Jenkins CI."
   [ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
-  TARGET_ENVIRONMENT=$target_env docker-compose up
+  export TARGET_ENVIRONMENT=$target_env
+  docker-compose up
 else
   if [ -f .dockerenv \
     -a "$JENKINS_JOB_NAME" != "" \
