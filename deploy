@@ -53,7 +53,7 @@ else
     -a "$TARGET_ENVIRONMENT" != "" ]
   then
     echo "Doing the deployment!"
-    WAIT_PERIOD=15s
+    WAIT_PERIOD=5s
     JOB_IS_BUILDING=false
     retries=0
     start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
@@ -74,7 +74,12 @@ job/$JENKINS_JOB_NAME/build"
         retries=$((retries+1))
         if [ "$response_code" == "000" ]
         then
-          echo "Something went wrong with cURL. Retrying in $WAIT_PERIOD"
+          if [ "$(nc -z $JENKINS_MASTER_HOSTNAME 8080 -w 1; echo $?)" != "0" ]
+          then
+            echo "Jenkins isn't available yet. Retrying in $WAIT_PERIOD"
+          else
+            echo "Something went wrong with cURL. Retrying in $WAIT_PERIOD"
+          fi
         else
           echo "Expected HTTP 200, got HTTP $response_code. Retrying in $WAIT_PERIOD"
         fi
@@ -84,8 +89,8 @@ job/$JENKINS_JOB_NAME/build"
         if [ "$JOB_IS_BUILDING" != "true" ]
         then
           retries=0
-          echo "Waiting a few seconds for the job to initialize and run..."
-          sleep 10
+          echo "Waiting $WAIT_PERIOD seconds for the job to initialize and run..."
+          sleep $WAIT_PERIOD
         fi
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/lastBuild"
