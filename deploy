@@ -98,7 +98,7 @@ job/$JENKINS_JOB_NAME/build"
         # for those that decide to use this script as-is in their existing Jenkins
         # server.
         last_build_response_code=$(curl -Iso /dev/null -w '%{http_code}' $last_build_url)
-        echo "DEBUG: RESPONSE_CODE: $last_build_response_code"
+        echo "DEBUG: RESPONSE_CODE: ${last_build_response_code[0]}"
         if [ "$last_build_response_code" != "200" ]
         then
             retries=$((retries+1))
