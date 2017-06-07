@@ -30,18 +30,18 @@ then
   exit 1
 fi
 
-target_env=$1
-if ! is_env_supported $target_env $SUPPORTED_ENVIRONMENTS
-then
-  printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
-  exit 1
-fi
-
 # We'll either start our CI environment if this is running from our local
 # machine or start the actual deployment if this is running from within a
 # docker container.
 if [ ! -f .dockerenv ]
 then
+  target_env=$1
+  if ! is_env_supported $target_env $SUPPORTED_ENVIRONMENTS
+  then
+    printf "ERROR: '${target_env}' not found in '${SUPPORTED_ENVIRONMENTS}'\n"
+    exit 1
+  fi
+
   export TARGET_ENVIRONMENT=$target_env
   echo "Booting local Jenkins CI. Target environment: $TARGET_ENVIRONMENT"
   [ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
