@@ -1,10 +1,10 @@
 FROM alpine:latest
 MAINTAINER Carlos Nunez <dev@carlonunez.me>
 RUN \
-  for package in curl bash netcat-openbsd python py-pip ruby \
+  for package in curl bash netcat-openbsd python py-pip ruby; \
   do \
     apk add --update $package \
-  done \
+  done; \
   rm -rf /var/cache/apk/*
 COPY ./deploy /tmp/deploy
 CMD "echo 'This container does nothing by default. The deployment command you \
