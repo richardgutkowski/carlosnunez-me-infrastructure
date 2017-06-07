@@ -46,7 +46,9 @@ TARGET_ENVIRONMENT=$target_env" > .env.jenkins-master
 
 # Do the deployment! Ignore errors after this point so that we can always ensure
 # we have a clean image.
+echo "Booting local Jenkins CI."
+[ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
 docker-compose up
 
 # Cleanup.
-rm .docker_env_vars
+[ -f ".docker_env_vars" ] && rm .docker_env_vars
