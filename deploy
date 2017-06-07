@@ -97,9 +97,8 @@ job/$JENKINS_JOB_NAME/build"
         # containers don't keep state at the moment, this will need to be modified
         # for those that decide to use this script as-is in their existing Jenkins
         # server.
-        last_build_response_text=$(curl -s $last_build_url)
-        echo "DEBUG: RESPONSE_TEXT: $last_build_response_text"
         last_build_response_code=$(curl -Iso /dev/null -w '%{http_code}' $last_build_url)
+        echo "DEBUG: RESPONSE_CODE: $last_build_response_code"
         if [ "$last_build_response_code" != "200" ]
         then
             retries=$((retries+1))
