@@ -70,11 +70,11 @@ else
     return 1
   else
     echo "ERROR: A required environment variable is missing. Ensure that it \
-is defined in docker-compose.yml. Here's what I have:\n \
-JENKINS_MASTER_URL=$JENKINS_MASTER_URL\n \
-JENKINS_JOB_NAME=$JENKINS_JOB_NAME\n \
-JENKINS_USERNAME=$JENKINS_USERNAME\n \
-JENKINS_PASSWORD=$JENKINS_PASSWORD\n \
+is defined in docker-compose.yml. Here's what I have:\t \
+JENKINS_MASTER_HOSTNAME=$JENKINS_MASTER_HOSTNAME\t \
+JENKINS_JOB_NAME=$JENKINS_JOB_NAME\t \
+JENKINS_USERNAME=$JENKINS_USERNAME\t \
+JENKINS_PASSWORD=$JENKINS_PASSWORD\t \
 TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT"
     return 1
 fi
