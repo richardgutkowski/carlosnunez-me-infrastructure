@@ -17,7 +17,7 @@ services:
     depends_on:
       - jenkins-master
     environment:
-      - JENKINS_MASTER_URL=http://admin:password@jenkins-master:8080
+      - JENKINS_MASTER_HOSTNAME=jenkins-master
       - JENKINS_JOB_NAME=deploy-infrastructure-carlosnunez.me
       - JENKINS_USERNAME=admin
       - JENKINS_PASSWORD=password
