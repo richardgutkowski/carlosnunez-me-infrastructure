@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 usage() {
   printf "deploy.sh [target_environment]\n"
