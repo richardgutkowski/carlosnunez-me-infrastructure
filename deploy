@@ -57,7 +57,7 @@ else
     start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/build"
     last_build_stats_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-job/$JENKINS_JOB_NAME/lastBuild/api/json"
+job/$JENKINS_JOB_NAME/lastBuild/api/json?tree=building,result"
     last_build_console_text_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/lastBuild/consoleText"
     while [ $retries -lt 10 ]
@@ -75,8 +75,9 @@ job/$JENKINS_JOB_NAME/lastBuild/consoleText"
         echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
-        last_build_status=$(curl -so /dev/null $last_build_stats_url | grep \
-'result: ' | cut -f2 -d ':')
+        last_build_status=$(curl -so /dev/null $last_build_stats_url)
+        last_build_console_text=$(curl -so /dev/null $last_build_console_text_url)
+        if [ "$(echo $last_build_status
         echo "Deployment was successful!"
         exit 0
       fi
