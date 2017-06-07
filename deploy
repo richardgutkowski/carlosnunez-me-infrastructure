@@ -37,11 +37,36 @@ then
   exit 1
 fi
 
-# Do the deployment! Ignore errors after this point so that we can always ensure
-# we have a clean image.
-echo "Booting local Jenkins CI."
-[ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
-docker-compose up
-
-# Cleanup.
-[ -f ".docker_env_vars" ] && rm .docker_env_vars
+# We'll either start our CI environment if this is running from our local
+# machine or start the actual deployment if this is running from within a
+# docker container.
+if [ ! -f .dockerenv ]
+then
+  echo "Booting local Jenkins CI."
+  [ "$(docker-compose ps -q | wc -l)" != "0" ] && docker-compose down
+  docker-compose up
+else
+  if [ -f .dockerenv \
+    -a "$JENKINS_JOB_NAME" != "" \
+    -a "$JENKINS_MASTER_URL" != "" \
+    -a "$JENKINS_USERNAME" != "" \
+    -a "$JENKINS_PASSWORD" != "" ]
+  then
+    echo "Doing the deployment!"
+    retries=0
+    url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_URL:8080/$JENKINS_JOB_NAME/Test/build"
+    while [ $retries -lt 10 ]
+    do
+      curl --fail $url
+      if [ "$?" != "0" ]
+      then
+        retries=$((retries+1))
+      else
+        echo "Deployment was successful!"
+        return 0
+      fi
+    done
+    echo "Deployment failed."
+    return 1
+  fi
+fi
