@@ -112,7 +112,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
 
           echo "Current build status: $last_build_status"
           echo "Current console text: $last_build_console_text"
-          if [ "$(echo $last_build_status | grep 'building: true')" == "" ]
+          if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
           then
             retries=$((retries+1))
             JOB_IS_BUILDING=true
