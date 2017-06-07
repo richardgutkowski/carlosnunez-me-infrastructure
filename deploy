@@ -47,14 +47,14 @@ then
 else
   if [ -f .dockerenv \
     -a "$JENKINS_JOB_NAME" != "" \
-    -a "$JENKINS_MASTER_URL" != "" \
+    -a "$JENKINS_MASTER_HOSTNAME" != "" \
     -a "$JENKINS_USERNAME" != "" \
     -a "$JENKINS_PASSWORD" != "" \
-    -a "$TARGET_ENVIRONMENT" ]
+    -a "$TARGET_ENVIRONMENT" != "" ]
   then
     echo "Doing the deployment!"
     retries=0
-    url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_URL:8080/$JENKINS_JOB_NAME/Test/build"
+    url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/$JENKINS_JOB_NAME/Test/build"
     while [ $retries -lt 10 ]
     do
       curl --fail $url
