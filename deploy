@@ -53,12 +53,21 @@ else
   then
     echo "Doing the deployment!"
     WAIT_PERIOD=15s
+    JOB_IS_BUILDING=false
     retries=0
     start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/build"
     while [ $retries -lt 10 ]
     do
-      response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $start_build_url)
+      # Assume that the last response code is 201 if the job is currently building.
+      # This will prevent us from invoking the job repeatedly unnecessarily.
+      if [ "$JOB_IS_BUILDING" != "true" ]
+      then
+        response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $start_build_url)
+      else
+        response_code="201"
+      fi
+
       if [ "$?" != "0" -o "$response_code" != "201" ]
       then
         retries=$((retries+1))
@@ -102,6 +111,7 @@ job/$JENKINS_JOB_NAME/build"
           if [ "$(echo $last_build_status | grep 'building: true')" == "" ]
           then
             retries=$((retries+1))
+            JOB_IS_BUILDING=true
             echo "This job is still building. See results at: $last_build_console_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
