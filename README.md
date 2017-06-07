@@ -25,6 +25,9 @@ Naming format should be: `config/terraform.tfvars.<environment>`
 will deploy your infrastructure through the pipeline defined by
 `Jenkinsfile`.
 
+NOTE: This will be slow the first time you run it, as Docker will need to build
+dependent images. It should be significantly faster on subsequent runs.
+
 I don't want full CI. How can I run this manually?
 ===================================================
 
