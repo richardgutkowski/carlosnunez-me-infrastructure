@@ -62,9 +62,13 @@ job/$JENKINS_JOB_NAME/build"
       if [ "$?" != "0" -o "$response_code" != "200" ]
       then
         retries=$((retries+1))
-        echo "Expected HTTP 200, got HTTP $response_code. Retrying in $WAIT_PERIOD"
+        if [ "$response_code" == "000" ]
+        then
+          echo "Something went wrong with cURL. Retrying in $WAIT_PERIOD"
+        else
+          echo "Expected HTTP 200, got HTTP $response_code. Retrying in $WAIT_PERIOD"
+        fi
         echo "URL we tried to hit: $url"
-        echo "(NOTE: 000 means something went wrong with cURL.)"
         sleep $WAIT_PERIOD
       else
         echo "Deployment was successful!"
