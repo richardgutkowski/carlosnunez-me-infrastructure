@@ -11,21 +11,6 @@ services:
     env_file:
       - .env.jenkins-master
     user: jenkins
-  jenkins-worker:
-    image: jenkinsci/jnlp-slave
-    environment:
-      JENKINS_URL: 'http://jenkins-master:8080'
-      JENKINS_SECRET: 'aaa12345'
-      JENKINS_AGENT_NAME: 'jenkins-worker'
-    external_links:
-      - jenkins-master
-    depends_on:
-      - jenkins-master
-    healthcheck:
-      test: curl -f http://jenkins-master:8080
-      interval: 30s
-      timeout: 2s
-      retries: 15
   pipeline-runner:
     build:
       context: .
