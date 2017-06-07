@@ -25,6 +25,6 @@ services:
       - TARGET_ENVIRONMENT
     command: /tmp/deploy $TARGET_ENVIRONMENT
     healthcheck:
-      test: nc -z $JENKINS_MASTER_HOSTNAME 8080
+      test: nc -z $JENKINS_MASTER_HOSTNAME 8080 -w 1
       interval: 5s
       timeout: 1m 
