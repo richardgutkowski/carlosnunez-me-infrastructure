@@ -68,5 +68,13 @@ else
     done
     echo "Deployment failed."
     return 1
-  fi
+  else
+    echo "ERROR: A required environment variable is missing. Ensure that it \
+is defined in docker-compose.yml. Here's what I have:\n \
+JENKINS_MASTER_URL=$JENKINS_MASTER_URL\n \
+JENKINS_JOB_NAME=$JENKINS_JOB_NAME\n \
+JENKINS_USERNAME=$JENKINS_USERNAME\n \
+JENKINS_PASSWORD=$JENKINS_PASSWORD\n"
+    return 1
+fi
 fi
