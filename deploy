@@ -12,9 +12,9 @@ is_env_supported() {
   matching_envs_found=$(echo "$supported_envs" | grep "${env_to_check}")
   if [ "$matching_envs_found" != "" ]
   then
-    return 0
+    exit 0
   else
-    return 1
+    exit 1
   fi
 }
 
@@ -65,11 +65,11 @@ else
         sleep $WAIT_PERIOD
       else
         echo "Deployment was successful!"
-        return 0
+        exit 0
       fi
     done
     echo "Deployment failed."
-    return 1
+    exit 1
   else
     echo "ERROR: A required environment variable is missing. Ensure that it \
 is defined in docker-compose.yml. Here's what I have:\t \
@@ -78,6 +78,6 @@ JENKINS_JOB_NAME=$JENKINS_JOB_NAME\t \
 JENKINS_USERNAME=$JENKINS_USERNAME\t \
 JENKINS_PASSWORD=$JENKINS_PASSWORD\t \
 TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT"
-    return 1
+    exit 1
 fi
 fi
