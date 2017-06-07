@@ -3,7 +3,7 @@ MAINTAINER Carlos Nunez <dev@carlonunez.me>
 RUN \
   for package in curl bash netcat-openbsd python py-pip ruby; \
   do \
-    apk add --update $package \
+    apk add --update $package; \
   done; \
   rm -rf /var/cache/apk/*
 COPY ./deploy /tmp/deploy
