@@ -2,7 +2,3 @@ FROM alpine:latest
 MAINTAINER Carlos Nunez <dev@carlonunez.me>
 RUN apk add --update curl && \
     rm -rf /var/cache/apk/*
-ENTRYPOINT ["/usr/bin/curl", \
-						"-X", \
-						"POST", \
-						"http://jenkins-master/job/deploy-infrastructure-carlosnunez.me/start/build"]
