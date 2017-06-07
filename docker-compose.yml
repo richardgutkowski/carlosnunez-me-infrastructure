@@ -23,7 +23,7 @@ services:
       - JENKINS_PASSWORD=password
       - WITHIN_DEPLOYMENT_CONTAINER=true
       - TARGET_ENVIRONMENT
-    entrypoint: /tmp/deploy $TARGET_ENVIRONMENT
+    command: /tmp/deploy $TARGET_ENVIRONMENT
     healthcheck:
       test: curl -f http://jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me || exit 1
       interval: 30s
