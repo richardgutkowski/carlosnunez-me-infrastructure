@@ -3,4 +3,5 @@ MAINTAINER Carlos Nunez <dev@carlonunez.me>
 RUN apk add --update curl && rm -rf /var/cache/apk/*
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 COPY ./deploy /tmp/deploy
-ENTRYPOINT "echo 'This container runs pipelines. You should override this in docker-compose.yml'"
+CMD "echo 'This container does nothing by default. The deployment command you \
+are looking for should be within docker-compose.yml.'"
