@@ -81,8 +81,11 @@ job/$JENKINS_JOB_NAME/build"
         sleep $WAIT_PERIOD
       else
         retries=0
-        echo "Waiting a few seconds for the job to initialize and run..."
-        sleep 10
+        if [ "$JOB_IS_BUILDING" != "true" ]
+        then
+          echo "Waiting a few seconds for the job to initialize and run..."
+          sleep 10
+        fi
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
           job/$JENKINS_JOB_NAME/lastBuild"
         last_build_stats_url="${last_build_url}/api/json?tree=building,result"
@@ -98,6 +101,7 @@ job/$JENKINS_JOB_NAME/build"
         if [ "$last_build_response_code" != "200" ]
         then
             retries=$((retries+1))
+            JOB_IS_BUILDING=true
             echo "This job is waiting to be queued. See results at: $last_build_console_text_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
