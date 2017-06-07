@@ -22,7 +22,7 @@ services:
       - JENKINS_USERNAME=admin
       - JENKINS_PASSWORD=password
       - WITHIN_DEPLOYMENT_CONTAINER=true
-    command: ./deploy.sh
+    command: ./deploy
     healthcheck:
       test: curl -f http://jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me || exit 1
       interval: 30s
