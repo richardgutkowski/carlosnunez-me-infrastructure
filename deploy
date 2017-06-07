@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-SUPPORTED_ENVIRONMENTS=$(find config -type f -name "infrastructure_config*" \
-  -exec sh -c "echo {} | cut -f2 -d '.'" \;)
-
 usage() {
   printf "deploy.sh [target_environment]\n"
   printf "Deploys infrastructure for carlosnunez.me\n\n"
-  printf "  target_environment: The environment to deploy onto. \
-Supported environments: [${SUPPORTED_ENVIRONMENTS}]\n\n"
+  printf "  target_environment: The environment to deploy onto."
 }
 
 is_env_supported() {
@@ -35,7 +31,8 @@ fi
 # docker container.
 if [ ! -f .dockerenv ]
 then
-  echo "We're outside our container"
+  SUPPORTED_ENVIRONMENTS=$(find config -type f -name "infrastructure_config*" \
+    -exec sh -c "echo {} | cut -f2 -d '.'" \;)
   target_env=$1
   if ! is_env_supported $target_env $SUPPORTED_ENVIRONMENTS
   then
