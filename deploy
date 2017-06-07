@@ -55,7 +55,7 @@ else
     WAIT_PERIOD=15s
     retries=0
     url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-$JENKINS_JOB_NAME/Test/build"
+job/$JENKINS_JOB_NAME/build"
     while [ $retries -lt 10 ]
     do
       response_code=$(curl -X POST -so /dev/null -w "%{http_code}" $url)
