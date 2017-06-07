@@ -89,7 +89,7 @@ job/$JENKINS_JOB_NAME/build"
         if [ "$last_build_response_code" != "200" ]
         then
             retries=$((retries+1))
-            echo "This job is waiting to be queued. See results at: $last_build_console_text"
+            echo "This job is waiting to be queued. See results at: $last_build_console_text_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
         else
@@ -99,10 +99,10 @@ job/$JENKINS_JOB_NAME/build"
 
           echo "Current build status: $last_build_status"
           echo "Current console text: $last_build_console_text"
-          if [ "$(echo $last_build_status | grep 'building: true')" != "" ]
+          if [ "$(echo $last_build_status | grep 'building: true')" == "" ]
           then
             retries=$((retries+1))
-            echo "This job is still building. See results at: $last_build_console_text"
+            echo "This job is still building. See results at: $last_build_console_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
           elif [ "$(echo $last_build_status | grep 'result: "FAILURE"')" != "" ]
