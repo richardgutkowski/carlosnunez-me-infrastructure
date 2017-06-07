@@ -16,6 +16,8 @@ services:
     image: pipeline-runner
     depends_on:
       - jenkins-master
+    entrypoint: >
+      curl -X POST http://admin:password@jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me/test/build
     healthcheck:
       test: curl -f http://jenkins-master:8080/jobs/deploy-infrastructure-carlosnunez.me || exit 1
       interval: 30s
