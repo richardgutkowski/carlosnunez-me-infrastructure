@@ -53,6 +53,7 @@ else
     -a "$TARGET_ENVIRONMENT" != "" ]
   then
     echo "Doing the deployment!"
+    WAIT_PERIOD=15s
     retries=0
     url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/$JENKINS_JOB_NAME/Test/build"
     while [ $retries -lt 10 ]
@@ -61,6 +62,8 @@ else
       if [ "$?" != "0" ]
       then
         retries=$((retries+1))
+        echo "Retrying in $WAIT_PERIOD"
+        sleep $WAIT_PERIOD
       else
         echo "Deployment was successful!"
         return 0
