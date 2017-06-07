@@ -71,6 +71,7 @@ job/$JENKINS_JOB_NAME/build"
         echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
+        retries=0
         echo "Waiting a few seconds for the job to initialize and run..."
         sleep 10
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
@@ -86,12 +87,13 @@ job/$JENKINS_JOB_NAME/build"
         # server.
         last_build_response_code=$(curl -so /dev/null -w '%{http_code}' $last_build_url)
         if [ "$last_build_response_code" != "200" ]
+        then
             retries=$((retries+1))
             echo "This job is waiting to be queued. See results at: $last_build_console_text"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
-        then
         else
+          retries=0
           last_build_status=$(curl -s $last_build_stats_url)
           last_build_console_text=$(curl -s $last_build_console_text_url)
 
