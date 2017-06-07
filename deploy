@@ -77,7 +77,21 @@ job/$JENKINS_JOB_NAME/lastBuild/consoleText"
       else
         last_build_status=$(curl -so /dev/null $last_build_stats_url)
         last_build_console_text=$(curl -so /dev/null $last_build_console_text_url)
-        if [ "$(echo $last_build_status
+        if [ "$(echo $last_build_status | grep 'building: true')" != "" ]
+        then
+          retries=$((retries+1))
+          echo "This job is still building. See results at: $last_build_console_text"
+          echo "Retrying in $WAIT_PERIOD"
+          sleep $WAIT_PERIOD
+        elif [ "$(echo $last_build_status | grep 'result: "FAILURE"')" != "" ]
+        then
+          echo "Deployment failed. See below for error text."
+          echo $last_build_console_text
+          exit 1
+        else
+          echo "Deployment succeeded!"
+
+
         echo "Deployment was successful!"
         exit 0
       fi
