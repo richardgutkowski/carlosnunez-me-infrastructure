@@ -31,3 +31,4 @@ terraform_*.zip
 # Ignore pipeline temp data.
 .docker_env_vars
 config/*
+logs/*
