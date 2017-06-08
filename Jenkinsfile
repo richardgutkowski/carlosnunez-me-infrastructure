@@ -7,9 +7,10 @@ pipeline {
         sh 'bundle install'
       }
     }
-    stage('Retrieve Configurations') {
+    stage('Retrieve Configurations and Terraform state') {
       steps {
         sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_TFVARS_BUCKET/terraform.tfvars'
+        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_STATE_BUCKET/terraform.tfstate'
       }
     }
     stage('Unit Tests') {
@@ -25,6 +26,11 @@ pipeline {
     stage('Deploy to environment') {
       steps {
         sh 'bundle exec rake deploy'
+      }
+    }
+    stage('Upload Terraform state') {
+      steps {
+        sh 'aws s3 cp terraform.tfstate s3://$AWS_S3_TERRAFORM_STATE_BUCKET/terraform.tfstate'
       }
     }
   }
