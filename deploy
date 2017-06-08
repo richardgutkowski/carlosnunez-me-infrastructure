@@ -41,6 +41,7 @@ then
 
   export TARGET_ENVIRONMENT=$target_env
   echo "Booting local Jenkins CI. Target environment: $TARGET_ENVIRONMENT"
+  docker-compose restart jenkins-master
   docker-compose up --abort-on-container-exit 2>&1 | \
     egrep --line-buffered "(pipeline\-runner|Jenkins is fully up and running)"
 else
