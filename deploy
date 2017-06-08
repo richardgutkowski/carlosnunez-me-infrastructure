@@ -16,6 +16,7 @@ fi
 # We'll either start our CI environment if this is running from our local
 # machine or start the actual deployment if this is running from within a
 # docker container.
+target_env=$1
 if [ ! -f .dockerenv ]
 then
   export TARGET_ENVIRONMENT=$target_env # Used by docker-compose.
