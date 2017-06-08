@@ -10,8 +10,8 @@ RUN \
   done;
 RUN easy_install pip
 RUN pip install awscli
-deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main
-deb-src http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main
+RUN deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main
+RUN deb-src http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main
 RUN apt-get -y update
 RUN apt-get -y install ruby2.4 ruby2.4-dev
 USER jenkins
