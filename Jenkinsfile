@@ -9,7 +9,6 @@ pipeline {
     }
     stage('Retrieve Configurations and Terraform binary') {
       steps {
-        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_TERRAFORM_BINARIES_BUCKET/latest-terraform ./terraform'
         sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_TFVARS_BUCKET/$TARGET_ENVIRONMENT/terraform.tfvars ./terraform.tfvars'
       }
     }
