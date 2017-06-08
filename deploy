@@ -122,7 +122,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
             NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
         else
           last_build_status=$(curl -s $last_build_stats_url)
-          last_build_console_text="$(curl -s $last_build_console_text_url)"
+          last_build_console_text="$(curl -s $last_build_console_text_url | grep -v '[Pipeline]')"
 
           if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
           then
