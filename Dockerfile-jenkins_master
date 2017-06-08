@@ -17,6 +17,8 @@ RUN apt-get -y update
 RUN apt-get -y install ruby2.4 ruby2.4-dev
 USER jenkins
 ENV PATH "/var/jenkins_home/.gem/ruby/2.4.0/bin:${PATH}"
+ENV GEM_HOME "/var/jenkins_home/.gems"
+RUN mkdir $GEM_HOME
 
 COPY files/jenkins/config.xml /usr/share/jenkins/ref/config.xml.override
 COPY files/jenkins/create_admin_user.groovy /usr/share/jenkins/ref/init.groovy.d/create_admin_user.groovy
