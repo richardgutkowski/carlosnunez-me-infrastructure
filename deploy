@@ -66,7 +66,7 @@ job/$JENKINS_JOB_NAME/build"
       NUMBER_OF_RETRIES_OUTSTANDING=$((MAX_NUMBER_OF_RETRIES-NUMBER_OF_RETRIES_ATTEMPTED))
       if [ "$JOB_IS_BUILDING" != "true" ]
       then
-        echo "Retry ($NUMBER_OF_RETRIES_ATTEMPTED/$NUMBER_OF_RETRIES_OUTSTANDING)"
+        echo "Attempt #${NUMBER_OF_RETRIES_ATTEMPTED}, $NUMBER_OF_RETRIES_OUTSTANDING remain"
       fi
       # Assume that the last response code is 201 if the job is currently building.
       # This will prevent us from invoking the job repeatedly unnecessarily.
@@ -94,6 +94,11 @@ job/$JENKINS_JOB_NAME/build"
         echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
+        if [ "$(JOB_IS_BUILDING)" == "true" ]
+        then
+          NUMBER_OF_RETRIES_ATTEMPTED=0
+        fi
+
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/lastBuild"
         last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/lastBuild"
@@ -111,10 +116,10 @@ job/$JENKINS_JOB_NAME/lastBuild"
         if [ "$last_build_response_code" != "200" ]
         then
             JOB_IS_BEING_QUEUED=true
-            echo "Job $JENKINS_JOB_NAME is being queued for execution. We'll poll again in ${WAIT_PERIOD}."
+            echo "Job $JENKINS_JOB_NAME is pending execution. We'll poll again in ${WAIT_PERIOD}."
             sleep $WAIT_PERIOD
+            NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
         else
-          NUMBER_OF_RETRIES_ATTEMPTED=0
           last_build_status=$(curl -s $last_build_stats_url)
           last_build_console_text="$(curl -s $last_build_console_text_url)"
 
