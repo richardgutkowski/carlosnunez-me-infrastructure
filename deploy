@@ -55,6 +55,7 @@ else
     echo "Doing the deployment!"
     WAIT_PERIOD=5s
     JOB_IS_BUILDING=false
+    SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=true
     retries=0
     start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/build"
@@ -94,8 +95,11 @@ job/$JENKINS_JOB_NAME/build"
         fi
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/lastBuild"
+        last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/lastBuild"
         last_build_stats_url="${last_build_url}/api/json?tree=building,result"
         last_build_console_text_url="${last_build_url}/consoleText"
+        last_build_console_text_url_localhost_relative=\
+          "${last_build_url_localhost_relative}/consoleText"
 
         # This is a bit crude in that it always assumes that this job hasn't been queued
         # up before (lastBuild will always return information about the last build that
@@ -106,23 +110,25 @@ job/$JENKINS_JOB_NAME/lastBuild"
         last_build_response_code=$(curl -LIso /dev/null -w '%{http_code}' $last_build_url)
         if [ "$last_build_response_code" != "200" ]
         then
-            retries=$((retries+1))
             JOB_IS_BUILDING=true
             echo "[$last_build_response_code] This job is waiting to be queued. See results at: $last_build_console_text_url"
-            echo "Retrying in $WAIT_PERIOD"
+            echo "Polling again in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
         else
           retries=0
           last_build_status=$(curl -s $last_build_stats_url)
           last_build_console_text="$(curl -s $last_build_console_text_url)"
 
-          echo "On build attempt #${retries}/9"
           if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
           then
             retries=$((retries+1))
             JOB_IS_BUILDING=true
-            echo "This job is still building. See results at: $last_build_console_text_url"
-            echo "Retrying in $WAIT_PERIOD"
+            if [ "$SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD" == "true" ]
+            then
+              echo "This job is building. See results in realtime at: $last_build_console_text_url_localhost_relative"
+              echo "Retrying in $WAIT_PERIOD"
+              SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
+            fi
             sleep $WAIT_PERIOD
           elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
           then
