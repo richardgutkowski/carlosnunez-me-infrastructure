@@ -9,8 +9,8 @@ pipeline {
     }
     stage('Retrieve Configurations and Terraform state') {
       steps {
-        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_TFVARS_BUCKET/terraform.tfvars'
-        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_STATE_BUCKET/terraform.tfstate'
+        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_TFVARS_BUCKET/terraform.tfvars ./terraform.tfvars'
+        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_STATE_BUCKET/terraform.tfstate ./terraform.tfstate'
       }
     }
     stage('Unit Tests') {
