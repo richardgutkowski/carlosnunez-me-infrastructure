@@ -49,8 +49,18 @@ namespace :unit do
   end
 end
 
-task :default => [ 'prerequisites:check_for_terraform_tfvars', \
-                   'prerequisites:check_env_vars', \
-                   'prerequisites:install_terraform_if_needed', \
-                   'static_analysis:lint', \
-                   'unit:spec' ]
+task :prereqs => ['prerequisites:check_for_terraform_tfvars', \
+                  'prerequisites:check_env_vars', \
+                  'prerequisites:install_terraform_if_needed' ]
+
+task :unit => [ 'prereqs',
+                'static_analysis:lint',
+                'unit:spec']
+
+task :integration => [ ]
+
+task :deploy => [ ]
+
+task :default => [ 'unit',
+                   'integration',
+                   'deploy' ]
