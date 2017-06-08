@@ -10,10 +10,10 @@ RUN \
   done;
 RUN easy_install pip
 RUN pip install awscli
-RUN apt-get install software-properties-common
+RUN apt-get -y install software-properties-common
 RUN apt-add-repository ppa:brightbox/ruby-ng
-RUN apt-get update
-RUN apt-get install ruby2.4 ruby2.4-dev
+RUN apt-get -y update
+RUN apt-get -y install ruby2.4 ruby2.4-dev
 USER jenkins
 
 COPY files/jenkins/config.xml /usr/share/jenkins/ref/config.xml.override
