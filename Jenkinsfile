@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Initialize') {
+    stage('Build') {
       steps {
         sh 'which bundler || gem install bundler'
         sh 'bundle install'
