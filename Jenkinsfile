@@ -3,6 +3,7 @@ pipeline {
   stages {
     stage('Initialise') {
       steps {
+				sh 'source $HOME/.rvm/scripts/rvm'
         sh 'which bundler || gem install bundler'
         sh 'bundle install'
       }
