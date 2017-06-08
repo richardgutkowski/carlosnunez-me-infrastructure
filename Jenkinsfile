@@ -7,9 +7,19 @@ pipeline {
         sh 'bundle install'
       }
     }
-    stage('Example') {
+    stage('Unit Tests') {
       steps {
-        echo "Hi! I'm in a stage step!"
+        sh 'bundle exec rake unit'
+      }
+    }
+    stage('Integration Tests') {
+      steps {
+        sh 'bundle exec rake integration'
+      }
+    }
+    stage('Deploy to environment') {
+      steps {
+        sh 'bundle exec rake deploy'
       }
     }
   }
