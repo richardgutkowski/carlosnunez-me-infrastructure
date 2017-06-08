@@ -14,7 +14,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F5DA5F09C3173AA6
 RUN echo deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main > /etc/apt/sources.list
 RUN echo deb-src http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main > /etc/apt/sources.list
 RUN apt-get -y update
-RUN apt-get -y install ruby2.4 ruby2.4-dev
+RUN apt-get -y install ruby2.2 ruby2.2-dev
 USER jenkins
 
 COPY files/jenkins/config.xml /usr/share/jenkins/ref/config.xml.override
