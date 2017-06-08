@@ -129,8 +129,12 @@ job/$JENKINS_JOB_NAME/lastBuild"
             JOB_IS_BUILDING=true
             if [ "$SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD" == "true" ]
             then
-              echo "This job is building. See results in realtime at: $last_build_console_text_url_localhost_relative"
+              this_log_filename=$(cat /dev/urandom | tr -cd 'a-zA-Z0-9' | head -c 8)
+              this_log_filepath="/tmp/logs/$this_log_filename"
+              this_log_filepath_localhost_relative="logs/$this_log_filename"
+              echo "This job is building. See results in realtime at: $this_log_filepath_localhost_relative"
               SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
+              echo $last_build_console_text > $this_log_filepath
             fi
             sleep $WAIT_PERIOD
             NUMBER_OF_RETRIES_ATTEMPTED=$((retries+1))
