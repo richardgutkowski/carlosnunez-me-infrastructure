@@ -98,9 +98,18 @@ job/$JENKINS_JOB_NAME/build"
           NUMBER_OF_RETRIES_ATTEMPTED=0
         fi
 
+        next_build_number_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+job/$JENKINS_JOB_NAME/api/json?tree=nextBuildNumber"
+        next_reported_build_number=$(curl -fs $next_build_number_url | \
+          sed 's/.*nextBuildNumber":\(.*\)\}/\1/')
+        this_build_number=1
+        if [ "$next_reported_build_number" != "" ]
+        then
+          this_build_number=$((next_reported_build_number-1))
+        fi
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-job/$JENKINS_JOB_NAME/lastBuild"
-        last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/lastBuild"
+job/$JENKINS_JOB_NAME/$this_build_number"
+        last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/$this_build_number"
         last_build_stats_url="${last_build_url}/api/json?tree=building,result"
         last_build_console_text_url="${last_build_url}/consoleText"
         last_build_console_text_url_localhost_relative="${last_build_url_localhost_relative}/consoleText"
