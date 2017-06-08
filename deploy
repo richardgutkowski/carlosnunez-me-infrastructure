@@ -94,7 +94,7 @@ job/$JENKINS_JOB_NAME/build"
         echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
-        if [ "$(JOB_IS_BUILDING)" == "true" ]
+        if [ "${JOB_IS_BUILDING}" == "true" ]
         then
           NUMBER_OF_RETRIES_ATTEMPTED=0
         fi
