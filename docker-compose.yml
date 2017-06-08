@@ -17,11 +17,15 @@ services:
     depends_on:
       - jenkins-master
     environment:
-      - JENKINS_MASTER_HOSTNAME=jenkins-master
+      - AWS_ACCESS_KEY_ID
+      - AWS_REGION
+      - AWS_S3_TERRAFORM_STATE_BUCKET="1sltVX8q-infrastructure-carlosnunez.me/tfstates/$TARGET_ENVIRONMENT"
+      - AWS_S3_TERRAFORM_TFVARS_BUCKET="1sltVX8q-infrastructure-carlosnunez.me/tfvars/$TARGET_ENVIRONMENT"
+      - AWS_SECRET_ACCESS_KEY
       - JENKINS_JOB_NAME=deploy-infrastructure-carlosnunez.me
-      - JENKINS_USERNAME=admin
+      - JENKINS_MASTER_HOSTNAME=jenkins-master
       - JENKINS_PASSWORD=password
-      - WITHIN_DEPLOYMENT_CONTAINER=true
+      - JENKINS_USERNAME=admin
       - TARGET_ENVIRONMENT
     command: /tmp/deploy $TARGET_ENVIRONMENT
     healthcheck:
