@@ -7,6 +7,12 @@ services:
     image: local_jenkins_master
     ports:
       - "80:8080"
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_REGION
+      - AWS_S3_TERRAFORM_STATE_BUCKET="1sltVX8q-infrastructure-carlosnunez.me/tfstates/$TARGET_ENVIRONMENT"
+      - AWS_S3_TERRAFORM_TFVARS_BUCKET="1sltVX8q-infrastructure-carlosnunez.me/tfvars/$TARGET_ENVIRONMENT"
+      - AWS_SECRET_ACCESS_KEY
   pipeline-runner:
     build:
       context: .
@@ -15,11 +21,6 @@ services:
     depends_on:
       - jenkins-master
     environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_REGION
-      - AWS_S3_TERRAFORM_STATE_BUCKET="1sltVX8q-infrastructure-carlosnunez.me/tfstates/$TARGET_ENVIRONMENT"
-      - AWS_S3_TERRAFORM_TFVARS_BUCKET="1sltVX8q-infrastructure-carlosnunez.me/tfvars/$TARGET_ENVIRONMENT"
-      - AWS_SECRET_ACCESS_KEY
       - JENKINS_JOB_NAME=deploy-infrastructure-carlosnunez.me
       - JENKINS_MASTER_HOSTNAME=jenkins-master
       - JENKINS_PASSWORD=password
