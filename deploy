@@ -113,7 +113,7 @@ job/$JENKINS_JOB_NAME/api/json?tree=nextBuildNumber"
             this_build_number=$next_reported_build_number
           fi
           last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-            job/$JENKINS_JOB_NAME/$this_build_number"
+job/$JENKINS_JOB_NAME/$this_build_number"
           last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/$this_build_number"
           last_build_stats_url="${last_build_url}/api/json?tree=building,result"
           last_build_console_text_url="${last_build_url}/consoleText"
