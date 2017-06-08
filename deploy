@@ -133,8 +133,8 @@ job/$JENKINS_JOB_NAME/lastBuild"
               this_log_filename=$(cat /dev/urandom | tr -cd 'a-zA-Z0-9' | head -c 8)
               this_log_filepath="/tmp/logs/$this_log_filename"
               this_log_filepath_localhost_relative="logs/$this_log_filename"
-              echo "This job is building. See results in realtime at \$PWD/$this_log_filepath_localhost_relative \
-or in your browser at $last_build_console_text_url_localhost_relative"
+              echo "This job is building. See results in realtime in your browser at $last_build_console_text_url_localhost_relative"
+              echo "You can also see the output of this job from docker: docker logs infrastructure_pipeline-runner_1"
               SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
             fi
             sleep $WAIT_PERIOD
@@ -142,10 +142,10 @@ or in your browser at $last_build_console_text_url_localhost_relative"
           elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
           then
             echo "Deployment failed. See below for error text."
-            echo "$last_build_console_text" | grep -v '[Pipeline]'
+            echo "$last_build_console_text"
             exit 1
           else
-            echo "$last_build_console_text" | grep -v '[Pipeline]'
+            echo "$last_build_console_text"
             echo "Deployment succeeded!"
             exit 0
           fi
