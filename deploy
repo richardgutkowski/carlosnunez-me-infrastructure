@@ -136,7 +136,6 @@ job/$JENKINS_JOB_NAME/lastBuild"
               echo "This job is building. See results in realtime at \$PWD/$this_log_filepath_localhost_relative \
 or in your browser at $last_build_console_text_url_localhost_relative"
               SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
-              echo $last_build_console_text >> $this_log_filepath
             fi
             sleep $WAIT_PERIOD
             NUMBER_OF_RETRIES_ATTEMPTED=$((retries+1))
