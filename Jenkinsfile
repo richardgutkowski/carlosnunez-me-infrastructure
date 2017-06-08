@@ -7,6 +7,11 @@ pipeline {
         sh 'bundle install'
       }
     }
+    stage('Retrieve Configurations') {
+      steps {
+        sh 'aws s3 cp s3://$AWS_S3_TERRAFORM_TFVARS_BUCKET/terraform.tfvars'
+      }
+    }
     stage('Unit Tests') {
       steps {
         sh 'bundle exec rake unit'
