@@ -52,18 +52,25 @@ else
     -a "$JENKINS_PASSWORD" != "" \
     -a "$TARGET_ENVIRONMENT" != "" ]
   then
-    echo "Doing the deployment!"
+    echo "INFO: Executing job [$JENKINS_JOB_NAME]"
     WAIT_PERIOD=5s
     JOB_IS_BUILDING=false
+    JOB_IS_BEING_QUEUED=false
     SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=true
-    retries=0
+    NUMBER_OF_RETRIES_ATTEMPTED=0
+    MAX_NUMBER_OF_RETRIES=10
     start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/build"
-    while [ $retries -lt 10 ]
+    while [ $NUMBER_OF_RETRIES_ATTEMPTED -lt $MAX_NUMBER_OF_RETRIES ]
     do
+      NUMBER_OF_RETRIES_OUTSTANDING=$((MAX_NUMBER_OF_RETRIES-NUMBER_OF_RETRIES_ATTEMPTED))
+      if [ "$JOB_IS_BUILDING" != "true" ]
+      then
+        echo "Retry ($NUMBER_OF_RETRIES_ATTEMPTED/$NUMBER_OF_RETRIES_OUTSTANDING)"
+      fi
       # Assume that the last response code is 201 if the job is currently building.
       # This will prevent us from invoking the job repeatedly unnecessarily.
-      if [ "$JOB_IS_BUILDING" != "true" ]
+      if [ "$JOB_IS_BUILDING" != "true" -o "$JOB_IS_BEING_QUEUED" != "true" ]
       then
         response_code=$(curl -X POST -Iso /dev/null -w "%{http_code}" $start_build_url)
       else
@@ -72,7 +79,7 @@ job/$JENKINS_JOB_NAME/build"
 
       if [ "$?" != "0" -o "$response_code" != "201" ]
       then
-        retries=$((retries+1))
+        NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
         if [ "$response_code" == "000" ]
         then
           if [ "$(nc -z $JENKINS_MASTER_HOSTNAME 8080 -w 1; echo $?)" != "0" ]
@@ -87,12 +94,6 @@ job/$JENKINS_JOB_NAME/build"
         echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
-        if [ "$JOB_IS_BUILDING" != "true" ]
-        then
-          retries=0
-          echo "Waiting $WAIT_PERIOD seconds for the job to initialize and run..."
-          sleep $WAIT_PERIOD
-        fi
         last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/lastBuild"
         last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/lastBuild"
@@ -109,33 +110,32 @@ job/$JENKINS_JOB_NAME/lastBuild"
         last_build_response_code=$(curl -LIso /dev/null -w '%{http_code}' $last_build_url)
         if [ "$last_build_response_code" != "200" ]
         then
-            JOB_IS_BUILDING=true
-            echo "[$last_build_response_code] This job is waiting to be queued. See results at: $last_build_console_text_url"
-            echo "Polling again in $WAIT_PERIOD"
+            JOB_IS_BEING_QUEUED=true
+            echo "Job $JENKINS_JOB_NAME is being queued for execution. We'll poll again in ${WAIT_PERIOD}."
             sleep $WAIT_PERIOD
         else
-          retries=0
+          NUMBER_OF_RETRIES_ATTEMPTED=0
           last_build_status=$(curl -s $last_build_stats_url)
           last_build_console_text="$(curl -s $last_build_console_text_url)"
 
           if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
           then
-            retries=$((retries+1))
+            JOB_IS_BEING_QUEUED=false
             JOB_IS_BUILDING=true
             if [ "$SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD" == "true" ]
             then
               echo "This job is building. See results in realtime at: $last_build_console_text_url_localhost_relative"
-              echo "Retrying in $WAIT_PERIOD"
               SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
             fi
             sleep $WAIT_PERIOD
+            NUMBER_OF_RETRIES_ATTEMPTED=$((retries+1))
           elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
           then
             echo "Deployment failed. See below for error text."
-            echo "$last_build_console_text"
+            echo "$last_build_console_text" | grep -v '[Pipeline]'
             exit 1
           else
-            echo "$last_build_console_text"
+            echo "$last_build_console_text" | grep -v '[Pipeline]'
             echo "Deployment succeeded!"
             exit 0
           fi
