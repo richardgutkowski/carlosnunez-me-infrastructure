@@ -121,7 +121,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
           then
             retries=$((retries+1))
             JOB_IS_BUILDING=true
-            echo "This job is still building. See results at: $last_build_console_url"
+            echo "This job is still building. See results at: $last_build_console_text_url"
             echo "Retrying in $WAIT_PERIOD"
             sleep $WAIT_PERIOD
           elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
@@ -130,6 +130,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
             echo "$last_build_console_text"
             exit 1
           else
+            echo "$last_build_console_text"
             echo "Deployment succeeded!"
             exit 0
           fi
