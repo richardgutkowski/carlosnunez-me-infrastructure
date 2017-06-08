@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Initialise') {
       steps {
-        sh 'which bundler || gem install bundler'
+        sh 'which bundler || gem install bundler --user-install'
         sh 'bundle install'
       }
     }
