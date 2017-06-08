@@ -103,7 +103,7 @@ job/$JENKINS_JOB_NAME/build"
         then
           next_build_number_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
             job/$JENKINS_JOB_NAME/api/json?tree=nextBuildNumber"
-          next_reported_build_number=$(curl -fs $next_build_number_url | \
+          next_reported_build_number=$(curl -Lfs $next_build_number_url | \
             sed 's/.*nextBuildNumber":\(.*\)\}/\1/')
           echo "DEBUG: Next number = $next_reported_build_number"
           this_build_number=1
