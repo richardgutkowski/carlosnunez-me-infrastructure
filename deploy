@@ -98,8 +98,7 @@ job/$JENKINS_JOB_NAME/lastBuild"
         last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/lastBuild"
         last_build_stats_url="${last_build_url}/api/json?tree=building,result"
         last_build_console_text_url="${last_build_url}/consoleText"
-        last_build_console_text_url_localhost_relative=\
-          "${last_build_url_localhost_relative}/consoleText"
+        last_build_console_text_url_localhost_relative="${last_build_url_localhost_relative}/consoleText"
 
         # This is a bit crude in that it always assumes that this job hasn't been queued
         # up before (lastBuild will always return information about the last build that
