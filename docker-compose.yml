@@ -13,6 +13,8 @@ services:
       - AWS_S3_TERRAFORM_STATE_BUCKET=1sltVX8q-infrastructure-carlosnunez-me/tfstates/$TARGET_ENVIRONMENT
       - AWS_S3_TERRAFORM_TFVARS_BUCKET=1sltVX8q-infrastructure-carlosnunez-me/tfvars/$TARGET_ENVIRONMENT
       - AWS_SECRET_ACCESS_KEY
+      - AWS_S3_TERRAFORM_TERRAFORM_BINARIES_BUCKET=1sltVX8q-infrastructure-carlosnunez-me/terraform-bin
+      - TARGET_ENVIRONMENT
   pipeline-runner:
     build:
       context: .
