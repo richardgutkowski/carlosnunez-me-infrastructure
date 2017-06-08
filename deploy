@@ -103,6 +103,7 @@ job/$JENKINS_JOB_NAME/build"
 job/$JENKINS_JOB_NAME/api/json?tree=nextBuildNumber"
         next_reported_build_number=$(curl -fs $next_build_number_url | \
           sed 's/.*nextBuildNumber":\(.*\)\}/\1/')
+        echo "DEBUG: Next number = $next_reported_build_number"
         this_build_number=1
         if [ "$next_reported_build_number" != "" ]
         then
