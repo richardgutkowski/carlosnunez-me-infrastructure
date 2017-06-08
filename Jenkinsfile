@@ -1,26 +1,26 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('build') {
       steps {
         sh 'which bundler || gem install bundler'
         sh 'bundle install'
       }
-      build 'Unit Tests'
+      build 'unitTests'
     }
-    stage('Unit Tests') {
+    stage('unitTests') {
       steps {
         sh 'bundle exec rake unit'
-        build 'Integration'
+        build 'integrationTests'
       }
     }
-    stage('Integration') {
+    stage('integrationTests') {
       steps {
         sh 'bundle exec rake integration'
-        build 'Deploy'
+        build 'deploy'
       }
     }
-    stage('Deploy') {
+    stage('deploy') {
       steps {
         sh 'bundle exec rake deploy'
       }
