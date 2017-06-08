@@ -125,7 +125,7 @@ job/$JENKINS_JOB_NAME/$this_build_number"
         if [ "$last_build_response_code" != "200" ]
         then
             JOB_IS_BEING_QUEUED=true
-            echo "Job $JENKINS_JOB_NAME is pending execution. We'll poll again in ${WAIT_PERIOD}."
+            echo "Job #{$this_build_number} of $JENKINS_JOB_NAME is pending execution. We'll poll again in ${WAIT_PERIOD}."
             sleep $WAIT_PERIOD
             NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
         else
