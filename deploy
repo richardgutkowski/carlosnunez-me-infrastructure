@@ -73,6 +73,7 @@ job/$JENKINS_JOB_NAME/build"
       # This will prevent us from invoking the job repeatedly unnecessarily.
       if [ "$JOB_IS_BUILDING" != "true" -o "$JOB_IS_BEING_QUEUED" != "true" ]
       then
+        echo "Queueing up job $JENKINS_JOB_NAME"
         response_code=$(curl -X POST -Iso /dev/null -w "%{http_code}" $start_build_url)
       else
         response_code="201"
