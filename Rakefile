@@ -14,6 +14,7 @@ namespace :prerequisites do
   task check_env_vars: :dotenv do
     required_env_vars_with_valid_values = {
       'TARGET_ENVIRONMENT' => get_supported_environments,
+      'AWS_S3_INFRASTRUCTURE_BUCKET' => "CHECK_NOT_REQUIRED",
       'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
       'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED"
     }
