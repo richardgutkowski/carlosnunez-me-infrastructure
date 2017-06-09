@@ -7,6 +7,6 @@ end
 
 RSpec.configure do |config|
   config.before(:all) {
-    $terraform_stdout = `terraform plan`
+    $terraform_plan = `terraform plan`
   }
 end
