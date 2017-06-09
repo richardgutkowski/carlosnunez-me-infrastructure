@@ -20,7 +20,7 @@ RUN pip install awscli
 USER jenkins
 ENV GEM_HOME "/var/jenkins_home/.gems"
 ENV GOPATH "/var/jenkins_home/go"
-ENV PATH "/var/jenkins_home/.gem/ruby/2.4.0/bin:${GOPATH}/bin:${PATH}"
+ENV PATH "/usr/lib/go-1.8/bin:/var/jenkins_home/.gem/ruby/2.4.0/bin:${GOPATH}/bin:${PATH}"
 RUN mkdir -p /var/jenkins_home/go/{bin,pkg,src}
 RUN mkdir $GEM_HOME
 
