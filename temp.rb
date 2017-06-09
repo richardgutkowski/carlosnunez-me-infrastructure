@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'rake'
-sh 'rm -q terraform.tfplan'
-sh %{'terraform plan -state=nil -out=terraform.tfplan > /dev/null'}
+%x('[ -f terraform.tfplan ] && rm terraform.tfplan')
+%x('terraform plan -state=nil -out=terraform.tfplan > /dev/null')
