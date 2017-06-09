@@ -32,6 +32,7 @@ else
     -a "$JENKINS_PASSWORD" != "" \
     -a "$TARGET_ENVIRONMENT" != "" ]
   then
+    echo "Deployment started: ${JENKINS_JOB_NAME}"
     WAIT_PERIOD=5s
     JOB_IS_BUILDING=false
     JOB_IS_BEING_QUEUED=false
