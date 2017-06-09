@@ -7,6 +7,6 @@ end
 
 RSpec.configure do |config|
   config.before(:all) {
-    @terraform_plan = `terraform plan 2>&1`
+    $terraform_plan = `terraform plan 2>&1`
   }
 end
