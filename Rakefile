@@ -16,6 +16,7 @@ namespace :prerequisites do
       'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
       'AWS_S3_TERRAFORM_TFVARS_BUCKET' => "CHECK_NOT_REQUIRED",
       'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED",
+      'GOPATH' => "CHECK_NOT_REQUIRED",
       'TARGET_ENVIRONMENT' => get_supported_environments
     }
     required_rake_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
@@ -27,6 +28,10 @@ namespace :prerequisites do
         raise "ERROR: #{ENV[env_var]} is not a valid value for #{ENV[env_var]}".red
       end
     end
+  end
+  task :install_tfjson_if_needed do
+    result=system('go','get','github.com/palantir/tfjson')
+    raise "ERROR: tfjson was not installed.".red if result != 0
   end
   task :install_terraform_if_needed do
     terraform_version = `\$PWD/terraform version 2>/dev/null`
@@ -56,7 +61,8 @@ end
 
 task :prereqs => ['prerequisites:check_for_terraform_tfvars', \
                   'prerequisites:check_env_vars', \
-                  'prerequisites:install_terraform_if_needed' ]
+                  'prerequisites:install_terraform_if_needed', \
+                  'prerequisites:install_tfjson_if_needed' ]
 
 task :unit => [ 'prereqs',
                 'static_analysis:lint',
