@@ -3,7 +3,7 @@ require 'awspec'
 
 describe "Terraform plan" do
   it "Should exist" do
-    puts $terraform_plan
+    puts "Terraform plan: #{$terraform_plan}, is_nil: #{$terraform_plan.nil?}"
     $terraform_plan.nil? == false
   end
 end
