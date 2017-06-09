@@ -30,7 +30,7 @@ namespace :prerequisites do
     end
   end
   task :install_tfjson_if_needed do
-    result=`which tfjson > /dev/null || { echo "INFO: Installing tfjson" ; go get github.com/palantir/tfjson 2>/dev/null; }; echo $`
+    result=`which tfjson > /dev/null || { echo "INFO: Installing tfjson" ; go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     puts "result: #{result}"
     raise "ERROR: tfjson was not installed.".red if result != "0"
   end
