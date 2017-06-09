@@ -1,3 +1,3 @@
 #!/usr/bin/env ruby
-_ = system('./terraform plan -state=no_state_for_testing \
-                                      -out=terraform.tfplan > /dev/null')
+system('./terraform plan -state=no_state_for_testing \
+																			-out=terraform.tfplan > /dev/null')
