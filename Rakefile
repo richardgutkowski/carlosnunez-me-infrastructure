@@ -31,8 +31,7 @@ namespace :prerequisites do
   end
   task :install_tfjson_if_needed do
     result=system('go','get','github.com/palantir/tfjson')
-    puts "RESULT: #{result}"
-    raise "ERROR: tfjson was not installed.".red if result != 0
+    raise "ERROR: tfjson was not installed.".red if not result
   end
   task :install_terraform_if_needed do
     terraform_version = `\$PWD/terraform version 2>/dev/null`
