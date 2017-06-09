@@ -7,9 +7,9 @@ end
 
 RSpec.configure do |config|
   config.before(:all) {
-    terraform_plan_json_str = \
-      `./terraform plan -state=no_state_for_testing -out=terraform.tfplan > /dev/null;  \
-      [ -f terraform.tfplan ] && tfjson terraform.tfplan`
+    terraform_plan_json_str = system('./terraform plan -state=no_state_for_testing \
+                                     -out=terraform.tfplan > /dev/null ; \
+                                     [ -f terraform.tfplan ] && tfjson terraform.tfplan')
     if terraform_plan_json_str == ""
       raise "Mock Terraform plan was not generated."
     end
