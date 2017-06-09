@@ -14,6 +14,6 @@ RSpec.configure do |config|
     $terraform_plan = JSON.parse(terraform_plan_json_str)
   }
   config.after(:all) {
-    _ = `rm .temp.tfplan`
+    _ = `rm temp.tfplan`
   }
 end
