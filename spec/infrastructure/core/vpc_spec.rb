@@ -1,3 +1,6 @@
 require 'spec_helper'
+require 'awspec'
 
-puts "Terraform plan generated: #{$terraform_plan}"
+describe "VPC was created" do
+  puts $terraform_plan
+end
