@@ -10,7 +10,8 @@ RSpec.configure do |config|
   config.before(:all) {
     _, $terraform_plan_stderr, _ = 
       Open3.capture3("./terraform plan -state=nil_state_for_testing -out=temp.tfplan")
-    terraform_plan_json_str = `[ -f temp.tfplan ] && tfjson temp.tfplan`
+    terraform_plan_json_str = `[ -f temp.tfplan ] && \
+$GOPATH/bin/tfjson temp.tfplan`
     raise "Mock Terraform plan was not generated." if not File.exist? 'temp.tfplan'
     $terraform_plan = JSON.parse(terraform_plan_json_str)
   }
