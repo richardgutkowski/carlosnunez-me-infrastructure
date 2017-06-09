@@ -1,6 +1,6 @@
 def get_supported_environments
   require 'aws-sdk'
-  return [] if !ENV['AWS_S3_INFRASTRUCTURE_BUCKET']
+  return nil if !ENV['AWS_S3_INFRASTRUCTURE_BUCKET']
   s3_client = Aws::S3::Client.new
   objects_in_infrastructure_bucket =
     s3_client.list_objects(bucket: ENV['AWS_S3_INFRASTRUCTURE_BUCKET'])
@@ -10,5 +10,5 @@ def get_supported_environments
   environments_found = tfvars_found.map do |s3_object_key|
     s3_object_key.split('/')[1]
   end
-  environments_found
+  environments_found.uniq
 end
