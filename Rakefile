@@ -13,14 +13,16 @@ namespace :prerequisites do
 
   task check_env_vars: :dotenv do
     required_rake_env_vars_with_valid_values = {
-      'TARGET_ENVIRONMENT' => get_supported_environments,
-      'AWS_S3_INFRASTRUCTURE_BUCKET' => "CHECK_NOT_REQUIRED",
       'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
+      'AWS_S3_TERRAFORM_TFVARS_BUCKET' => "CHECK_NOT_REQUIRED",
       'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED"
+      'TARGET_ENVIRONMENT' => get_supported_environments,
     }
     required_rake_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
       raise "ERROR: #{env_var} is not defined in your environment; please define it." if !ENV[env_var].red
       if supported_env_var_values != "CHECK_NOT_REQUIRED" and !supported_env_var_values.include? ENV[env_var]
+        if supported_env_var_values.nil?
+          raise "ERROR: No supported environments found. (Check your bucket: #{ENV['AWS_S3_TERRAFORM_TFVARS_BUCKET']})"
         raise "ERROR: #{ENV[env_var]} is not a valid value for #{ENV[env_var]}".red
       end
     end
