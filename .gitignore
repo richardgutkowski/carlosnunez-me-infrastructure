@@ -6,7 +6,7 @@ include/*
 terraform.tfvars
 
 # Ignore any local state generated
-terraform.tfstate*
+*.tfstate*
 
 # Ignore packer build.log
 build.log
