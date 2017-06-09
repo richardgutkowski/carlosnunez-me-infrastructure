@@ -8,5 +8,5 @@ system('tfjson terraform.tfplan')
 
 system('[ -f "terraform2.tfplan" ] && rm terraform2.tfplan \
 				./terraform plan -state=nil \
-												 -out=terraform2.tfplan > /dev/null ; \
+												 -out=terraform2.tfplan ; \
 				tfjson terraform2.tfplan')
