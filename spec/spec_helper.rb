@@ -8,7 +8,9 @@ end
 
 RSpec.configure do |config|
   config.before(:all) {
-    $terraform_plan, $terraform_plan_stderr, _ = 
-      Open3.capture3("terraform plan -state=nil_state_for_testing")
+    _, $terraform_plan_stderr, _ = 
+      Open3.capture3("terraform plan -state=nil_state_for_testing -out=temp.tfstate")
+    terraform_plan_json_str = `[ -f temp.tfstate ] && tfjson temp.tfstate`
+    $terraform_plan = JSON.parse(terraform_plan_json_str)
   }
 end
