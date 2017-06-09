@@ -9,6 +9,6 @@ end
 RSpec.configure do |config|
   config.before(:all) {
     $terraform_plan, $terraform_plan_stdout, _ = 
-      Open3.capture("terraform plan -state=nil_state_for_testing")
+      Open3.capture3("terraform plan -state=nil_state_for_testing")
   }
 end
