@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
-system('rm terraform.tfplan')
-system('./terraform plan -state=no_state_for_testing -out=terraform.tfplan')
+require 'fileutils'
+sh %{'[ -f terraform.tfplan ] && rm terraform.tfplan'}
+sh %{'terraform plan -state=nil -out=terraform.tfplan > /dev/null'}
