@@ -7,7 +7,7 @@ RUN echo deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main >> /e
 RUN echo deb-src http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main >> /etc/apt/sources.list
 RUN apt-get -y update
 RUN \
-  for package in python python-setuptools python-dev build-essential ruby2.4 ruby2.4-dev golang-go; \
+  for package in python python-setuptools python-dev build-essential ruby2.4 ruby2.4-dev golang-1.8-go; \
   do \
     apt-get -y install $package; \
   done;
