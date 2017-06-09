@@ -3,6 +3,7 @@ MAINTAINER Carlos Nunez <dev@carlosnunez.me>
 
 USER root
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F5DA5F09C3173AA6
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F6BC817356A3D45E
 RUN echo deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main >> /etc/apt/sources.list
 RUN echo deb-src http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main >> /etc/apt/sources.list
 RUN echo deb http://ppa.launchpad.net/longsleep/golang-backports/ubuntu xenial main >> /etc/apt/sources.list
