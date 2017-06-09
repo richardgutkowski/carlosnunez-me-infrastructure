@@ -16,6 +16,8 @@ RUN pip install awscli
 USER jenkins
 ENV PATH "/var/jenkins_home/.gem/ruby/2.4.0/bin:${PATH}"
 ENV GEM_HOME "/var/jenkins_home/.gems"
+ENV GOPATH "$HOME/go"
+RUN mkdir -p $GOPATH/bin $GOPATH/pkg $GOPATH/src
 RUN mkdir $GEM_HOME
 
 COPY files/jenkins/config.xml /usr/share/jenkins/ref/config.xml.override
