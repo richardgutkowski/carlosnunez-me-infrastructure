@@ -29,7 +29,7 @@ pipeline {
     }
     stage('Upload Terraform state') {
       steps {
-        sh 'aws s3 cp terraform.tfstate s3://$AWS_S3_TERRAFORM_STATE_BUCKET/terraform.tfstate'
+        sh '[ -f terraform.tfstate ] && aws s3 cp terraform.tfstate s3://$AWS_S3_TERRAFORM_STATE_BUCKET/terraform.tfstate'
       }
     }
   }
