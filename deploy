@@ -22,8 +22,7 @@ then
   export TARGET_ENVIRONMENT=$target_env # Used by docker-compose.
   echo "Booting local Jenkins CI. Target environment: $TARGET_ENVIRONMENT"
   docker-compose restart jenkins-master
-  docker-compose up --abort-on-container-exit 2>&1 | \
-    egrep --line-buffered "(pipeline\-runner)"
+  docker-compose up --abort-on-container-exit 2>&1
 else
   if [ -f .dockerenv \
     -a "$JENKINS_JOB_NAME" != "" \
