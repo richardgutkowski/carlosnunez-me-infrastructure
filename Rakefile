@@ -5,6 +5,13 @@ require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
 namespace :prerequisites do
+  task :check_for_golang do
+    matching_golang_version_found = `go version | grep -- #{@GOLANG_VERSION_REQUIRED}`
+    if matching_golang_version_found.empty?
+      raise "ERROR: Go is not installed. You'll need to install Golang to continue.".red
+    end
+  end
+
   task :check_for_terraform_tfvars do
     if not File.exist? 'terraform.tfvars'
       raise "ERROR: Terraform variables not found. Did you pull them in from S3?".red
@@ -33,7 +40,7 @@ namespace :prerequisites do
     result=`which tfjson > /dev/null || { echo "INFO: Installing tfjson" ; go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     raise "ERROR: tfjson was not installed.".red if result.to_i != 0
   end
-  task :install_terraform_if_needed do
+  task :download_latest_version_of_terraform_if_needed do
     terraform_version = `\$PWD/terraform version 2>/dev/null`
     if terraform_version == "" or terraform_version.include? 'Your version of Terraform is out of date'
       puts "Terraform not found or out of date. Updating."
@@ -61,7 +68,7 @@ end
 
 task :prereqs => ['prerequisites:check_for_terraform_tfvars', \
                   'prerequisites:check_env_vars', \
-                  'prerequisites:install_terraform_if_needed', \
+                  'prerequisites:download_latest_version_of_terraform_if_needed', \
                   'prerequisites:install_tfjson_if_needed' ]
 
 task :unit => [ 'prereqs',
