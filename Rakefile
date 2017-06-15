@@ -6,7 +6,8 @@ require_relative 'lib/terraform_helper'
 
 namespace :prerequisites do
   task :check_for_golang do
-    matching_golang_version_found = `go version | grep -- #{@GOLANG_VERSION_REQUIRED}`
+    GOLANG_VERSION_REQUIRED = 'go1.8'
+    matching_golang_version_found = `go version | grep -- #{GOLANG_VERSION_REQUIRED}`
     if matching_golang_version_found.empty?
       raise "ERROR: Go is not installed. You'll need to install Golang to continue.".red
     end
@@ -66,7 +67,8 @@ namespace :unit do
   end
 end
 
-task :prereqs => ['prerequisites:check_for_terraform_tfvars', \
+task :prereqs => ['prerequisites:check_for_golang', \
+                  'prerequisites:check_for_terraform_tfvars', \
                   'prerequisites:check_env_vars', \
                   'prerequisites:download_latest_version_of_terraform_if_needed', \
                   'prerequisites:install_tfjson_if_needed' ]
