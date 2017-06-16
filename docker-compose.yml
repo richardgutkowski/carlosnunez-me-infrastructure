@@ -2,7 +2,8 @@ version: '3'
 services:
   git-server:
     image: jkarlos/git-server-docker
-    ports: "10222:22"
+    ports:
+      - "10222:22"
     volumes:
       - $PWD:/git-server/repos/infrastructure
       - $PWD/files/git-server/ssh_keys:/git-server/keys
