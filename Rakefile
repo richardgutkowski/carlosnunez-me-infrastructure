@@ -5,8 +5,9 @@ require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
 namespace :prerequisites do
+  GOLANG_VERSION_REQUIRED = 'go1.8'
+  TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.9'
   task :check_for_golang do
-    GOLANG_VERSION_REQUIRED = 'go1.8'
     matching_golang_version_found = `go version | grep -- #{GOLANG_VERSION_REQUIRED}`
     if matching_golang_version_found.empty?
       raise "ERROR: Go is not installed. You'll need to install Golang to continue.".red
@@ -55,15 +56,15 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     end
   end
   task :download_tfjson_supported_terraform_if_needed do
-    puts "Version: #{$TFJSON_SUPPORTED_TERRAFORM_VERSION}"
+    puts "Version: #{TFJSON_SUPPORTED_TERRAFORM_VERSION}"
     old_terraform_path = '\$PWD/old_terraform'
     old_terraform_version = `#{old_terraform_path} version 2>/dev/null | \
-grep #{$TFJSON_SUPPORTED_TERRAFORM_VERSION}`
+grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
     if terraform_version == ""
-      puts "You don't have Terraform version #{$TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
+      puts "You don't have Terraform version #{TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
 This is required by tfjson for unit testing. We're installing this now."
       install_specific_version_of_terraform_into_working_directory! \
-        version:$TFJSON_SUPPORTED_TERRAFORM_VERSION
+        version:TFJSON_SUPPORTED_TERRAFORM_VERSION
     end
   end
 end
