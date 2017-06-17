@@ -113,7 +113,7 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
   {
-    :version => version,
+    :version => latest_version,
     :version_uri => latest_terraform_release_uri
   }
 end
