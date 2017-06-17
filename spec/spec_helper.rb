@@ -7,15 +7,17 @@ end
 
 RSpec.configure do |config|
   config.before(:all) {
-		system('./terraform plan -state=dummy_state -out=${TARGET_ENVIRONMENT}_infra_fixture.tfplan > /dev/null')
-		terraform_plan_as_json_str = system('tfjson ./${TARGET_ENVIRONMENT}_infra_fixture.tfplan')
-		system('rm -rf ./dummy_state ${TARGET_ENVIRONMENT}_infra_fixture.tfplan')
+		system('./terraform plan -state=discarded_state_not_required_for_unit_tests \
+-out=terraform_fixture.tfplan > /dev/null')
+		terraform_plan_as_json_str = system('tfjson ./terraform_fixture.tfplan')
     if terraform_plan_as_json_str == ""
       raise "Mock Terraform plan was not generated."
     end
     $terraform_plan = JSON.parse(terraform_plan_json_str)
   }
   config.after(:all) {
-    `rm terraform.tfplan`
+    [ './dummy_state', './terraform_fixture.tfplan' ].each do |file|
+      `rm #{file}`
+    end
   }
 end
