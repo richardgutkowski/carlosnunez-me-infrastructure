@@ -12,7 +12,15 @@ def lint_terraform_configurations_in_this_directory
   return lint_successful, lint_result
 end
 
+def install_specific_version_of_terraform_into_working_directory!(version:)
+  install_terraform_into_working_directory! version:version
+end
+
 def install_latest_version_of_terraform_into_working_directory!
+  install_terraform_into_working_directory! version:'latest'
+end
+
+def install_terraform_into_working_directory!(version:)
   os = get_supported_terraform_os_build
   if os == "unsupported"
     raise "Terraform is not supported by your operating system."
