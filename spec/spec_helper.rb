@@ -18,6 +18,14 @@ RSpec.configure do |config|
       raise "Mock Terraform plan was not generated."
     end
     $terraform_plan = JSON.parse(terraform_plan_json_serialized)
+
+    $terraform_tfvars = {}
+    File.open("#{ENV['PWD']}/terraform.tfvars",'r').map do |line|
+      tfvar_key, tfvar_value = line.split('=').map do |item|
+        item.sub('"','').gsub("\n",'').gsub(' ','').gsub('"','')
+      end
+      $terraform_tfvars[tfvar_key] = tfvar_value
+    end
   }
   config.after(:all) {
     [ './dummy_state', './terraform_fixture.tfplan' ].each do |file|
