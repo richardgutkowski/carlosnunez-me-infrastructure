@@ -44,8 +44,13 @@ def install_terraform_into_working_directory!(version:)
     raise "Couldn't retrieve version #{version} of Terraform. You'll need to install it manually."
   end
 
+  if version == 'latest'
+    file_name_to_use = ''
+  else
+    file_name_to_use = 'old_terraform'
+  end
   download_terraform_into_working_directory! uri_as_string:terraform_release_uri, \
-    file_name:'old_terraform'
+    file_name:file_name_to_use
   if not terraform_installed_successfully? version_expected:terraform_version
     raise "Terraform not updated successfully. You'll need to install it manually."
   end
@@ -153,8 +158,8 @@ def create_uri(scheme:, hostname:, path:)
   end
 end   
 
-def download_terraform_into_working_directory!(file_name,uri_as_string:)
-  if not file_name
+def download_terraform_into_working_directory!(file_name:,uri_as_string:)
+  if not file_name or file_name.empty?
     uri = URI(uri_as_string)
     file_name = uri.path.split('/')[-1]
   end
