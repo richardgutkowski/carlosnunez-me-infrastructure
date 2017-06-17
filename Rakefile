@@ -57,12 +57,12 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
   task :download_tfjson_supported_terraform_if_needed do
     old_terraform_path = '\$PWD/old_terraform'
     old_terraform_version = `#{old_terraform_path} version 2>/dev/null | \
-grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
+grep #{@TFJSON_SUPPORTED_TERRAFORM_VERSION}`
     if terraform_version == ""
-      puts "You don't have Terraform version #{TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
+      puts "You don't have Terraform version #{@TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
 This is required by tfjson for unit testing. We're installing this now."
       install_specific_version_of_terraform_into_working_directory! \
-        version:TFJSON_SUPPORTED_TERRAFORM_VERSION
+        version:@TFJSON_SUPPORTED_TERRAFORM_VERSION
     end
   end
 end
