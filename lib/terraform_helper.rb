@@ -203,7 +203,7 @@ def download_terraform_into_working_directory!(file_name:,uri_as_string:)
   end
 end
 
-def terraform_installed_successfully?(version_expected:)
+def terraform_installed_successfully?(file_name:, version_expected:)
   terraform_version_reported = `\$PWD/terraform version`
   terraform_version_reported.include? "Terraform v#{version_expected}"
 end
