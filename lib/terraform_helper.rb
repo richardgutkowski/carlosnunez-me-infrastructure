@@ -160,9 +160,9 @@ end
 
 def download_terraform_into_working_directory!(file_name:,uri_as_string:)
   if not file_name or file_name.empty?
-    uri = URI(uri_as_string)
     file_name = uri.path.split('/')[-1]
   end
+  uri = URI(uri_as_string)
   if !File.exist? file_name
     session = Net::HTTP.new(uri.host, uri.port)
     if uri.scheme == 'https'
