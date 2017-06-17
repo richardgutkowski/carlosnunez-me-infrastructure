@@ -31,11 +31,17 @@ def install_terraform_into_working_directory!(version:)
     raise "Terraform is not supported by your CPU platform."
   end
 
-  latest_terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
-  latest_terraform_version = latest_terraform_release_details[:version]
-  latest_terraform_release_uri = latest_terraform_release_details[:version_uri]
-  if latest_terraform_release_uri == "NOT_FOUND"
-    raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
+  if version == 'latest'
+    terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
+  else
+    terraform_release_details = get_specific_terraform_release os:os, \
+      cpu_platform:cpu_platform, \
+      version:version
+  end
+  terraform_version = terraform_release_details[:version]
+  terraform_release_uri = terraform_release_details[:version_uri]
+  if terraform_release_uri == "NOT_FOUND"
+    raise "Couldn't retrieve version #{version} of Terraform. You'll need to install it manually."
   end
 
   download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
