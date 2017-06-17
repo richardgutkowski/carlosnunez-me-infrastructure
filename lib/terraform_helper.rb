@@ -153,7 +153,7 @@ def create_uri(scheme:, hostname:, path:)
   end
 end   
 
-def download_terraform_into_working_directory!(uri_as_string:,file_name)
+def download_terraform_into_working_directory!(file_name,uri_as_string:)
   if not file_name
     uri = URI(uri_as_string)
     file_name = uri.path.split('/')[-1]
