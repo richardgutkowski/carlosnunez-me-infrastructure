@@ -6,7 +6,7 @@ describe "VPC" do
     @vpc_details = $terraform_plan['aws_vpc.infrastructure']
   end
   it "should have the right CIDR block" do
-    cidr_block_expected = "10.1.0.0/16"
+    cidr_block_expected = $terraform_tfvars['aws_vpc_cidr_block']
     expect(@vpc_details['cidr_block']).to eq(cidr_block_expected)
   end
 end
