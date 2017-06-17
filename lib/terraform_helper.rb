@@ -163,6 +163,7 @@ def download_terraform_into_working_directory!(file_name:,uri_as_string:)
   uri = URI(uri_as_string)
   if not file_name or file_name.empty?
     file_name = uri.path.split('/')[-1]
+    actual_file_name = 'terraform'
   end
   if !File.exist? file_name
     session = Net::HTTP.new(uri.host, uri.port)
@@ -198,7 +199,9 @@ def download_terraform_into_working_directory!(file_name:,uri_as_string:)
 
   Zip::File.open(file_name) do |zip_file|
     zip_file.each do |file|
-      actual_file_name = file_name.sub('.zip','')
+      if not actual_file_name
+        actual_file_name = file_name.sub('.zip','')
+      end
       puts "Extracting #{file.name} from #{file_name} and naming it #{actual_file_name}"
       if File.exist? actual_file_name
         `rm #{actual_file_name}`
