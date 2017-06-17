@@ -1,15 +1,6 @@
 version: '3'
 services:
-  git-server:
-    image: jkarlos/git-server-docker
-    ports:
-      - "10222:22"
-    volumes:
-      - $PWD:/git-server/repos/infrastructure
-      - $PWD/files/git-server/ssh_keys:/git-server/keys
   jenkins-master:
-    depends_on:
-      - git-server
     build:
       context: .
       dockerfile: Dockerfile-jenkins_master
