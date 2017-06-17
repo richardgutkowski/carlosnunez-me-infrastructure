@@ -56,7 +56,6 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     end
   end
   task :download_tfjson_supported_terraform_if_needed do
-    puts "Version: #{TFJSON_SUPPORTED_TERRAFORM_VERSION}"
     old_terraform_path = '\$PWD/old_terraform'
     old_terraform_version = `#{old_terraform_path} version 2>/dev/null | \
 grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
