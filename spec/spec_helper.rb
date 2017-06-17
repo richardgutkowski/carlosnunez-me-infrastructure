@@ -11,10 +11,9 @@ RSpec.configure do |config|
     if not File.exist? tfjson_location
       raise "tfjson not found at #{tfjson_location}. Rakefile should have installed it..."
     end
-		terraform_plan_as_json_str = \
-      system("#{ENV['PWD']}/old_terraform plan -state=discarded_state_not_required_for_unit_tests \
--out=terraform_fixture.tfplan > /dev/null")
-    puts "Got: #{terraform_plan_as_json_str}"
+		terraform_plan_as_json_str = `#{ENV['PWD']}/old_terraform plan \
+-state=discarded_state_not_required_for_unit_tests \
+-out=terraform_fixture.tfplan > /dev/null`
     if terraform_plan_as_json_str.nil? or terraform_plan_as_json_str.empty?
       raise "Mock Terraform plan was not generated."
     end
