@@ -52,7 +52,7 @@ def install_terraform_into_working_directory!(version:)
   download_terraform_into_working_directory! uri_as_string:terraform_release_uri, \
     file_name:file_name_to_use
   if not terraform_installed_successfully? version_expected:terraform_version
-    raise "Terraform not updated successfully. You'll need to install it manually."
+    raise "Terraform #{terraform_version} not updated successfully. You'll need to install it manually."
   end
 end
 
