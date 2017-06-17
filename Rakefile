@@ -54,7 +54,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
       install_latest_version_of_terraform_into_working_directory!
     end
   end
-  task :check_for_tfjson_supported_terraform do
+  task :download_tfjson_supported_terraform_if_needed do
     old_terraform_path = '\$PWD/old_terraform'
     old_terraform_version = `#{old_terraform_path} version 2>/dev/null | \
 grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
@@ -87,6 +87,7 @@ task :prereqs => ['prerequisites:check_for_golang', \
                   'prerequisites:check_for_terraform_tfvars', \
                   'prerequisites:check_env_vars', \
                   'prerequisites:download_latest_version_of_terraform_if_needed', \
+                  'prerequisites:download_tfjson_supported_terraform_if_needed', \
                   'prerequisites:install_tfjson_if_needed' ]
 
 task :unit => [ 'prereqs',
