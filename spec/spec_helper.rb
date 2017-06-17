@@ -9,7 +9,7 @@ RSpec.configure do |config|
   config.before(:all) {
     tfjson_location = [ ENV['GOPATH'], 'bin', 'tfjson' ].join('/')
     if not File.exist? tfjson_location
-      raise "tfjson not found. Rakefile should have installed it..."
+      raise "tfjson not found at #{tfjson_location}. Rakefile should have installed it..."
     end
 		system("#{ENV['PWD']}/old_terraform plan -state=discarded_state_not_required_for_unit_tests \
 -out=terraform_fixture.tfplan > /dev/null")
