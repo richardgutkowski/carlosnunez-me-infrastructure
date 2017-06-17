@@ -6,7 +6,7 @@ require_relative 'lib/terraform_helper'
 
 namespace :prerequisites do
   GOLANG_VERSION_REQUIRED = 'go1.8'
-  TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.9'
+  TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.8'
   task :check_for_golang do
     matching_golang_version_found = `go version | grep -- #{GOLANG_VERSION_REQUIRED}`
     if matching_golang_version_found.empty?
