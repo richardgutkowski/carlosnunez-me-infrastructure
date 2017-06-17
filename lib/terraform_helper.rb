@@ -81,11 +81,10 @@ end
 
 def get_specific_terraform_release(os:, cpu_platform:, version:)
   terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
-  terraform_versions_stub = "v#{version}"
   terraform_cpu_arch_stub = "#{os}_#{cpu_platform}"
   specific_terraform_release_uri = [
     terraform_releases_uri,
-    terraform_versions_stub,
+    "v#{version}",
     "terraform_#{terraform_cpu_arch_stub}.zip"
   ].join('/')
   puts "We got URI: #{specific_terraform_release_uri}"
