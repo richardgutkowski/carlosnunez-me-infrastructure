@@ -14,7 +14,6 @@ RSpec.configure do |config|
 		system("#{ENV['PWD']}/old_terraform plan -state=discarded_state_not_required_for_unit_tests \
 -out=terraform_fixture.tfplan > /dev/null")
     terraform_plan_json_serialized = `#{tfjson_location} ./terraform_fixture.tfplan`
-    puts "Got: #{terraform_plan_json_serialized}"
     if terraform_plan_json_serialized.nil? or terraform_plan_json_serialized.empty?
       raise "Mock Terraform plan was not generated."
     end
