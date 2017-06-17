@@ -93,7 +93,6 @@ def get_specific_terraform_release(os:, cpu_platform:, version:)
     version,
     "terraform_#{version}_#{terraform_cpu_arch_stub}.zip"
   ].join('/')
-  puts "We got URI: #{specific_terraform_release_uri}"
   {
     :version => version,
     :version_uri => specific_terraform_release_uri
