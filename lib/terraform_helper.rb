@@ -206,7 +206,7 @@ def download_terraform_into_working_directory!(file_name:,uri_as_string:)
 end
 
 def terraform_installed_successfully?(is_latest:, version_expected:)
-  if not is_latest
+  if is_latest
     terraform_version_reported = `\$PWD/terraform version`
   else
     terraform_version_reported = `\$PWD/old_terraform version`
