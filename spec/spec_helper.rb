@@ -11,7 +11,7 @@ RSpec.configure do |config|
 -out=terraform_fixture.tfplan > /dev/null")
 		terraform_plan_as_json_str = system('tfjson ./terraform_fixture.tfplan')
     puts "Got: #{terraform_plan_as_json_str}"
-    if terraform_plan_as_json_str.empty?
+    if terraform_plan_as_json_str.nil? or terraform_plan_as_json_str.empty?
       raise "Mock Terraform plan was not generated."
     end
     $terraform_plan = JSON.parse(terraform_plan_json_str)
