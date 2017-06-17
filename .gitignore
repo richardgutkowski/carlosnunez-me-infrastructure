@@ -24,6 +24,7 @@ config/application.yml
 # Ignore terraform zips and the Terraform binary
 terraform
 terraform_*.zip
+old_terraform*
 
 # Ignore test kitchen stuff.
 .kitchen/*
