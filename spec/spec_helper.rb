@@ -14,7 +14,6 @@ RSpec.configure do |config|
       raise "Mock Terraform plan was not generated."
     end
     $terraform_plan = JSON.parse(terraform_plan_json_str)
-    $TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.9'
   }
   config.after(:all) {
     [ './dummy_state', './terraform_fixture.tfplan' ].each do |file|
