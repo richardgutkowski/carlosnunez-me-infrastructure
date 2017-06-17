@@ -7,7 +7,7 @@ end
 
 RSpec.configure do |config|
   config.before(:all) {
-		system('terraform plan -state=discarded_state_not_required_for_unit_tests \
+		system('\$PWD/old_terraform plan -state=discarded_state_not_required_for_unit_tests \
 -out=terraform_fixture.tfplan > /dev/null')
 		terraform_plan_as_json_str = system('tfjson ./terraform_fixture.tfplan')
     if terraform_plan_as_json_str == ""
