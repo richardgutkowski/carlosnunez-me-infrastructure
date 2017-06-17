@@ -7,6 +7,6 @@ describe "VPC" do
   end
   it "should have the right CIDR block" do
     cidr_block_expected = "10.1.0.0/16"
-    expect(@vpc_details['cidr_block']).to be_eq cidr_block_expected
+    @vpc_details['cidr_block'].should eq(cidr_block_expected)
   end
 end
