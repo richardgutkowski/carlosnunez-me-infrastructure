@@ -47,7 +47,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     raise "ERROR: tfjson was not installed.".red if result.to_i != 0
   end
   task :download_latest_version_of_terraform_if_needed do
-    terraform_version = `\$PWD/terraform version 2>/dev/null`
+    terraform_version = `#{ENV['PWD']}/terraform version 2>/dev/null`
     if terraform_version == "" or \
       terraform_version.include? 'Your version of Terraform is out of date'
       puts "Terraform not found or out of date. Updating.".yellow
@@ -56,8 +56,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     end
   end
   task :download_tfjson_supported_terraform_if_needed do
-    old_terraform_path = '\$PWD/old_terraform'
-    old_terraform_version = `#{old_terraform_path} version 2>&1`
+    old_terraform_version = `#{ENV['PWD']}/old_terraform version 2>&1`
     puts "Got: #{old_terraform_version}"
     if old_terraform_version.empty?
       puts "You don't have Terraform version #{TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
