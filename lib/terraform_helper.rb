@@ -44,8 +44,8 @@ def install_terraform_into_working_directory!(version:)
     raise "Couldn't retrieve version #{version} of Terraform. You'll need to install it manually."
   end
 
-  download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
-  if not terraform_installed_successfully? version_expected:latest_terraform_version
+  download_terraform_into_working_directory! uri_as_string:terraform_release_uri
+  if not terraform_installed_successfully? version_expected:terraform_version
     raise "Terraform not updated successfully. You'll need to install it manually."
   end
 end
