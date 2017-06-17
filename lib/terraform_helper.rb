@@ -47,7 +47,7 @@ def install_terraform_into_working_directory!(version:)
   if version == 'latest'
     file_name_to_use = ''
   else
-    file_name_to_use = 'old_terraform'
+    file_name_to_use = 'old_terraform.zip'
   end
   download_terraform_into_working_directory! uri_as_string:terraform_release_uri, \
     file_name:file_name_to_use
