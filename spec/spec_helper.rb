@@ -18,7 +18,9 @@ RSpec.configure do |config|
   }
   config.after(:all) {
     [ './dummy_state', './terraform_fixture.tfplan' ].each do |file|
-      `rm #{file}`
+      if File.exist? file
+        `rm #{file}`
+      end
     end
   }
 end
