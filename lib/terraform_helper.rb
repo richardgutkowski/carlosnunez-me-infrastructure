@@ -46,12 +46,14 @@ def install_terraform_into_working_directory!(version:)
 
   if version == 'latest'
     file_name_to_use = ''
+    is_latest = true
   else
     file_name_to_use = 'old_terraform.zip'
+    is_latest = false
   end
   download_terraform_into_working_directory! uri_as_string:terraform_release_uri, \
     file_name:file_name_to_use
-  if not terraform_installed_successfully? version_expected:terraform_version
+  if not terraform_installed_successfully? is_latest:is_latest version_expected:terraform_version
     raise "Terraform #{terraform_version} not updated successfully. You'll need to install it manually."
   end
 end
@@ -203,7 +205,11 @@ def download_terraform_into_working_directory!(file_name:,uri_as_string:)
   end
 end
 
-def terraform_installed_successfully?(file_name:, version_expected:)
-  terraform_version_reported = `\$PWD/terraform version`
+def terraform_installed_successfully?(is_latest:, version_expected:)
+  if not is_latest
+    terraform_version_reported = `\$PWD/terraform version`
+  else
+    terraform_version_reported = `\$PWD/old_terraform version`
+  end
   terraform_version_reported.include? "Terraform v#{version_expected}"
 end
