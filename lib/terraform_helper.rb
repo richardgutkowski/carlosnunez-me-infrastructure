@@ -32,8 +32,8 @@ def install_terraform_into_working_directory!(version:)
   end
 
   latest_terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
-  latest_terraform_version = latest_terraform_release_details[:latest_version]
-  latest_terraform_release_uri = latest_terraform_release_details[:latest_version_uri]
+  latest_terraform_version = latest_terraform_release_details[:version]
+  latest_terraform_release_uri = latest_terraform_release_details[:version_uri]
   if latest_terraform_release_uri == "NOT_FOUND"
     raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
   end
@@ -73,6 +73,18 @@ def get_supported_cpu_platform
   end
 end
 
+def get_specific_terraform_release(os:, cpu_platform:, version:)
+  terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
+  terraform_versions_stub = 'v' + version.gsub /^v/,''
+  terraform_cpu_arch_stub = "#{os}_#{cpu_platform}"
+  specific_terraform_release_uri = \
+    [ terraform_releases_uri, terraform_versions_stub, terraform_cpu_arch_stub ].join('/')
+  {
+    :version => version,
+    :version_uri => specific_terraform_release_uri
+  }
+end
+
 def get_latest_terraform_release(os: ,cpu_platform:)
   terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
   terraform_releases_html = do_http_get_with_forwards! uri:terraform_releases_uri
@@ -87,8 +99,8 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
   {
-    :latest_version => latest_version,
-    :latest_version_uri => latest_terraform_release_uri
+    :version => version,
+    :version_uri => latest_terraform_release_uri
   }
 end
 
