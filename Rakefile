@@ -50,7 +50,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     terraform_version = `\$PWD/terraform version 2>/dev/null`
     if terraform_version == "" or \
       terraform_version.include? 'Your version of Terraform is out of date'
-      puts "Terraform not found or out of date. Updating."
+      puts "Terraform not found or out of date. Updating.".yellow
       `rm ./terraform`
       install_latest_version_of_terraform_into_working_directory!
     end
@@ -62,7 +62,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
 grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
     if old_terraform_version == ""
       puts "You don't have Terraform version #{TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
-This is required by tfjson for unit testing. We're installing this now."
+This is required by tfjson for unit testing. We're installing this now.".yellow
       install_specific_version_of_terraform_into_working_directory! \
         version:TFJSON_SUPPORTED_TERRAFORM_VERSION
     end
