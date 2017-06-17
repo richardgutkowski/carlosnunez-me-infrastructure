@@ -18,7 +18,7 @@ RSpec.configure do |config|
     if terraform_plan_json_serialized.nil? or terraform_plan_json_serialized.empty?
       raise "Mock Terraform plan was not generated."
     end
-    $terraform_plan = JSON.parse(terraform_plan_json_str)
+    $terraform_plan = JSON.parse(terraform_plan_json_serialized)
   }
   config.after(:all) {
     [ './dummy_state', './terraform_fixture.tfplan' ].each do |file|
