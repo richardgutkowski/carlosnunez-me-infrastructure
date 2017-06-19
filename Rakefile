@@ -8,14 +8,12 @@ namespace :prerequisites do
   GOLANG_VERSION_REQUIRED = 'go1.8'
   TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.8'
   task :check_for_golang do
-    puts "DEBUG: Checking go version".cyan
     matching_golang_version_found = `go version | grep -- #{GOLANG_VERSION_REQUIRED}`
     if matching_golang_version_found.empty?
       raise "ERROR: Go is not installed. You'll need to install Golang to continue.".red
     end
   end
   task :check_for_terraform_tfvars do
-    puts "DEBUG: Checking terraform tfvars".cyan
     if not File.exist? 'terraform.tfvars'
       raise "ERROR: Terraform variables not found. Did you pull them in from S3?".red
     end
