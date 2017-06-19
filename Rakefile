@@ -7,20 +7,22 @@ require_relative 'lib/terraform_helper'
 namespace :prerequisites do
   GOLANG_VERSION_REQUIRED = 'go1.8'
   TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.8'
-  puts "DEBUG: Checking prereqs.".cyan
   task :check_for_golang do
+    puts "DEBUG: Checking go version".cyan
     matching_golang_version_found = `go version | grep -- #{GOLANG_VERSION_REQUIRED}`
     if matching_golang_version_found.empty?
       raise "ERROR: Go is not installed. You'll need to install Golang to continue.".red
     end
   end
   task :check_for_terraform_tfvars do
+    puts "DEBUG: Checking terraform tfvars".cyan
     if not File.exist? 'terraform.tfvars'
       raise "ERROR: Terraform variables not found. Did you pull them in from S3?".red
     end
   end
 
   task check_env_vars: :dotenv do
+    puts "DEBUG: Checking env var check".cyan
     required_rake_env_vars_with_valid_values = {
       'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
       'AWS_S3_TERRAFORM_TFVARS_BUCKET' => "CHECK_NOT_REQUIRED",
@@ -42,6 +44,7 @@ please define it.".red if !ENV[env_var]
     end
   end
   task :install_tfjson_if_needed do
+    puts "DEBUG: Checking tfjson check".cyan
     result=`which tfjson > /dev/null || { \
 echo "INFO: Installing tfjson" ; \
 go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
@@ -57,6 +60,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     end
   end
   task :download_tfjson_supported_terraform_if_needed do
+    puts "DEBUG: Checking tfjson download".cyan
     old_terraform_version = `#{ENV['PWD']}/old_terraform version 2>/dev/null | \
  grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
     if old_terraform_version.empty?
