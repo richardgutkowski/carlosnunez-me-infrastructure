@@ -5,6 +5,9 @@ require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
 namespace :prerequisites do
+  before(:all) do
+    puts "INFO: Checking prereqs.".yellow
+  end
   GOLANG_VERSION_REQUIRED = 'go1.8'
   TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.8'
   task :check_for_golang do
