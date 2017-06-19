@@ -8,7 +8,7 @@ describe "KubernetesCluster" do
 
   context "Metadata" do
     it "should have retrieved EC2 details" do
-      expect(@ec2_details).not_to be_empty
+      expect(@ec2_details).not_to be_nil
     end
   end
 
