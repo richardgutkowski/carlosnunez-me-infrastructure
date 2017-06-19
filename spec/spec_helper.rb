@@ -1,5 +1,6 @@
 require 'yaml'
 require 'rspec'
+require 'colorize'
 
 if not ENV['TARGET_ENVIRONMENT']
   raise 'TARGET_ENVIRONMENT not found in your environment; please define it.'
