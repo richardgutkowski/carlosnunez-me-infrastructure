@@ -42,7 +42,6 @@ please define it.".red if !ENV[env_var]
     end
   end
   task :install_tfjson_if_needed do
-    puts "DEBUG: Checking tfjson check".cyan
     result=`which tfjson > /dev/null || { \
 echo "INFO: Installing tfjson" ; \
 go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
@@ -58,7 +57,6 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
     end
   end
   task :download_tfjson_supported_terraform_if_needed do
-    puts "DEBUG: Checking tfjson download".cyan
     old_terraform_version = `#{ENV['PWD']}/old_terraform version 2>/dev/null | \
  grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
     if old_terraform_version.empty?
