@@ -20,7 +20,6 @@ namespace :prerequisites do
   end
 
   task check_env_vars: :dotenv do
-    puts "DEBUG: Checking env var check".cyan
     required_rake_env_vars_with_valid_values = {
       'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
       'AWS_S3_TERRAFORM_TFVARS_BUCKET' => "CHECK_NOT_REQUIRED",
