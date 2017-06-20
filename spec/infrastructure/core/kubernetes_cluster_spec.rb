@@ -23,7 +23,10 @@ describe "KubernetesCluster" do
 
   context "AMI" do
     it "should be fetching the latest stable release of CoreoS" do
-      expect(@kube_ami_details['
+      latest_hvm_coreos_ami_for_this_region =
+        $coreos_amis[ENV['AWS_REGION']]['hvm']
+      expect(@kube_ami_details['data.image_id']).to eq \
+        latest_hvm_coreos_ami_for_this_region
     end
   end
 end
