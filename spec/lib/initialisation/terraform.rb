@@ -23,6 +23,8 @@ def initialise_global_terraform_plan!
   File.open(temp_tfplan_json_file_for_future_perusal, 'w') do |file_handle|
     file_handle.write(terraform_plan_json_serialized)
   end
+  puts "INFO: A copy of the terraform plan JSON generated for this run can \
+be found at #{temp_tfplan_json_file_for_future_perusal}".cyan
 
   terraform_plan = JSON.parse(terraform_plan_json_serialized)
 end
