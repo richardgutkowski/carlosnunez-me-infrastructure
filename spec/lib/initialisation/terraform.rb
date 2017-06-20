@@ -4,18 +4,18 @@ def initialise_global_terraform_plan!
     raise "tfjson not found. Rakefile should have installed it..."
   end
 
-  print "INFO: Generating terraform plan now. This might take a few minutes...".yellow
+  puts "INFO: Generating Terraform plan now. This might take a short while.".yellow
   system("#{ENV['PWD']}/terraform get")
   system("#{ENV['PWD']}/old_terraform plan \
 -var aws_region=#{ENV['AWS_REGION']} \
 -state=discarded_state_not_required_for_unit_tests \
 -out=terraform_fixture.tfplan > /dev/null")
-  print "done!\n".green
 
   terraform_plan_json_serialized = `#{tfjson_location} ./terraform_fixture.tfplan`
   if terraform_plan_json_serialized.nil? or terraform_plan_json_serialized.empty?
     raise "Mock Terraform plan was not generated. See above errors for more details."
   end
+  puts "INFO: Terraform plan generated!".yellow
   temp_tfplan_json_file_for_future_perusal = '/tmp/terraform_plan.json'
   if File.exist? temp_tfplan_json_file_for_future_perusal
     `rm -rfq #{temp_tfplan_json_file_for_future_perusal}`
