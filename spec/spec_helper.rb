@@ -2,7 +2,7 @@ require 'yaml'
 require 'rspec'
 require 'colorize'
 Dir.glob('spec/lib/{initialisation,cleanup}/*.rb').each do |file|
-  require file
+  require_relative file
 end
 
 if not ENV['TARGET_ENVIRONMENT']
