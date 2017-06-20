@@ -20,4 +20,10 @@ describe "KubernetesCluster" do
       expect(@ec2_details['subnet_id']).to eq @vpc_details['subnet_id']
     end
   end
+
+  context "AMI" do
+    it "should be fetching the latest stable release of CoreoS" do
+      expect(@kube_ami_details['
+    end
+  end
 end
