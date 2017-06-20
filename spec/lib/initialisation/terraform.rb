@@ -16,6 +16,14 @@ def initialise_global_terraform_plan!
   if terraform_plan_json_serialized.nil? or terraform_plan_json_serialized.empty?
     raise "Mock Terraform plan was not generated. See above errors for more details."
   end
+  temp_tfplan_json_file_for_future_perusal = '/tmp/terraform_plan.json'
+  if File.exist? temp_tfplan_json_file_for_future_perusal
+    `rm -rfq #{temp_tfplan_json_file_for_future_perusal}`
+  end
+  File.open(temp_tfplan_json_file_for_future_perusal, 'w') do |file_handle|
+    file_handle.write(terraform_plan_json_serialized)
+  end
+
   terraform_plan = JSON.parse(terraform_plan_json_serialized)
 end
 
