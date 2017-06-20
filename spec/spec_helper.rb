@@ -3,7 +3,7 @@ require 'rspec'
 require 'colorize'
 Dir.glob('spec/lib/{initialisation,cleanup}/*.rb').each do |file|
   absolute_filepath = 
-    File.expand_path(File.dirname(__FILE__)) + "../#{file}"
+    File.expand_path(File.dirname(__FILE__)) + "/../#{file}"
   require_relative absolute_filepath
 end
 
