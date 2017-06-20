@@ -1,4 +1,4 @@
-variable "aws_region" {
+variable "aws_target_region" {
   description = "The AWS region onto which this infrastructure will be deployed."
 }
 
