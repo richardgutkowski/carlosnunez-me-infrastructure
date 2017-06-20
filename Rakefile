@@ -26,7 +26,7 @@ namespace :prerequisites do
       'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED",
       'GOPATH' => "CHECK_NOT_REQUIRED",
       'TARGET_ENVIRONMENT' => get_supported_environments,
-      'TF_VAR_aws_region' => 'CHECK_NOT_REQUIRED'
+      'AWS_REGION' => 'CHECK_NOT_REQUIRED'
     }
     required_rake_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
       if supported_env_var_values.nil?
