@@ -8,8 +8,12 @@ end
 
 RSpec.configure do |config|
   config.before(:suite) {
+    initialise_global_terraform_tfvars!
+    initialise_global_terraform_plan!
+    initialise_global_coreos_release_data!
   }
   config.after(:suite) {
+    cleanup_terraform_residue!
     [ './dummy_state', './terraform_fixture.tfplan' ].each do |file|
       if File.exist? file
         `rm #{file}`
