@@ -18,7 +18,7 @@ def initialise_global_terraform_plan!
   puts "INFO: Terraform plan generated!".yellow
   temp_tfplan_json_file_for_future_perusal = '/tmp/terraform_plan.json'
   if File.exist? temp_tfplan_json_file_for_future_perusal
-    `rm -rfq #{temp_tfplan_json_file_for_future_perusal}`
+    `rm -f #{temp_tfplan_json_file_for_future_perusal} 2>/dev/null`
   end
   File.open(temp_tfplan_json_file_for_future_perusal, 'w') do |file_handle|
     file_handle.write(terraform_plan_json_serialized)
