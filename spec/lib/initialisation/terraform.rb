@@ -6,7 +6,8 @@ def initialise_global_terraform_plan!
 
   print "INFO: Generating terraform plan now. This might take a few minutes...".yellow
   system("#{ENV['PWD']}/terraform get")
-  system("#{ENV['PWD']}/old_terraform plan -state=discarded_state_not_required_for_unit_tests \
+  system("TF_VAR_aws_region=#{ENV['TF_VAR_aws_region']} \
+#{ENV['PWD']}/old_terraform plan -state=discarded_state_not_required_for_unit_tests \
 -out=terraform_fixture.tfplan > /dev/null")
   print "done!\n".green
 
