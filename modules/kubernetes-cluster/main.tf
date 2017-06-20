@@ -3,7 +3,6 @@ provider "aws" {
 }
 
 resource "aws_instance" "kubernetes_controller" {
-  aws_region = "${var.aws_region}"
   ami = "${data.aws_ami.kubernetes_instances.id}"
   instance_type = "${var.kubernetes_controller_instance_size}"
 }
