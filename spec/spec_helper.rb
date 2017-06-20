@@ -1,6 +1,9 @@
 require 'yaml'
 require 'rspec'
 require 'colorize'
+Dir.glob('spec/lib/{initialisation,cleanup}/*.rb').each do |file|
+  require file
+end
 
 if not ENV['TARGET_ENVIRONMENT']
   raise 'TARGET_ENVIRONMENT not found in your environment; please define it.'
