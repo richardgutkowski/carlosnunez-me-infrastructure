@@ -12,6 +12,7 @@ if not ENV['TARGET_ENVIRONMENT']
 end
 
 RSpec.configure do |config|
+  config.fail_fast = true
   config.before(:suite) {
     initialise_global_terraform_tfvars!
     initialise_global_terraform_plan!
