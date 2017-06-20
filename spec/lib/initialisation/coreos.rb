@@ -14,7 +14,7 @@ def obtain_latest_coreos_version_and_ami!
   # this is a tad confusing without understanding that .delete deletes the key
   # provided from the hash in place.
   _ = coreos_ami_releases_json.delete 'release_info'
-  ami_data_to_return.merge! coreos_ami_release_json
+  ami_data_to_return.merge! coreos_ami_releases_json
 
   return ami_data_to_return
 end
