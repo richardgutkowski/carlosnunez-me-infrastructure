@@ -5,7 +5,7 @@ def initialise_global_terraform_plan!
   end
 
   puts "INFO: Generating Terraform plan now. This might take a short while.".yellow
-  system("#{ENV['PWD']}/terraform get")
+  system("#{ENV['PWD']}/terraform get > /dev/null")
   system("#{ENV['PWD']}/old_terraform plan \
 -var aws_region=#{ENV['AWS_REGION']} \
 -state=discarded_state_not_required_for_unit_tests \
