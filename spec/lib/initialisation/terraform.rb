@@ -12,7 +12,7 @@ def initialise_global_terraform_plan!
 
   terraform_plan_json_serialized = `#{tfjson_location} ./terraform_fixture.tfplan`
   if terraform_plan_json_serialized.nil? or terraform_plan_json_serialized.empty?
-    raise "Mock Terraform plan was not generated."
+    raise "Mock Terraform plan was not generated. See above errors for more details."
   end
   terraform_plan = JSON.parse(terraform_plan_json_serialized)
 end
