@@ -27,6 +27,7 @@ def initialise_global_terraform_plan!
 be found at #{temp_tfplan_json_file_for_future_perusal}".cyan
 
   terraform_plan = JSON.parse(terraform_plan_json_serialized)
+  return terraform_plan
 end
 
 def initialise_global_terraform_tfvars!
@@ -37,4 +38,5 @@ def initialise_global_terraform_tfvars!
     end
     terraform_tfvars[tfvar_key] = tfvar_value
   end
+  return terraform_tfvars
 end
