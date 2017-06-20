@@ -4,8 +4,7 @@ def initialise_global_terraform_plan!
     raise "tfjson not found. Rakefile should have installed it..."
   end
 
-  print "INFO: Generating Terraform plan now. This might take a short while if \
-you have a lot of modules and/or resources in your infrastructure...".yellow
+  print "INFO: Generating Terraform plan now. This might take a short while...".yellow
   system("#{ENV['PWD']}/terraform get > /dev/null")
   system("#{ENV['PWD']}/old_terraform plan \
 -var aws_region=#{ENV['AWS_REGION']} \
