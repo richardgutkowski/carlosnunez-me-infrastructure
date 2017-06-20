@@ -1,4 +1,8 @@
 variable "controller_instance_size" {
   description = "The size of your Kubernetes controller."
-  default = "t2.micro"
+  default = {
+    us-east-1 = "t2.micro"
+    us-east-2 = "t2.micro"
+    us-west-1 = "t2.micro"
+  }
 }
