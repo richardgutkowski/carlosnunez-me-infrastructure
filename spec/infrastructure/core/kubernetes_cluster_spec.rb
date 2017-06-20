@@ -4,6 +4,7 @@ describe "KubernetesCluster" do
   before(:all) do
     @vpc_details = $terraform_plan['aws_vpc.infrastructure']
     @ec2_details = $terraform_plan['aws_ec2.infrastructure.kubernetes_cluster']
+    @ami_details = $terraform_plan['aws_ami.kubernetes_instances']
   end
 
   context "Metadata" do
@@ -25,8 +26,7 @@ describe "KubernetesCluster" do
     it "should be fetching the latest stable release of CoreoS" do
       latest_hvm_coreos_ami_for_this_region =
         $coreos_amis[ENV['AWS_REGION']]['hvm']
-      expect(@kube_ami_details['data.image_id']).to eq \
-        latest_hvm_coreos_ami_for_this_region
+      expect(@ami_details['image_id']).to eq latest_hvm_coreos_ami_for_this_region
     end
   end
 end
