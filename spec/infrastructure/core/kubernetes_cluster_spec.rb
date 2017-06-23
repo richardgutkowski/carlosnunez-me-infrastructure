@@ -40,13 +40,14 @@ describe "KubernetesCluster" do
       end
     end
 
-    it "should be fetching the latest stable release of CoreOS for region \
-#{ENV['AWS_REGION']}" do
-      latest_hvm_coreos_ami_for_this_region =
-        @coreos_amis[ENV['AWS_REGION']]['hvm']
-      expect(@controller_details['ami']).to \
-        eq latest_hvm_coreos_ami_for_this_region
+    @controllers_found.keys.each do |kube_controller|
+      this_controller_details = @controllers_found[kube_controller]
+      it "should be fetching the latest stable release of CoreOS for region \
+      #{ENV['AWS_REGION']}" do
+        expected_ami_id = @coreos_amis[ENV['AWS_REGION']]['hvm']
+        actual_ami_id = this_controller_details['ami']
+        expect(expected_ami_id).to eq expected_ami_id
+      end
     end
-
   end
 end
