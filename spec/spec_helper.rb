@@ -14,8 +14,13 @@ end
 RSpec.configure do |config|
   config.fail_fast = true
   config.before(:suite) {
-    $terraform_tfvars = initialise_global_terraform_tfvars!
-    $terraform_plan = initialise_global_terraform_plan!
+    begin
+      $terraform_tfvars = initialise_global_terraform_tfvars!
+      $terraform_plan = initialise_global_terraform_plan!
+    rescue
+      raise 'Something went wrong while initialising Terraform. See the errors \
+above for more information.'
+    end
   }
   config.after(:suite) {
     cleanup_terraform_residue!
