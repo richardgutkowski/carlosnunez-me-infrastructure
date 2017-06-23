@@ -5,3 +5,8 @@ variable "aws_region" {
 variable "kubernetes_controller_instance_size" {
   description = "The size of your Kubernetes controller."
 }
+
+variable "kubernetes_controller_count" {
+  description = "The number of controllers to provision. Must be greater than 3."
+  default = 3
+}
