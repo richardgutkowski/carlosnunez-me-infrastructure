@@ -5,6 +5,7 @@ describe "KubernetesCluster" do
     @vpc_details = $terraform_plan['aws_vpc.infrastructure']
     @controller_details =
       $terraform_plan['kubernetes-cluster']['aws_instance.kubernetes_controller']
+    @coreos_amis = obtain_latest_coreos_version_and_ami!
   end
 
   context "Controller" do
@@ -17,7 +18,7 @@ describe "KubernetesCluster" do
     it "should be fetching the latest stable release of CoreOS for region \
 #{ENV['AWS_REGION']}" do
       latest_hvm_coreos_ami_for_this_region =
-        $coreos_amis[ENV['AWS_REGION']]['hvm']
+        @coreos_amis[ENV['AWS_REGION']]['hvm']
       expect(@controller_details['ami']).to \
         eq latest_hvm_coreos_ami_for_this_region
     end
