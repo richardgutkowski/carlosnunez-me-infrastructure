@@ -5,10 +5,9 @@ describe "KubernetesCluster" do
   before(:all) do
     @vpc_details = $terraform_plan['aws_vpc.infrastructure']
     @coreos_amis = obtain_latest_coreos_version_and_ami!
-    let(:controllers_found) =
-      $terraform_plan['kubernetes-cluster'].select do |key,value|
-        key.match /aws_instance\.kubernetes_controller/
-      end
+    let(:controllers_found) = $terraform_plan['kubernetes-cluster'].select do |key,value|
+      key.match /aws_instance\.kubernetes_controller/
+    end
   end
 
   context "Controller" do
