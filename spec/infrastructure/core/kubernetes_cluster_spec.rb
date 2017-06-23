@@ -24,11 +24,13 @@ describe "KubernetesCluster" do
       end
       
       
-      it "should be replicated the correct number of times within this AZ" do
+      it "should be replicated the correct number of times" do
         expected_number_of_kube_controllers = \
           $terraform_tfvars['kubernetes_controller_count']
-        expect(@controllers_found.count).to be eq expected_number_of_kube_controllers
+        expect(@controllers_found.count).to eq expected_number_of_kube_controllers
+      end
 
+      it "should use the same AZ across all Kubernetes controllers" do
         # We aren't testing that these controllers actually have AZs
         # (it can be empty if not defined). We're solely testing that 
         # they are the same within this AZ.
