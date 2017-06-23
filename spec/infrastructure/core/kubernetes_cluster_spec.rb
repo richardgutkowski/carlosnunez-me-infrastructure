@@ -38,7 +38,7 @@ describe "KubernetesCluster" do
           controller_config['availability_zone']
         end
         deduplicated_az_set = Set.new(azs_for_each_controller)
-        expect(deduplicated_az_set.count).to be eq 1
+        expect(deduplicated_az_set.count).to eq 1
       end
     end
 
