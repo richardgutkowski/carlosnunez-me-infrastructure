@@ -16,7 +16,6 @@ RSpec.configure do |config|
   config.before(:suite) {
     $terraform_tfvars = initialise_global_terraform_tfvars!
     $terraform_plan = initialise_global_terraform_plan!
-    $coreos_amis = obtain_latest_coreos_version_and_ami!
   }
   config.after(:suite) {
     cleanup_terraform_residue!
