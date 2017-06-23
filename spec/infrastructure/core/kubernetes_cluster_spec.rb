@@ -1,10 +1,13 @@
 require 'spec_helper'
+require 'set'
 
 describe "KubernetesCluster" do
   before(:all) do
     @vpc_details = $terraform_plan['aws_vpc.infrastructure']
-    @controller_details =
-      $terraform_plan['kubernetes-cluster']['aws_instance.kubernetes_controller']
+    @controllers_found =
+      $terraform_plan['kubernetes-cluster'].select do |key,value|
+        key.match /aws_instance\.kubernetes_controller/
+      end
     @coreos_amis = obtain_latest_coreos_version_and_ami!
   end
 
@@ -12,6 +15,28 @@ describe "KubernetesCluster" do
     context "Metadata" do
       it "should have retrieved EC2 details" do
         expect(@controller_details).not_to be_nil
+      end
+    end
+
+    context "Sizing" do
+      it "should be defined" do
+        expect($terraform_tfvars['kubernetes_controller_count'].not_to be_nil
+      end
+      
+      
+      it "should be replicated #{expected_number_of_kube_controllers} times within this AZ" do
+        expected_number_of_kube_controllers = \
+          $terraform_tfvars['kubernetes_controller_count']
+        expect(@controllers_found.count).to be eq expected_number_of_kube_controllers
+
+        # We aren't testing that these controllers actually have AZs
+        # (it can be empty if not defined). We're solely testing that 
+        # they are the same within this AZ.
+        azs_for_each_controller = @controllers_found.values.map do |controller_config|
+          controller_config['availability_zone']
+        end
+        deduplicated_az_set = Set.new(azs_for_each_controller)
+        expect(deduplicated_az_set.count).to be eq 1
       end
     end
 
@@ -23,13 +48,5 @@ describe "KubernetesCluster" do
         eq latest_hvm_coreos_ami_for_this_region
     end
 
-    it "should be replicated three times within this AZ" do
-      minimum_number_of_kube_controllers = 3
-      expect($terraform_tfvars['kubernetes_controller_count']).not_to be_nil
-      expect($terraform_tfvars['kubernetes_controller_count']).to be \
-        > minimum_number_of_kube_controllers
-      expect(@controller_details['count']).to \
-        eq $terraform_tfvars['kubernetes_controller_count']
-    end
   end
 end
