@@ -24,9 +24,9 @@ describe "KubernetesCluster" do
       end
       
       
+      expected_number_of_kube_controllers = \
+        $terraform_tfvars['kubernetes_controller_count']
       it "should be replicated #{expected_number_of_kube_controllers} times within this AZ" do
-        expected_number_of_kube_controllers = \
-          $terraform_tfvars['kubernetes_controller_count']
         expect(@controllers_found.count).to be eq expected_number_of_kube_controllers
 
         # We aren't testing that these controllers actually have AZs
