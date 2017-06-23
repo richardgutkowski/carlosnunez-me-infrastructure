@@ -70,11 +70,13 @@ end
 
 namespace :static_analysis do
   task :lint do
-    puts "INFO: Linting Terraform configurations.".yellow
+    print "INFO: Linting Terraform configurations...".yellow
     lint_successful, lint_error_message = lint_terraform_configurations_in_this_directory
     if !lint_successful
+      print "failed!\n".red
       raise "ERROR: terraform-lint failed! Error: #{lint_error_message}".red
     end
+    print "done!\n".green
   end
 end
 
