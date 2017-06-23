@@ -8,5 +8,4 @@ variable "kubernetes_controller_instance_size" {
 
 variable "kubernetes_controller_count" {
   description = "The number of controllers to provision. Must be greater than 3."
-  default = 3
 }
