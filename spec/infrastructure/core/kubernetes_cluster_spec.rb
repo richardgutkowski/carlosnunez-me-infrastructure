@@ -21,5 +21,11 @@ describe "KubernetesCluster" do
       expect(@controller_details['ami']).to \
         eq latest_hvm_coreos_ami_for_this_region
     end
+
+    it "should be replicated three times within this AZ" do
+      expect($terraform_tfvars['controller_count']).not_to be_nil
+      expect(@controller_details['count']).to be \
+        eq $terraform_tfvars['controller_count']
+    end
   end
 end
