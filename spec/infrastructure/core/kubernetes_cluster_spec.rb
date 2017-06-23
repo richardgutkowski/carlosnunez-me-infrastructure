@@ -25,7 +25,7 @@ describe "KubernetesCluster" do
 
     it "should be replicated three times within this AZ" do
       expect($terraform_tfvars['kubernetes_controller_count']).not_to be_nil
-      expect(@controller_details['count']).to be \
+      expect(@controller_details['count']).to \
         eq $terraform_tfvars['kubernetes_controller_count']
     end
   end
