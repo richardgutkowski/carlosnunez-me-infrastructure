@@ -20,6 +20,8 @@ RSpec.configure do |config|
     rescue
       raise 'Something went wrong while initialising Terraform. See the errors \
 above for more information.'
+    ensure
+      cleanup_terraform_residue!
     end
   }
   config.after(:suite) {
