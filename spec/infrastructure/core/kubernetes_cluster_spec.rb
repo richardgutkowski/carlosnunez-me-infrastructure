@@ -20,7 +20,7 @@ describe "KubernetesCluster" do
 
     context "Sizing" do
       it "should be defined" do
-        expect($terraform_tfvars['kubernetes_controller_count'].not_to be_nil
+        expect($terraform_tfvars['kubernetes_controller_count']).not_to be_nil
       end
       
       
