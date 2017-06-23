@@ -26,7 +26,7 @@ describe "KubernetesCluster" do
       
       it "should be replicated the correct number of times" do
         expected_number_of_kube_controllers = \
-          $terraform_tfvars['kubernetes_controller_count']
+          $terraform_tfvars['kubernetes_controller_count'].to_i
         expect(@controllers_found.count).to eq expected_number_of_kube_controllers
       end
 
