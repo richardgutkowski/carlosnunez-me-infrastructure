@@ -52,5 +52,16 @@ describe "KubernetesCluster" do
         expect(expected_ami_id).to eq expected_ami_id
       end
     end
+
+    it "should use the instance size requested" do
+      @controllers_found.keys.each do |kube_controller_resource_name|
+        this_controller_details =
+          @controllers_found[kube_controller_resource_name]
+        actual_instance_size = @this_controller_details['instance_size']
+        expected_instance_size =
+          $terraform_tfvars['kubernetes_controller_instance_size']
+        expect(expected_instance_size).to eq actual_instance_size
+      end
+    end
   end
 end
