@@ -1,7 +1,0 @@
----
-driver:
-  name: terraform
-  cli: ./terraform
-provisioner:
-  name: terraform
-  apply_timeout: 100
