@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+usage() {
+  printf "deploy.sh [target_environment]\n"
+  printf "Deploys infrastructure for carlosnunez.me\n\n"
+  printf "  target_environment: The environment to deploy onto."
+}
+
+NUMBER_OF_ARGS_EXPECTED=1
+if [ "$#" != "$NUMBER_OF_ARGS_EXPECTED" ]
+then
+  usage
+  exit 1
+fi
+
+# We'll either start our CI environment if this is running from our local
+# machine or start the actual deployment if this is running from within a
+# docker container.
+target_env=$1
+if [ ! -f .dockerenv ]
+then
+  export TARGET_ENVIRONMENT=$target_env # Used by docker-compose.
+  echo "Booting local Jenkins CI. Target environment: $TARGET_ENVIRONMENT"
+  docker-compose restart jenkins-master
+  docker-compose up --abort-on-container-exit 2>&1
+else
+  if [ -f .dockerenv \
+    -a "$JENKINS_JOB_NAME" != "" \
+    -a "$JENKINS_MASTER_HOSTNAME" != "" \
+    -a "$JENKINS_USERNAME" != "" \
+    -a "$JENKINS_PASSWORD" != "" \
+    -a "$TARGET_ENVIRONMENT" != "" ]
+  then
+    echo "Deployment started: ${JENKINS_JOB_NAME}"
+    WAIT_PERIOD=5s
+    JOB_IS_BUILDING=false
+    JOB_IS_BEING_QUEUED=false
+    SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=true
+    NUMBER_OF_RETRIES_ATTEMPTED=0
+    MAX_NUMBER_OF_RETRIES=10
+    start_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+job/$JENKINS_JOB_NAME/build"
+    while [ $NUMBER_OF_RETRIES_ATTEMPTED -lt $MAX_NUMBER_OF_RETRIES ]
+    do
+      NUMBER_OF_RETRIES_OUTSTANDING=$((MAX_NUMBER_OF_RETRIES-NUMBER_OF_RETRIES_ATTEMPTED))
+      expected_http_code="201"
+      # Assume that the last response code is 201 if the job is currently building.
+      # This will prevent us from invoking the job repeatedly unnecessarily.
+      if [ "$JOB_IS_BUILDING" != "true" -a "$JOB_IS_BEING_QUEUED" != "true" ]
+      then
+        response_code=$(curl -X POST -Iso /dev/null -w "%{http_code}" $start_build_url)
+      else
+        response_code=$expected_http_code
+      fi
+
+      if [ "$?" != "0" -o "$response_code" != "$expected_http_code" ]
+      then
+        NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
+        sleep $WAIT_PERIOD
+      else
+        if [ "${JOB_IS_BUILDING}" == "true" ]
+        then
+          NUMBER_OF_RETRIES_ATTEMPTED=0
+        fi
+
+        if [ ! $build_number_for_this_job ]
+        then
+          next_build_number_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+job/$JENKINS_JOB_NAME/api/json?tree=nextBuildNumber"
+          next_reported_build_number=$(curl -Lfs $next_build_number_url | \
+            grep 'nextBuildNumber":' | \
+            sed 's/.*nextBuildNumber":\(.*\)\}/\1/')
+          build_number_for_this_job=1
+          if [ "$next_reported_build_number" != "" ]
+          then
+            build_number_for_this_job=$next_reported_build_number
+          fi
+          last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
+job/$JENKINS_JOB_NAME/$build_number_for_this_job"
+          last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/$build_number_for_this_job"
+          last_build_stats_url="${last_build_url}/api/json?tree=building,result"
+          last_build_console_text_url="${last_build_url}/consoleText"
+          last_build_console_text_url_localhost_relative="${last_build_url_localhost_relative}/consoleText"
+        fi
+        # This is a bit crude in that it always assumes that this job hasn't been queued
+        # up before (lastBuild will always return information about the last build that
+        # occurred). While this isn't a problem for our local CI given that our
+        # containers don't keep state at the moment, this will need to be modified
+        # for those that decide to use this script as-is in their existing Jenkins
+        # server or for those that would like to bind-mount a JENKINS_HOME.
+        last_build_response_code=$(curl -LIso /dev/null -w '%{http_code}' $last_build_url)
+        if [ "$last_build_response_code" != "200" ]
+        then
+            JOB_IS_BEING_QUEUED=true
+            sleep $WAIT_PERIOD
+            NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
+        else
+          last_build_status=$(curl -s $last_build_stats_url)
+          last_build_console_text="$(curl -s $last_build_console_text_url)"
+
+          if [ "$(echo $last_build_status | grep '"building":true')" != "" ]
+          then
+            JOB_IS_BEING_QUEUED=false
+            JOB_IS_BUILDING=true
+            if [ "$SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD" == "true" ]
+            then
+              this_log_filename=$(cat /dev/urandom | tr -cd 'a-zA-Z0-9' | head -c 8)
+              this_log_filepath="/tmp/logs/$this_log_filename"
+              this_log_filepath_localhost_relative="logs/$this_log_filename"
+              echo "This job is building. See realtime results in your browser: $last_build_console_text_url_localhost_relative"
+              echo "You can also see the output of this job from docker: docker logs infrastructure_pipeline-runner_1"
+              SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
+            fi
+            sleep $WAIT_PERIOD
+            NUMBER_OF_RETRIES_ATTEMPTED=$((retries+1))
+          elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
+          then
+            echo "ERROR: Deployment failed."
+            echo "$last_build_console_text" | grep -v '\[Pipeline\]'
+            exit 1
+          else
+            echo "$last_build_console_text" | grep -v '\[Pipeline\]'
+            echo "Deployment succeeded!"
+            exit 0
+          fi
+        fi
+      fi
+    done
+    echo "ERROR: Timed out waiting for this deployment to start."
+    exit 1
+  else
+    echo "ERROR: A required environment variable is missing. Ensure that it \
+is defined in docker-compose.yml. Here's what I have:\t \
+JENKINS_MASTER_HOSTNAME=$JENKINS_MASTER_HOSTNAME\t \
+JENKINS_JOB_NAME=$JENKINS_JOB_NAME\t \
+JENKINS_USERNAME=$JENKINS_USERNAME\t \
+JENKINS_PASSWORD=$JENKINS_PASSWORD\t \
+TARGET_ENVIRONMENT=$TARGET_ENVIRONMENT"
+    exit 1
+fi
+fi
