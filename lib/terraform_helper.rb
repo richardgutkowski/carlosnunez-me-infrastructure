@@ -111,7 +111,10 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   if terraform_versions.empty?
     return "NOT_FOUND"
   end
-  _, latest_version = terraform_versions.first.split('_')
+  terraform_versions_without_betas_or_rcs = terraform_versions.select do |version_name|
+    !version_name.match /.*-(beta|rc)/
+  end
+  _, latest_version = terraform_versions_without_betas_or_rcs.first.split('_')
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
   {
