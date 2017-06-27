@@ -12,7 +12,15 @@ def lint_terraform_configurations_in_this_directory
   return lint_successful, lint_result
 end
 
+def install_specific_version_of_terraform_into_working_directory!(version:)
+  install_terraform_into_working_directory! version:version
+end
+
 def install_latest_version_of_terraform_into_working_directory!
+  install_terraform_into_working_directory! version:'latest'
+end
+
+def install_terraform_into_working_directory!(version:)
   os = get_supported_terraform_os_build
   if os == "unsupported"
     raise "Terraform is not supported by your operating system."
@@ -23,16 +31,30 @@ def install_latest_version_of_terraform_into_working_directory!
     raise "Terraform is not supported by your CPU platform."
   end
 
-  latest_terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
-  latest_terraform_version = latest_terraform_release_details[:latest_version]
-  latest_terraform_release_uri = latest_terraform_release_details[:latest_version_uri]
-  if latest_terraform_release_uri == "NOT_FOUND"
-    raise "Couldn't retrieve latest the link to the latest version of Terraform. You'll need to install it manually."
+  if version == 'latest'
+    terraform_release_details = get_latest_terraform_release os:os, cpu_platform:cpu_platform
+  else
+    terraform_release_details = get_specific_terraform_release os:os, \
+      cpu_platform:cpu_platform, \
+      version:version
+  end
+  terraform_version = terraform_release_details[:version]
+  terraform_release_uri = terraform_release_details[:version_uri]
+  if terraform_release_uri == "NOT_FOUND"
+    raise "Couldn't retrieve version #{version} of Terraform. You'll need to install it manually."
   end
 
-  download_terraform_into_working_directory! uri_as_string:latest_terraform_release_uri
-  if not terraform_installed_successfully? version_expected:latest_terraform_version
-    raise "Terraform not updated successfully. You'll need to install it manually."
+  if version == 'latest'
+    file_name_to_use = ''
+    is_latest = true
+  else
+    file_name_to_use = 'old_terraform.zip'
+    is_latest = false
+  end
+  download_terraform_into_working_directory! uri_as_string:terraform_release_uri, \
+    file_name:file_name_to_use
+  if not terraform_installed_successfully? is_latest:is_latest, version_expected:terraform_version
+    raise "Terraform #{terraform_version} not updated successfully. You'll need to install it manually."
   end
 end
 
@@ -65,6 +87,20 @@ def get_supported_cpu_platform
   end
 end
 
+def get_specific_terraform_release(os:, cpu_platform:, version:)
+  terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
+  terraform_cpu_arch_stub = "#{os}_#{cpu_platform}"
+  specific_terraform_release_uri = [
+    terraform_releases_uri,
+    version,
+    "terraform_#{version}_#{terraform_cpu_arch_stub}.zip"
+  ].join('/')
+  {
+    :version => version,
+    :version_uri => specific_terraform_release_uri
+  }
+end
+
 def get_latest_terraform_release(os: ,cpu_platform:)
   terraform_releases_uri = 'https://releases.hashicorp.com/terraform'
   terraform_releases_html = do_http_get_with_forwards! uri:terraform_releases_uri
@@ -79,8 +115,8 @@ def get_latest_terraform_release(os: ,cpu_platform:)
   latest_terraform_release_uri = \
     "#{terraform_releases_uri}/#{latest_version}/terraform_#{latest_version}_#{os}_#{cpu_platform}.zip"
   {
-    :latest_version => latest_version,
-    :latest_version_uri => latest_terraform_release_uri
+    :version => latest_version,
+    :version_uri => latest_terraform_release_uri
   }
 end
 
@@ -123,10 +159,12 @@ def create_uri(scheme:, hostname:, path:)
   end
 end   
 
-def download_terraform_into_working_directory!(uri_as_string:)
+def download_terraform_into_working_directory!(file_name:,uri_as_string:)
   uri = URI(uri_as_string)
-  file_name = uri.path.split('/')[-1]
-
+  if not file_name or file_name.empty?
+    file_name = uri.path.split('/')[-1]
+    actual_file_name = 'terraform'
+  end
   if !File.exist? file_name
     session = Net::HTTP.new(uri.host, uri.port)
     if uri.scheme == 'https'
@@ -161,14 +199,24 @@ def download_terraform_into_working_directory!(uri_as_string:)
 
   Zip::File.open(file_name) do |zip_file|
     zip_file.each do |file|
-      puts "Extracting #{file.name} from #{file_name}..."
-      file.extract(file.name)
-      File.chmod(0744, file.name)
+      if not actual_file_name
+        actual_file_name = file_name.sub('.zip','')
+      end
+      puts "Extracting #{file.name} from #{file_name} and naming it #{actual_file_name}"
+      if File.exist? actual_file_name
+        `rm #{actual_file_name}`
+      end
+      file.extract(actual_file_name)
+      File.chmod(0744, actual_file_name)
     end
   end
 end
 
-def terraform_installed_successfully?(version_expected:)
-  terraform_version_reported = `\$PWD/terraform version`
+def terraform_installed_successfully?(is_latest:, version_expected:)
+  if is_latest
+    terraform_version_reported = `\$PWD/terraform version`
+  else
+    terraform_version_reported = `\$PWD/old_terraform version`
+  end
   terraform_version_reported.include? "Terraform v#{version_expected}"
 end

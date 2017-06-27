@@ -31,7 +31,7 @@ else
     -a "$JENKINS_PASSWORD" != "" \
     -a "$TARGET_ENVIRONMENT" != "" ]
   then
-    echo "INFO: Executing job [$JENKINS_JOB_NAME]"
+    echo "Deployment started: ${JENKINS_JOB_NAME}"
     WAIT_PERIOD=5s
     JOB_IS_BUILDING=false
     JOB_IS_BEING_QUEUED=false
@@ -43,34 +43,19 @@ job/$JENKINS_JOB_NAME/build"
     while [ $NUMBER_OF_RETRIES_ATTEMPTED -lt $MAX_NUMBER_OF_RETRIES ]
     do
       NUMBER_OF_RETRIES_OUTSTANDING=$((MAX_NUMBER_OF_RETRIES-NUMBER_OF_RETRIES_ATTEMPTED))
-      if [ "$JOB_IS_BUILDING" != "true" ]
-      then
-        echo "Attempt #${NUMBER_OF_RETRIES_ATTEMPTED}, $NUMBER_OF_RETRIES_OUTSTANDING remain"
-      fi
+      expected_http_code="201"
       # Assume that the last response code is 201 if the job is currently building.
       # This will prevent us from invoking the job repeatedly unnecessarily.
       if [ "$JOB_IS_BUILDING" != "true" -a "$JOB_IS_BEING_QUEUED" != "true" ]
       then
         response_code=$(curl -X POST -Iso /dev/null -w "%{http_code}" $start_build_url)
       else
-        response_code="201"
+        response_code=$expected_http_code
       fi
 
-      if [ "$?" != "0" -o "$response_code" != "201" ]
+      if [ "$?" != "0" -o "$response_code" != "$expected_http_code" ]
       then
         NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
-        if [ "$response_code" == "000" ]
-        then
-          if [ "$(nc -z $JENKINS_MASTER_HOSTNAME 8080 -w 1; echo $?)" != "0" ]
-          then
-            echo "Jenkins isn't available yet. Retrying in $WAIT_PERIOD"
-          else
-            echo "Something went wrong with cURL. Retrying in $WAIT_PERIOD"
-          fi
-        else
-          echo "Expected HTTP 200, got HTTP $response_code. Retrying in $WAIT_PERIOD"
-        fi
-        echo "URL we tried to hit: $start_build_url"
         sleep $WAIT_PERIOD
       else
         if [ "${JOB_IS_BUILDING}" == "true" ]
@@ -78,21 +63,21 @@ job/$JENKINS_JOB_NAME/build"
           NUMBER_OF_RETRIES_ATTEMPTED=0
         fi
 
-        if [ ! $this_build_number ]
+        if [ ! $build_number_for_this_job ]
         then
           next_build_number_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
 job/$JENKINS_JOB_NAME/api/json?tree=nextBuildNumber"
           next_reported_build_number=$(curl -Lfs $next_build_number_url | \
             grep 'nextBuildNumber":' | \
             sed 's/.*nextBuildNumber":\(.*\)\}/\1/')
-          this_build_number=1
+          build_number_for_this_job=1
           if [ "$next_reported_build_number" != "" ]
           then
-            this_build_number=$next_reported_build_number
+            build_number_for_this_job=$next_reported_build_number
           fi
           last_build_url="http://$JENKINS_USERNAME:$JENKINS_PASSWORD@$JENKINS_MASTER_HOSTNAME:8080/\
-job/$JENKINS_JOB_NAME/$this_build_number"
-          last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/$this_build_number"
+job/$JENKINS_JOB_NAME/$build_number_for_this_job"
+          last_build_url_localhost_relative="http://localhost/job/$JENKINS_JOB_NAME/$build_number_for_this_job"
           last_build_stats_url="${last_build_url}/api/json?tree=building,result"
           last_build_console_text_url="${last_build_url}/consoleText"
           last_build_console_text_url_localhost_relative="${last_build_url_localhost_relative}/consoleText"
@@ -107,7 +92,6 @@ job/$JENKINS_JOB_NAME/$this_build_number"
         if [ "$last_build_response_code" != "200" ]
         then
             JOB_IS_BEING_QUEUED=true
-            echo "Job #{$this_build_number} of $JENKINS_JOB_NAME is pending execution. We'll poll again in ${WAIT_PERIOD}."
             sleep $WAIT_PERIOD
             NUMBER_OF_RETRIES_ATTEMPTED=$((NUMBER_OF_RETRIES_ATTEMPTED+1))
         else
@@ -123,7 +107,7 @@ job/$JENKINS_JOB_NAME/$this_build_number"
               this_log_filename=$(cat /dev/urandom | tr -cd 'a-zA-Z0-9' | head -c 8)
               this_log_filepath="/tmp/logs/$this_log_filename"
               this_log_filepath_localhost_relative="logs/$this_log_filename"
-              echo "This job is building. See results in realtime in your browser at $last_build_console_text_url_localhost_relative"
+              echo "This job is building. See realtime results in your browser: $last_build_console_text_url_localhost_relative"
               echo "You can also see the output of this job from docker: docker logs infrastructure_pipeline-runner_1"
               SHOW_FIRST_TIME_MESSAGE_DURING_JOB_BUILD=false
             fi
@@ -131,7 +115,7 @@ job/$JENKINS_JOB_NAME/$this_build_number"
             NUMBER_OF_RETRIES_ATTEMPTED=$((retries+1))
           elif [ "$(echo $last_build_status | grep '"result":"FAILURE"')" != "" ]
           then
-            echo "Deployment failed. See below for error text."
+            echo "ERROR: Deployment failed."
             echo "$last_build_console_text" | grep -v '\[Pipeline\]'
             exit 1
           else
@@ -142,7 +126,7 @@ job/$JENKINS_JOB_NAME/$this_build_number"
         fi
       fi
     done
-    echo "Deployment failed. Timed out waiting on the deployment job to start."
+    echo "ERROR: Timed out waiting for this deployment to start."
     exit 1
   else
     echo "ERROR: A required environment variable is missing. Ensure that it \
