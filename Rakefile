@@ -4,43 +4,55 @@ require 'rspec/core/rake_task'
 require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
+@REQUIRED_ENV_VARS_WITH_SUPPORTED_VALUES = {
+  'AWS_ACCESS_KEY_ID' => nil,
+  'AWS_S3_TERRAFORM_TFVARS_BUCKET' => nil,
+  'AWS_SECRET_ACCESS_KEY' => nil,
+  'GOPATH' => nil,
+  'TARGET_ENVIRONMENT' => get_supported_environments,
+  'AWS_REGION' => nil
+}
+
+@OPTIONAL_ENV_VARS = [
+  'SKIP_TERRAFORM_UPDATE'
+]
+
+@REQUIRED_BINARY_VERSIONS = {
+  :golang => 'go1.8',
+  :terraform_for_tfjson => '0.8.8',
+  :terraform => '0.9.8'
+}
+
 namespace :prerequisites do
-  GOLANG_VERSION_REQUIRED = 'go1.8'
-  TFJSON_SUPPORTED_TERRAFORM_VERSION = '0.8.8'
   task :check_for_golang do
-    matching_golang_version_found = `go version | grep -- #{GOLANG_VERSION_REQUIRED}`
+    required_version_of_golang = @REQUIRED_BINARY_VERSIONS[:golang]
+    matching_golang_version_found = `go version | grep -- #{required_version_of_golang}`
     if matching_golang_version_found.empty?
       raise "ERROR: Go is not installed. You'll need to install Golang to continue.".red
     end
   end
+
   task :check_for_terraform_tfvars do
     if not File.exist? 'terraform.tfvars'
       raise "ERROR: Terraform variables not found. Did you pull them in from S3?".red
     end
   end
 
-  task check_env_vars: :dotenv do
-    required_rake_env_vars_with_valid_values = {
-      'AWS_ACCESS_KEY_ID' => "CHECK_NOT_REQUIRED",
-      'AWS_S3_TERRAFORM_TFVARS_BUCKET' => "CHECK_NOT_REQUIRED",
-      'AWS_SECRET_ACCESS_KEY' => "CHECK_NOT_REQUIRED",
-      'GOPATH' => "CHECK_NOT_REQUIRED",
-      'TARGET_ENVIRONMENT' => get_supported_environments,
-      'AWS_REGION' => 'CHECK_NOT_REQUIRED'
-    }
-    required_rake_env_vars_with_valid_values.each do |env_var, supported_env_var_values|
-      if supported_env_var_values.nil?
-        raise "ERROR: No supported environments found. \
-(Check your bucket: #{ENV['AWS_S3_TERRAFORM_TFVARS_BUCKET']})".red
+  task process_env_vars: :dotenv do
+    @options = {}
+    @REQUIRED_ENV_VARS_WITH_SUPPORTED_VALUES.each do |env_var, supported_env_var_values|
+      actual_env_var_value = ENV[env_var]
+      if not actual_env_var_value or actual_env_var_value.empty?
+        raise "ERROR: Required environment variable not found: #{env_var}".red
       end
-      raise "ERROR: #{env_var} is not defined in your environment; \
-please define it.".red if !ENV[env_var]
-      if supported_env_var_values != "CHECK_NOT_REQUIRED" and \
-        !supported_env_var_values.include? ENV[env_var]
-        raise "ERROR: #{ENV[env_var]} is not a valid value for #{ENV[env_var]}".red
+      if supported_env_var_values != :supports_anything and
+        supported_env_var_values.includes actual_env_var_value
+        raise "ERROR: #{actual_env_var_value} is not supported. \
+Supported values are: #{supported_env_var_values}".red
       end
     end
   end
+
   task :install_tfjson_if_needed do
     result=`which tfjson > /dev/null || { \
 echo "INFO: Installing tfjson" ; \
@@ -49,7 +61,8 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
   end
   task :download_latest_version_of_terraform_if_needed do
     terraform_version = `#{ENV['PWD']}/terraform version 2>/dev/null`
-    if terraform_version == "" or \
+    if terraform_version == ""
+      if ENV[
       terraform_version.include? 'Your version of Terraform is out of date'
       puts "Terraform not found or out of date. Updating.".yellow
       `rm ./terraform`
@@ -89,7 +102,7 @@ end
 
 task :prereqs => ['prerequisites:check_for_golang', \
                   'prerequisites:check_for_terraform_tfvars', \
-                  'prerequisites:check_env_vars', \
+                  'prerequisites:process_env_vars', \
                   'prerequisites:download_latest_version_of_terraform_if_needed', \
                   'prerequisites:download_tfjson_supported_terraform_if_needed', \
                   'prerequisites:install_tfjson_if_needed' ]
@@ -103,5 +116,3 @@ task :integration => [ ]
 task :deploy => [ ]
 
 task :default => [ 'unit',
-                   'integration',
-                   'deploy' ]
