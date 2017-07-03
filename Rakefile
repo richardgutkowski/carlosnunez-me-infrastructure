@@ -83,6 +83,10 @@ namespace :prerequisites do
 
   task process_env_vars: :dotenv do
     @options = process_env_vars required:@REQUIRED_ENV_VARS, optional:@OPTIONAL_ENV_VARS
+    if @options[:error_message]
+      Rake::Task['print_help'].execute
+      raise @options[:error_message]
+    end
   end
 
   task :install_tfjson_if_needed do
