@@ -17,7 +17,7 @@ describe "EC2Key" do
 
   it "should retrieve the publc key specified" do
     expected_pubkey = $terraform_tfvars['ec2_public_key']
-    actual_pubkey = @ec2_key_details['public_key']
+    actual_pubkey = @ec2_key_details['public_key'].gsub /ssh-rsa/, "ssh-rsa "
     expect(expected_pubkey).to eq actual_pubkey
   end
 end
