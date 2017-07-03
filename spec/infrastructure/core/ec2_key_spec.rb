@@ -14,4 +14,10 @@ describe "EC2Key" do
     actual_key_name = @ec2_key_details['key_name']
     expect(expected_key_name).to eq actual_key_name
   end
+
+  it "should retrieve the publc key specified" do
+    expected_pubkey = $terraform_tfvars['ec2_public_key']
+    actual_pubkey = @ec2_key_details['public_key']
+    expect(expected_pubkey).to eq actual_pubkey
+  end
 end
