@@ -37,7 +37,9 @@ This is usually set up for you when you install awscli.",
 }
 
 @OPTIONAL_ENV_VARS = {
-  'SKIP_TERRAFORM_UPDATE' => false
+  'SKIP_TERRAFORM_UPDATE' => {
+    :description => "Skip updating Terraform to the latest version. Not recommended"
+  }
 }
 
 @REQUIRED_BINARY_VERSIONS = {
@@ -56,7 +58,7 @@ task :print_help do
   all_env_vars.each do |env_var, env_var_properties|
     print "#{env_var}: ".yellow
     print "#{env_var_properties[:description]}"
-    if not env_var_properties[:supported_values] != :anything
+    if not env_var_properties[:supported_values].to_s != 'anything'
       print "Must be one of these: [#{env_var_properties[:supported_values]}]"
     end
     print "\n"
