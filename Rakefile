@@ -6,7 +6,7 @@ require_relative 'lib/terraform_helper'
 
 @REQUIRED_ENV_VARS = {
   'AWS_ACCESS_KEY_ID'=> {
-    :description => "The access key for your AWS account. This is usually set 
+    :description => "The access key for your AWS account. This is usually set \
 up for you when you install awscli.",
     :supported_values => :anything
   },
@@ -15,17 +15,17 @@ up for you when you install awscli.",
     :supported_values => :anything
   },
   'AWS_SECRET_ACCESS_KEY'=> {
-    :description => "The secret key for your AWS account. This is usually set up 
+    :description => "The secret key for your AWS account. This is usually set up \
 for you when you install awscli.",
     :supported_values => :anything
   },
   'GOPATH'=> {
-    :description => "The path to your Golang binaries and libraries. This is 
+    :description => "The path to your Golang binaries and libraries. This is \
 usually set up for you when you install Golang.",
     :supported_values => :anything
   },
   'TARGET_ENVIRONMENT'=> {
-    :description => "The environment to which you are deploying. This determines 
+    :description => "The environment to which you are deploying. This determines \
 the S3 key from which your tfvars are sourced.",
     :supported_values => get_supported_environments
   },
