@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "EC2Key" do
   before(:all) do
-    @ec2_key_details = $terraform_plan['aws_key_pair.all_nodes']
+    @ec2_key_details = $terraform_plan['ec2-instance-key']['aws_key_pair.keypair']
   end
 
   it "should be present" do
