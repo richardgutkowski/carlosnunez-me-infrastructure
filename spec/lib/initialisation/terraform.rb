@@ -34,8 +34,9 @@ end
 def initialise_global_terraform_tfvars!
   terraform_tfvars = {}
   File.open("#{ENV['PWD']}/terraform.tfvars",'r').map do |line|
+    line = line.gsub(' = ','=')
     tfvar_key, tfvar_value = line.split('=').map do |item|
-      item.sub('"','').gsub("\n",'').gsub(' ','').gsub('"','')
+      item.sub('"','').gsub("\n",'')
     end
     terraform_tfvars[tfvar_key] = tfvar_value
   end
