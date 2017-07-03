@@ -89,10 +89,10 @@ namespace :prerequisites do
         Rake::Task['print_help'].execute
       end
       supported_env_var_values = env_var_properties[:supported_values]
-      if not supported_env_var_values.nil? and
-        supported_env_var_values.include? actual_env_var_value
+      if not supported_env_var_values.nil?
         raise "ERROR: #{actual_env_var_value} is not supported. \
 Supported values are: #{supported_env_var_values}".red
+        Rake::Task['print_help'].execute
       end
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
