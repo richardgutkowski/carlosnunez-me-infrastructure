@@ -55,7 +55,7 @@ task :print_help do
       env_var_properties[:description].empty?
       raise "ERROR: Env var #{env_var} needs a description!".red
     end
-    puts "#{3.times(' ')#{env_var}:".yellow
+    puts "#{3.times(' ')}#{env_var}:".yellow
     puts "#{5.times(' ')}#{env_var_properties[:description]}"
     if not env_var_properties[:supported_values].nil?
       print "#{5.times(' ')}Required values: ".cyan
