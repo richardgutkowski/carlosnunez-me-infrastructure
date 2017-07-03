@@ -164,3 +164,5 @@ task :integration => [ ]
 task :deploy => [ ]
 
 task :default => [ 'unit', 'integration' ]
+
+task :help => [ 'print_help' ]
