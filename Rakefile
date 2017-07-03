@@ -83,7 +83,8 @@ namespace :prerequisites do
   end
 
   task process_env_vars: :dotenv do
-    @options = process_env_vars required:@REQUIRED_ENV_VARS, optional:@OPTIONAL_ENV_VARS
+    @options = process_env_vars
+      required_env_vars:@REQUIRED_ENV_VARS,optional_env_vars:@OPTIONAL_ENV_VARS
     if @options[:error_message]
       Rake::Task['print_help'].execute
       raise @options[:error_message]
