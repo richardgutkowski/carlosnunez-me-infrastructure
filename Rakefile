@@ -57,7 +57,7 @@ task :print_help do
     print "#{env_var}: ".yellow
     print "#{env_var_properties[:description]}"
     if not env_var_properties[:supported_values] != :anything
-      print "Supported values: [#{env_var_properties[:supported_values]}"
+      print "Must be one of these: [#{env_var_properties[:supported_values]}]"
     end
     print "\n"
   end
