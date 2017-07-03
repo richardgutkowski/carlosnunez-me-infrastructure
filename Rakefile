@@ -82,34 +82,7 @@ namespace :prerequisites do
   end
 
   task process_env_vars: :dotenv do
-    @options = {}
-    @REQUIRED_ENV_VARS.each do |env_var, env_var_properties|
-      actual_env_var_value = ENV[env_var]
-      if actual_env_var_value.nil? or actual_env_var_value.empty?
-        if not env_var_properties[:default_value].nil?
-          actual_env_var_value = env_var_properties[:default_value]
-        else
-          Rake::Task['print_help'].execute
-          raise "ERROR: Required environment variable not found: #{env_var}".red
-        end
-      end
-      supported_env_var_values = env_var_properties[:supported_values]
-      if not supported_env_var_values.nil? and
-        not supported_env_var_values.include? actual_env_var_value
-        Rake::Task['print_help'].execute
-        raise "ERROR: \"#{actual_env_var_value}\" is not supported. \
-Supported values are: #{supported_env_var_values}".red
-      end
-      @options[env_var.downcase.to_sym] = actual_env_var_value
-    end
-
-    @OPTIONAL_ENV_VARS.each do |env_var, env_var_properties|
-      actual_env_var_value = ENV[env_var]
-      if actual_env_var_value.nil? and not env_var_properties[:default_value].nil?
-        actual_env_var_value = env_var_properties[:default_value]
-      end
-      @options[env_var.downcase.to_sym] = actual_env_var_value
-    end
+    @options = process_env_vars required:@REQUIRED_ENV_VARS, optional:@OPTIONAL_ENV_VARS
   end
 
   task :install_tfjson_if_needed do
