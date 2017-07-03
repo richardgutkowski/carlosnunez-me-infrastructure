@@ -123,7 +123,7 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
   end
   task :download_tfjson_supported_terraform_if_needed do
     old_terraform_version = `#{ENV['PWD']}/old_terraform version 2>/dev/null | \
- grep #{TFJSON_SUPPORTED_TERRAFORM_VERSION}`
+ grep #{REQUIRED_BINARY_VERSIONS[:terraform_for_tfjson]}`
     if old_terraform_version.empty?
       puts "You don't have Terraform version #{TFJSON_SUPPORTED_TERRAFORM_VERSION} installed. \
 This is required by tfjson for unit testing. We're installing this now.".yellow
