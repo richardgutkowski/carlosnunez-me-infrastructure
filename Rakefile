@@ -13,9 +13,9 @@ require_relative 'lib/terraform_helper'
   'AWS_REGION' => nil
 }
 
-@OPTIONAL_ENV_VARS = [
-  'SKIP_TERRAFORM_UPDATE'
-]
+@OPTIONAL_ENV_VARS_WITH_DEFAULT_VALUES = {
+  'SKIP_TERRAFORM_UPDATE' => false
+}
 
 @REQUIRED_BINARY_VERSIONS = {
   :golang => 'go1.8',
@@ -50,6 +50,11 @@ namespace :prerequisites do
         raise "ERROR: #{actual_env_var_value} is not supported. \
 Supported values are: #{supported_env_var_values}".red
       end
+      @options[env_var.downcase.to_sym] = actual_env_var_value
+    end
+
+    @OPTIONAL_ENV_VARS_WITH_DEFAULT_VALUES.each do |env_var, default_value|
+      @options[env_var.downcase.to_sym] = actual_env_var_value
     end
   end
 
@@ -62,11 +67,12 @@ go get github.com/palantir/tfjson 2>/dev/null; }; echo $?`
   task :download_latest_version_of_terraform_if_needed do
     terraform_version = `#{ENV['PWD']}/terraform version 2>/dev/null`
     if terraform_version == ""
-      if ENV[
-      terraform_version.include? 'Your version of Terraform is out of date'
-      puts "Terraform not found or out of date. Updating.".yellow
-      `rm ./terraform`
-      install_latest_version_of_terraform_into_working_directory!
+      if @options[:skip_terraform_update] == false
+        terraform_version.include? 'Your version of Terraform is out of date'
+        puts "Terraform not found or out of date. Updating.".yellow
+        `rm ./terraform`
+        install_latest_version_of_terraform_into_working_directory!
+      end
     end
   end
   task :download_tfjson_supported_terraform_if_needed do
@@ -115,4 +121,4 @@ task :integration => [ ]
 
 task :deploy => [ ]
 
-task :default => [ 'unit',
+task :default => [ 'unit', 'integration' ]
