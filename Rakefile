@@ -99,6 +99,7 @@ Supported values are: #{supported_env_var_values}".red
     end
 
     @OPTIONAL_ENV_VARS.each do |env_var, _|
+      actual_env_var_value = ENV[env_var]
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
   end
