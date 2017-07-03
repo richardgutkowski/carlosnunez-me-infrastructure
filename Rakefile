@@ -48,7 +48,8 @@ This is usually set up for you when you install awscli.",
 
 task :print_help do
   all_env_vars = @REQUIRED_ENV_VARS.merge(@OPTIONAL_ENV_VARS)
-  puts "USAGE: bundle exec rake (unit, test, deploy)."
+  print "USAGE: ".green
+  puts "bundle exec rake [unit, test, deploy]"
   puts "Deploys this infrastructure onto the cloud or hardware of your choice.\n"
  
   puts "Supported environment variables:"
