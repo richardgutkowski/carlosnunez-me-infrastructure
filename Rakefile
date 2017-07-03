@@ -33,7 +33,8 @@ This is usually set up for you when you install awscli."
 
 @OPTIONAL_ENV_VARS = {
   'SKIP_TERRAFORM_UPDATE' => {
-    :description => "Skip updating Terraform to the latest version. Not recommended"
+    :description => "Skip updating Terraform to the latest version. Not recommended",
+    :default_value => false
   }
 }
 
@@ -84,9 +85,13 @@ namespace :prerequisites do
     @options = {}
     @REQUIRED_ENV_VARS.each do |env_var, env_var_properties|
       actual_env_var_value = ENV[env_var]
-      if not actual_env_var_value or actual_env_var_value.empty?
-        Rake::Task['print_help'].execute
-        raise "ERROR: Required environment variable not found: #{env_var}".red
+      if actual_env_var_value.nil? or actual_env_var_value.empty?
+        if not env_var_properties[:default_value].nil?
+          actual_env_var_value = env_var_properties[:default_value]
+        else
+          Rake::Task['print_help'].execute
+          raise "ERROR: Required environment variable not found: #{env_var}".red
+        end
       end
       supported_env_var_values = env_var_properties[:supported_values]
       if not supported_env_var_values.nil? and
@@ -98,8 +103,11 @@ Supported values are: #{supported_env_var_values}".red
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
 
-    @OPTIONAL_ENV_VARS.each do |env_var, _|
+    @OPTIONAL_ENV_VARS.each do |env_var, env_var_properties|
       actual_env_var_value = ENV[env_var]
+      if actual_env_var_value.nil? and not env_var_properties[:default_value].nil?
+        actual_env_var_value = env_var_properties[:default_value]
+      end
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
   end
