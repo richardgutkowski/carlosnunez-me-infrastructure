@@ -26,7 +26,7 @@ the S3 key from which your tfvars are sourced.",
     :supported_values => get_supported_environments
   },
   'AWS_REGION'=> {
-    :description => "The AWS region to which your infrastructure will be deployed. 
+    :description => "The AWS region to which your infrastructure will be deployed. \
 This is usually set up for you when you install awscli."
   }
 }
