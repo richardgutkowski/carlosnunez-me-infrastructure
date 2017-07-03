@@ -47,7 +47,7 @@ task :print_help do
   all_env_vars = @REQUIRED_ENV_VARS.merge(@OPTIONAL_ENV_VARS)
   print "USAGE: ".green
   puts "bundle exec rake [unit, test, deploy]"
-  puts "Deploys this infrastructure onto the cloud or hardware of your choice.\n\n"
+  puts "Deploys this infrastructure onto the cloud provider or hardware of your choice.\n\n"
  
   puts "Supported environment variables:"
   all_env_vars.each do |env_var, env_var_properties|
