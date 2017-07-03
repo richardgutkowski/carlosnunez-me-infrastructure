@@ -4,16 +4,39 @@ require 'rspec/core/rake_task'
 require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
 
-@REQUIRED_ENV_VARS_WITH_SUPPORTED_VALUES = {
-  'AWS_ACCESS_KEY_ID' => nil,
-  'AWS_S3_TERRAFORM_TFVARS_BUCKET' => nil,
-  'AWS_SECRET_ACCESS_KEY' => nil,
-  'GOPATH' => nil,
-  'TARGET_ENVIRONMENT' => get_supported_environments,
-  'AWS_REGION' => nil
+@REQUIRED_ENV_VARS = {
+  'AWS_ACCESS_KEY_ID'=> {
+    :description => "The access key for your AWS account. This is usually set 
+up for you when you install awscli.",
+    :supported_values => :anything
+  }
+  'AWS_S3_TERRAFORM_TFVARS_BUCKET'=> {
+    :description => "The S3 bucket in which your Terraform .tfvar files are located.",
+    :supported_values => :anything
+  }
+  'AWS_SECRET_ACCESS_KEY'=> {
+    :description => "The secret key for your AWS account. This is usually set up 
+for you when you install awscli.",
+    :supported_values => :anything
+  }
+  'GOPATH'=> {
+    :description => "The path to your Golang binaries and libraries. This is 
+usually set up for you when you install Golang.",
+    :supported_values => :anything
+  }
+  'TARGET_ENVIRONMENT'=> {
+    :description => "The environment to which you are deploying. This determines 
+the S3 key from which your tfvars are sourced.",
+    :supported_values => get_supported_environments
+  }
+  'AWS_REGION'=> {
+    :description => "The AWS region to which your infrastructure will be deployed. 
+This is usually set up for you when you install awscli.",
+    :supported_values => :anything
+  }
 }
 
-@OPTIONAL_ENV_VARS_WITH_DEFAULT_VALUES = {
+@OPTIONAL_ENV_VARS = {
   'SKIP_TERRAFORM_UPDATE' => false
 }
 
@@ -22,6 +45,23 @@ require_relative 'lib/terraform_helper'
   :terraform_for_tfjson => '0.8.8',
   :terraform => '0.9.8'
 }
+
+task :print_help do
+  all_env_vars = @REQUIRED_ENV_VARS.merge(@OPTIONAL_ENV_VARS)
+  puts "USAGE: bundle exec rake (unit, test, deploy)."
+  puts "Deploys this infrastructure onto the cloud or hardware of your choice.\n"
+ 
+  puts "Supported environment variables:"
+  all_env_vars.each do |env_var, env_var_properties|
+    print "#{env_var}: ".yellow
+    print "#{env_var[:description]}"
+    if not env_var[:supported_values].nil?
+      print "Supported values: [#{env_var[:supported_values]}"
+    end
+    print "\n"
+  end
+end
+
 
 namespace :prerequisites do
   task :check_for_golang do
@@ -40,12 +80,14 @@ namespace :prerequisites do
 
   task process_env_vars: :dotenv do
     @options = {}
-    @REQUIRED_ENV_VARS_WITH_SUPPORTED_VALUES.each do |env_var, supported_env_var_values|
+    @REQUIRED_ENV_VARS.each do |env_var, env_var_properties|
       actual_env_var_value = ENV[env_var]
       if not actual_env_var_value or actual_env_var_value.empty?
         raise "ERROR: Required environment variable not found: #{env_var}".red
+        Rake::Task['print_help'].execute
       end
-      if supported_env_var_values != :supports_anything and
+      supported_env_var_values = env_var_properties[:supported_values]
+      if supported_env_var_values != :anything and
         supported_env_var_values.include? actual_env_var_value
         raise "ERROR: #{actual_env_var_value} is not supported. \
 Supported values are: #{supported_env_var_values}".red
@@ -53,7 +95,7 @@ Supported values are: #{supported_env_var_values}".red
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
 
-    @OPTIONAL_ENV_VARS_WITH_DEFAULT_VALUES.each do |env_var, default_value|
+    @OPTIONAL_ENV_VARS.each do |env_var, _|
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
   end
