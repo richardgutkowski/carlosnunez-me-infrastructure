@@ -7,22 +7,18 @@ require_relative 'lib/terraform_helper'
 @REQUIRED_ENV_VARS = {
   'AWS_ACCESS_KEY_ID'=> {
     :description => "The access key for your AWS account. This is usually set \
-up for you when you install awscli.",
-    :supported_values => :anything
+up for you when you install awscli."
   },
   'AWS_S3_TERRAFORM_TFVARS_BUCKET'=> {
-    :description => "The S3 bucket in which your Terraform .tfvar files are located.",
-    :supported_values => :anything
+    :description => "The S3 bucket in which your Terraform .tfvar files are located."
   },
   'AWS_SECRET_ACCESS_KEY'=> {
     :description => "The secret key for your AWS account. This is usually set up \
-for you when you install awscli.",
-    :supported_values => :anything
+for you when you install awscli."
   },
   'GOPATH'=> {
     :description => "The path to your Golang binaries and libraries. This is \
-usually set up for you when you install Golang.",
-    :supported_values => :anything
+usually set up for you when you install Golang."
   },
   'TARGET_ENVIRONMENT'=> {
     :description => "The environment to which you are deploying. This determines \
@@ -31,8 +27,7 @@ the S3 key from which your tfvars are sourced.",
   },
   'AWS_REGION'=> {
     :description => "The AWS region to which your infrastructure will be deployed. 
-This is usually set up for you when you install awscli.",
-    :supported_values => :anything
+This is usually set up for you when you install awscli."
   }
 }
 
@@ -62,8 +57,8 @@ task :print_help do
     end
     print "#{env_var}: ".yellow
     print "#{env_var_properties[:description]}"
-    if not env_var_properties[:supported_values].to_s != 'anything'
-      print "Must be one of these: [#{env_var_properties[:supported_values]}]"
+    if not env_var_properties[:supported_values].nil?
+      print " Must be one of these: [#{env_var_properties[:supported_values]}]"
     end
     print "\n"
   end
