@@ -46,7 +46,7 @@ namespace :prerequisites do
         raise "ERROR: Required environment variable not found: #{env_var}".red
       end
       if supported_env_var_values != :supports_anything and
-        supported_env_var_values.includes actual_env_var_value
+        supported_env_var_values.include? actual_env_var_value
         raise "ERROR: #{actual_env_var_value} is not supported. \
 Supported values are: #{supported_env_var_values}".red
       end
