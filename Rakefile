@@ -55,8 +55,8 @@ task :print_help do
       env_var_properties[:description].empty?
       raise "ERROR: Env var #{env_var} needs a description!".red
     end
-    print "   #{env_var}: ".yellow
-    print "#{env_var_properties[:description]}"
+    puts "   #{env_var}:".yellow
+    print "      #{env_var_properties[:description]}"
     if not env_var_properties[:supported_values].nil?
       print " Must be one of these: [#{env_var_properties[:supported_values]}]"
     end
