@@ -3,6 +3,7 @@ require 'dotenv/tasks'
 require 'rspec/core/rake_task'
 require_relative 'lib/environments'
 require_relative 'lib/terraform_helper'
+require_relative 'lib/environment_variable_processing'
 
 @REQUIRED_ENV_VARS = {
   'AWS_ACCESS_KEY_ID'=> {
