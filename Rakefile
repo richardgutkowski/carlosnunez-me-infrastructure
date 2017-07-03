@@ -85,14 +85,14 @@ namespace :prerequisites do
     @REQUIRED_ENV_VARS.each do |env_var, env_var_properties|
       actual_env_var_value = ENV[env_var]
       if not actual_env_var_value or actual_env_var_value.empty?
-        puts "ERROR: Required environment variable not found: #{env_var}".red
         Rake::Task['print_help'].execute
+        puts "ERROR: Required environment variable not found: #{env_var}".red
       end
       supported_env_var_values = env_var_properties[:supported_values]
       if not supported_env_var_values.nil?
+        Rake::Task['print_help'].execute
         puts "ERROR: #{actual_env_var_value} is not supported. \
 Supported values are: #{supported_env_var_values}".red
-        Rake::Task['print_help'].execute
       end
       @options[env_var.downcase.to_sym] = actual_env_var_value
     end
