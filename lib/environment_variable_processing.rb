@@ -1,4 +1,4 @@
-def process_env_vars!(required_env_vars:, optional_env_vars:)
+def process_env_vars(required_env_vars:, optional_env_vars:)
   parsed_options = {
     :error_message => []
   }
