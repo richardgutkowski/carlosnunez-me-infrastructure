@@ -56,6 +56,10 @@ task :print_help do
  
   puts "Supported environment variables:"
   all_env_vars.each do |env_var, env_var_properties|
+    if env_var_properties[:description].nil? or
+      env_var_properties[:description].empty?
+      raise "ERROR: Env var #{env_var} needs a description!".red
+    end
     print "#{env_var}: ".yellow
     print "#{env_var_properties[:description]}"
     if not env_var_properties[:supported_values].to_s != 'anything'
