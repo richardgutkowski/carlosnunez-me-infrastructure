@@ -56,7 +56,7 @@ task :print_help do
   all_env_vars.each do |env_var, env_var_properties|
     print "#{env_var}: ".yellow
     print "#{env_var_properties[:description]}"
-    if not env_var_properties[:supported_values].nil?
+    if not env_var_properties[:supported_values] != :anything
       print "Supported values: [#{env_var_properties[:supported_values]}"
     end
     print "\n"
