@@ -9,26 +9,26 @@ require_relative 'lib/terraform_helper'
     :description => "The access key for your AWS account. This is usually set 
 up for you when you install awscli.",
     :supported_values => :anything
-  }
+  },
   'AWS_S3_TERRAFORM_TFVARS_BUCKET'=> {
     :description => "The S3 bucket in which your Terraform .tfvar files are located.",
     :supported_values => :anything
-  }
+  },
   'AWS_SECRET_ACCESS_KEY'=> {
     :description => "The secret key for your AWS account. This is usually set up 
 for you when you install awscli.",
     :supported_values => :anything
-  }
+  },
   'GOPATH'=> {
     :description => "The path to your Golang binaries and libraries. This is 
 usually set up for you when you install Golang.",
     :supported_values => :anything
-  }
+  },
   'TARGET_ENVIRONMENT'=> {
     :description => "The environment to which you are deploying. This determines 
 the S3 key from which your tfvars are sourced.",
     :supported_values => get_supported_environments
-  }
+  },
   'AWS_REGION'=> {
     :description => "The AWS region to which your infrastructure will be deployed. 
 This is usually set up for you when you install awscli.",
